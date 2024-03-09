@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="masbroModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="pim_autoloading">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EMEMP#" Type="int" />
+          <Property Name="EMNAME" Type="nvarchar" MaxLength="255" />
+          <Property Name="SKILL" Type="nvarchar" MaxLength="255" />
+          <Property Name="LEADERNAME" Type="nvarchar" MaxLength="255" />
+          <Property Name="UNIQUE" Type="nvarchar" MaxLength="255" />
+          <Property Name="SCHEDULED" Type="nvarchar" MaxLength="255" />
+          <Property Name="rank1" Type="nvarchar" MaxLength="255" />
+          <Property Name="marking" Type="nvarchar" MaxLength="255" />
+          <Property Name="operator mark" Type="nvarchar" MaxLength="255" />
+          <Property Name="operator count" Type="nvarchar" MaxLength="255" />
+          <Property Name="rank_skill" Type="float" />
+          <Property Name="opt_notes" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="pim_autoloading_skill">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SKILLCODE" Type="varchar" MaxLength="50" />
+          <Property Name="SKILLTYPE" Type="varchar" MaxLength="250" />
+          <Property Name="SKILLNAME" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityContainer Name="masbroModelStoreContainer">
+          <EntitySet Name="pim_autoloading" EntityType="Self.pim_autoloading" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pim_autoloading_skill" EntityType="Self.pim_autoloading_skill" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="masbroModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="autoloadEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="pim_autoloading" EntityType="masbroModel.pim_autoloading" />
+          <EntitySet Name="pim_autoloading_skill" EntityType="masbroModel.pim_autoloading_skill" />
+        </EntityContainer>
+        <EntityType Name="pim_autoloading">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="EMEMP_" Type="Int32" />
+          <Property Name="EMNAME" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="SKILL" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="LEADERNAME" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="UNIQUE" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="SCHEDULED" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="rank1" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="marking" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="operator_mark" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="operator_count" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="rank_skill" Type="Double" />
+          <Property Name="opt_notes" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="pim_autoloading_skill">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SKILLCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SKILLTYPE" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="SKILLNAME" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="masbroModelStoreContainer" CdmEntityContainer="autoloadEntities">
+          <EntitySetMapping Name="pim_autoloading">
+            <EntityTypeMapping TypeName="masbroModel.pim_autoloading">
+              <MappingFragment StoreEntitySet="pim_autoloading">
+                <ScalarProperty Name="opt_notes" ColumnName="opt_notes" />
+                <ScalarProperty Name="rank_skill" ColumnName="rank_skill" />
+                <ScalarProperty Name="operator_count" ColumnName="operator count" />
+                <ScalarProperty Name="operator_mark" ColumnName="operator mark" />
+                <ScalarProperty Name="marking" ColumnName="marking" />
+                <ScalarProperty Name="rank1" ColumnName="rank1" />
+                <ScalarProperty Name="SCHEDULED" ColumnName="SCHEDULED" />
+                <ScalarProperty Name="UNIQUE" ColumnName="UNIQUE" />
+                <ScalarProperty Name="LEADERNAME" ColumnName="LEADERNAME" />
+                <ScalarProperty Name="SKILL" ColumnName="SKILL" />
+                <ScalarProperty Name="EMNAME" ColumnName="EMNAME" />
+                <ScalarProperty Name="EMEMP_" ColumnName="EMEMP#" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pim_autoloading_skill">
+            <EntityTypeMapping TypeName="masbroModel.pim_autoloading_skill">
+              <MappingFragment StoreEntitySet="pim_autoloading_skill">
+                <ScalarProperty Name="SKILLNAME" ColumnName="SKILLNAME" />
+                <ScalarProperty Name="SKILLTYPE" ColumnName="SKILLTYPE" />
+                <ScalarProperty Name="SKILLCODE" ColumnName="SKILLCODE" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
