@@ -1,0 +1,195 @@
+﻿@model IEnumerable<OEE_SSC.Models.East_Schedule>
+@{
+    ViewBag.Title = "insertSchedule";
+}
+
+<h2>insertSchedule</h2>
+
+
+<section class="section" style="padding: 80px 5% 3% 5%;">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10 pt-lg-5">
+
+            <!-- Tampilkan loading ketika proses impor sedang berlangsung -->
+            <div id="loading" class="justify-content-center  mb-3" style="display: none;">
+                <h5>Please wait... Data is being processed...</h5>
+                <div class="Loading">
+                    <div class="Loading-progress"></div>
+                </div>
+            </div>
+
+            <div class="card col-lg-12">
+                <div class="card-body ps-5 pe-5 pt-4 pb-3">
+
+                    <h5 class="card-title">INSERT DATA SCHEDULE </h5>
+
+                    <!-- Table with hoverable rows -->
+                    <form id="importForm" method="post" action="@Url.Action("InsertSchedule", "Home")" style="font-size:small">
+                        <input id="importData" type="submit" class="btn btn-success mb-4" value="Import Data" />
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Date</th>
+                                    <th>Shift</th>
+                                    <th>No Machine</th>
+                                    <th>Part Number</th>
+                                    <th>Shiftly Target</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int count = 1;
+                                    int shift = ViewBag.inputShift;
+                                }
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@count</td>
+                                        <td>@ViewBag.FilterDate.ToShortDateString()</td>
+                                        <td>@ViewBag.inputShift</td>
+                                        <td>@item.mc</td>
+                                        <td>@item.part</td>
+                                        <td>
+                                            @if (shift == 1)
+                                            {
+                                                <input type="text" class="form-control" name="models[@(count - 1)].sh1" value="@item.sh1" style="font-size:small; cursor:not-allowed;" readonly />
+                                                <input type="hidden" name="models[@(count - 1)].mc" value="@item.mc" />
+                                                <input type="hidden" name="models[@(count - 1)].part" value="@item.part" />
+                                            }
+                                            else if (shift == 2)
+                                            {
+                                                <input type="text" class="form-control" name="models[@(count - 1)].sh2" value="@item.sh2" style="font-size: small; cursor:not-allowed;" readonly />
+                                                <input type="hidden" name="models[@(count - 1)].mc" value="@item.mc" />
+                                                <input type="hidden" name="models[@(count - 1)].part" value="@item.part" />
+                                            }
+                                            else if (shift == 3)
+                                            {
+                                                <input type="text" class="form-control" name="models[@(count - 1)].sh3" value="@item.sh3" style="font-size: small; cursor: not-allowed;" readonly />
+                                                <input type="hidden" name="models[@(count - 1)].mc" value="@item.mc" />
+                                                <input type="hidden" name="models[@(count - 1)].part" value="@item.part" />
+                                            }
+                                        </td>
+                                    </tr>
+                                    count++;
+                                }
+                            </tbody>
+                        </table>
+                    </form>
+                    <!-- End Table with hoverable rows -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* IMPORT DATA  *@
+    <div class="row justify-content-center">
+        <div class="col-lg-10 pt-lg-5">
+            <h2>Import Schedule Data from Excel</h2>
+
+            @using (Html.BeginForm("importData", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "importForm" }))
+            {
+                <div class="form-group">
+                    <label for="file">Excel File:</label>
+                    <input type="file" name="file" id="file" class="form-control" />
+                </div>
+
+                <br />
+                <br />
+
+                <button id="importData" type="submit" class="btn btn-primary">Import</button>
+            }
+
+            @if (ViewBag.Message != null)
+            {
+                <p class="text-success">@ViewBag.Message</p>
+            }
+
+            @if (ViewBag.Error != null)
+            {
+                <p class="text-danger">@ViewBag.Error</p>
+            }
+
+        </div>
+    </div>
+
+    @* IMPORT DATA  PART NUMBER*@
+    <div class="row justify-content-center">
+        <div class="col-lg-10 pt-lg-5">
+            <h2>Import Part Number Data from Excel</h2>
+
+            @using (Html.BeginForm("importDataPN", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "importForm" }))
+            {
+                <div class="form-group">
+                    <label for="file">Part Number Excel File:</label>
+                    <input type="file" name="file" id="file" class="form-control" />
+                </div>
+
+                <br />
+                <br />
+
+                <button id="importData" type="submit" class="btn btn-success">Import</button>
+            }
+
+            @if (ViewBag.Message != null)
+            {
+                <p class="text-success">@ViewBag.Message</p>
+            }
+
+            @if (ViewBag.Error != null)
+            {
+                <p class="text-danger">@ViewBag.Error</p>
+            }
+
+        </div>
+    </div>
+</section>
+
+
+@* LOADING DATA PROCESSING *@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Event listener ketika tombol "Update Query" di klik
+        $("#importData").click(function () {
+            // Tampilkan loading saat proses impor berlangsung
+            showLoading();
+
+            // Kirim data form secara asynchronous menggunakan AJAX
+            $.ajax({
+                type: "POST",
+                url: $("#importForm").attr("action"),
+                data: new FormData($("#importForm")[0]),
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    // Sembunyikan loading setelah impor selesai
+                    hideLoading();
+                    // Refresh halaman untuk menampilkan pesan sukses atau error
+                    //location.reload();
+                },
+                error: function (error) {
+                    // Sembunyikan loading jika terjadi kesalahan
+                    hideLoading();
+                    // Tampilkan pesan error
+                    console.log(error);
+                    //alert("Error occurred while importing data. Please try again.");
+                }
+            });
+        });
+
+        // Function untuk menampilkan loading
+        function showLoading() {
+            $("#loading").show();
+        }
+
+        // Function untuk menyembunyikan loading
+        function hideLoading() {
+            $("#loading").hide();
+        }
+    });
+</script>

@@ -1,0 +1,104 @@
+﻿<!-- Update the model type -->
+
+@model IEnumerable<OEE_SSC.Models.pim_kpi_performance>
+@{
+    ViewBag.Title = "General Data";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+
+
+    /* general styling */
+    :root {
+        --smaller: .75;
+    }
+
+
+    .container {
+        color: #333;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+
+
+    .emoji {
+        display: none;
+        padding: 1rem;
+    }
+
+        .emoji span {
+            font-size: 4rem;
+            padding: 0 .5rem;
+        }
+</style>
+
+<main id="" class="main" style="padding: 85px 35px 25px 35px;">
+    <section class="section">
+        <div class="row justify-content-center mt2 p-5">
+            <div class="col-lg-11 col-md-12">
+
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title text-center m-3">Developer is still tweaking amazing few details, stay tuned!</h1>
+
+                        <div class="container">
+                            <div id="">
+                                <div>
+                                    <img class="mb-4" src="~/Content/assets/img/under_construct_m.png" style="max-height:auto; max-width:60%" />
+                                    <h6 class="text-center text-danger mt-5"><b>Under Construction:</b></h6>
+
+                                    <h5 class="text-center text-bg-danger p-2" id="countdown"></h5>
+
+                                    @if (ViewBag.date != null && ViewBag.shift != null)
+                                    {
+                                        <a href="@Url.Action("firstPage", "Home", new { shiftEmp = ViewBag.shift, dateFilter = ViewBag.date })"> <u> Back to SSC</u></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("mainPage", "Home")"> <u> Back to Menu </u></a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+<script>
+    // Set the date we're counting down to
+    var countDownDate = new Date("Nov 9, 2023 15:37:25").getTime();
+
+    // Update the count down every 1 second
+    var x = setInterval(function () {
+
+        // Get today's date and time
+        var now = new Date().getTime();
+
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Output the result in an element with id="demo"
+        document.getElementById("countdown").innerHTML = days + " d - " + hours + " h - "
+            + minutes + " m - " + seconds + " s ";
+
+        // If the count down is over, write some text
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("countdown").innerHTML = "EXPIRED";
+        }
+    }, 1000);
+</script>

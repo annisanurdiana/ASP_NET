@@ -1,0 +1,144 @@
+﻿@model IEnumerable<OEE_SSC.Models.pim_machine>
+@{
+    ViewBag.Title = "insertMachine";
+    //Layout = null;
+}
+
+
+
+<!-- Memuat file jQuery dari server -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.min.js"></script>
+
+<!--  link CSS untuk tampilan SweetAlert -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.min.css">
+
+
+
+<section class="section" style="padding: 80px 5% 3% 5%;">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10 pt-lg-5">
+            <div class="card col-lg-12">
+                <div class="card-body ps-5 pe-5 pt-4 pb-3">
+                    <h5 class="card-title">INSERT DATA ALL MACHINES </h5>
+                    <div class="btn btn-outline-primary">
+                        <label for="selectAll">Select All Machine</label>
+                        <input type="checkbox" id="selectAll" />
+                    </div>
+
+                    <!-- Table with hoverable rows -->
+                    <form method="post" action="@Url.Action("insertMachine", "Home")">
+
+                        @* Button Submit *@
+                        <div class="form-group justify-content-center ">
+                            <br /><input type="submit" class="btn btn-warning" value="Submit" style="width:100px;" />
+                        </div>
+
+
+
+                        <br />
+                        @* ---------------------------------------------------------------------------------------------- *@
+                        <br />
+                        @*<h3>Shift: @Session["myShift"]</h3>
+                            <h3>Date: @Session["myDate"]</h3>*@
+
+                        <table class="table table-borderless" style="overflow-x: auto;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">No Machine</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Shift</th>
+                                    <th scope="col">Select Machine</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int count_y = 0;
+                                }
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <th scope="row">
+                                            <p> @(count_y+1)</p>
+                                        </th>
+                                        <td>
+                                            <p>@item.machine</p>
+                                        </td>
+                                        <td>
+                                            <p>@Session["myDate"]</p>
+                                        </td>
+                                        <td>
+                                            <p>@Session["myShift"]</p>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="selectedMachines" value="@item.machine" />
+                                            <label>Insert nomor mesin <b style="color:dimgrey;">@item.machine</b></label>
+                                        </td>
+                                    </tr>
+                                    count_y++;
+                                }
+                            </tbody>
+                        </table>
+
+                    </form>
+                    <!-- End Table with hoverable rows -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10 pt-lg-5">
+            <h2>Import Schedule Data from Excel</h2>
+
+            @using (Html.BeginForm("importData", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="form-group">
+                    <label for="file">Excel File:</label>
+                    <input type="file" name="file" id="file" class="form-control" />
+                </div>
+
+                <br />
+                <br />
+
+                <button type="submit" class="btn btn-primary">Import</button>
+            }
+
+            @if (ViewBag.Message != null)
+            {
+                <p class="text-success">@ViewBag.Message</p>
+            }
+
+            @if (ViewBag.Error != null)
+            {
+                <p class="text-danger">@ViewBag.Error</p>
+            }
+
+        </div>
+    </div>
+</section>
+
+<script>
+
+    //$(document).ready(function () {
+    //    $('.scroll-to-bottom').click(function () {
+    //        $('html, body').animate({
+    //            scrollTop: $(document).height()
+    //        }, 1000);
+    //        return false;
+    //    });
+    //});
+
+    // select all checkboxes when "select all" checkbox is clicked
+    $('#selectAll').click(function () {
+        $('input[name="selectedMachines"]').prop('checked', this.checked);
+    });
+</script>
+
+

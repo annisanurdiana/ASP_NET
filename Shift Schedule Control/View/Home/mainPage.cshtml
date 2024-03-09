@@ -1,0 +1,167 @@
+﻿
+@model IEnumerable<OEE_SSC.Models.PIM_SSC_MAIN>
+
+@{
+    ViewBag.Title = "PIM SSC";
+    Layout = null;
+}
+
+<title>PIM Application </title>
+
+<!-- Vendor CSS Files -->
+<link href="~/Content/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/quill/quill.snow.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+<!-- Template Main CSS File -->
+<link href="~/Content/assets/css/style.css" rel="stylesheet" />
+<link href="~/Content/assets/css/newstyle.css" rel="stylesheet" />
+<link href="~/Content/assets/css/menuPage.css" rel="stylesheet" />
+
+<!-- Title Logo -->
+<link rel="icon" href="~/Content/assets/img/mattel.png" type="image/x-icon">
+
+
+
+<div class="bgImage">
+    <div class="overlay">
+        <!--  -->
+    </div>
+    <div class="content" style="text-align: center">
+        <div class="justify-content-center">
+            <h1 style="font-size: 42px;">
+                <b>
+                    PRIMARY
+                    <span style="color: #7ab3fe ">
+                        MOLDING
+                    </span>
+                    <span style="color: #f6aafd ">
+                        CENTER
+                    </span>
+                </b>
+            </h1>
+        </div>
+        <p style="letter-spacing: 1.1px; font-size: 14px;">We empower the next generation to explore the wonder of childhood and reach their full potential.</p>
+
+        <!-- FIRST ROW -->
+        <div class="row col-lg-9 col-md-11 col-sm-22 m-2">
+            <div class="">
+
+                <a target="_blank" href="@Url.Action("insertSchedule", "Home")" class="menu_txt btn btn_btn_rainbow col-lg-2 col-md-3 m-2 pb-3 pt-3 uppercase" title="Insert Schedule for SSC">
+                    <i class="bi bi-cloud-upload" style="font-size: 45px;"></i>
+                    <br />
+                    SCHEDULE_PIM
+                </a>
+                <a target="_blank" href="@Url.Action("firstPage", "Home")" class="menu_txt btn btn_btn_rainbow col-lg-2 col-md-3 m-2 pb-3 pt-3" title="Input SSC Digital">
+                    <i class="bi bi-clipboard-check" style="font-size: 45px;"></i>
+                    <br />
+                    PIM e-SSC
+                </a>
+                <a target="_blank" href="@Url.Action("sscPage", "PA_Home")" class="menu_txt btn btn_btn_rainbow col-lg-2 col-md-3 m-2 pb-3 pt-3" title="Key-in in PA SSC">
+                    <i class="bi bi-clipboard-check" style="font-size: 45px;"></i>
+                    <br />
+                    PA e-SSC
+                </a>
+                <a target="_blank" href="@Url.Action("oeeFilterData", "view_oee")" class="menu_txt btn btn_btn_rainbow col-lg-2 col-md-3 m-2 pb-3 pt-3" title="Report OEE Real Time">
+                    <i class="bi bi-graph-up" style="font-size: 45px;"></i><br />
+                    REPORT OEE
+                </a>
+                <a target="_blank" href="@Url.Action("downloadData", "downloadData", new { shiftEmp = Session["myShift"], dateFilter = Session["myDate"] })" class="menu_txt btn btn_btn_rainbow col-lg-2 col-md-3 m-2 pb-3 pt-3" title="Download Data Output SSC">
+                    <i class="bi bi-download" style="font-size: 45px;"></i><br />
+                    DOWNLOAD DATA
+                </a>
+                <a target="_blank" href="@Url.Action("displayData", "downloadData", new { shiftEmp = Session["myShift"], dateStart = Session["myDate"], dateFinish = Session["myDate"] })" class="menu_txt btn btn_btn_rainbow col-lg-2 col-md-3 m-2 pb-3 pt-3" title="Open Data Output SSC">
+                    <i class="bi bi-folder2-open" style="font-size: 45px;"></i><br />
+                    PIM OUTPUT DATA
+                </a>
+                <a target="_blank" href="@Url.Action("displayData", "PA_OUTPUT", new { shiftEmp = Session["myShift"], dateStart = Session["myDate"], dateFinish = Session["myDate"] })" class="menu_txt btn btn_btn_rainbow col-lg-2 col-md-3 m-2 pb-3 pt-3" title="Open Data Output SSC">
+                    <i class="bi bi-folder2-open" style="font-size: 45px;"></i><br />
+                    PA OUTPUT DATA
+                </a>
+                @* SECOND ROW - LG -START HERE *@
+                <a target="_blank" href="@Url.Action("importDataKPK", "Home")" class="menu_txt btn btn_btn_rainbow col-lg-2 col-md-3 m-2 pb-3 pt-3" title="Update KPK PIM Operators">
+                    <i class="bi bi-people-fill" style="font-size: 45px;"></i>
+                    <br />
+                    IMPORT KPK
+                </a>
+                <a target="_blank" href="@Url.Action("firstPage", "scrap")" class="menu_txt btn btn_btn_rainbow col-lg-2 col-md-3 m-2 pb-3 pt-3" title="Input SCRAP Digital">
+                    <i class="bi bi-patch-exclamation" style="font-size: 45px;"></i><br />
+                    e-SCRAP
+                </a>
+                <a target="_blank" href="@Url.Action("Index", "Media")" class="menu_txt btn btn_btn_rainbow col-lg-2 col-md-3 m-2 pb-3 pt-3" title="Upload and Download File">
+                    <i class="bi bi-book" style="font-size: 45px;"></i>
+                    <br />
+                    HAND BOOK
+                </a>
+
+                <a target="_blank" href="@Url.Action("KPI_PERFORMANCE", "Home")" class="menu_txt btn btn_btn_rainbow col-lg-2 col-md-3 m-2 pb-3 pt-3" title="KPI Performance of PIM">
+                    <i class="bi bi-bookmark-star" style="font-size: 45px;"></i>
+                    <br />
+                    KPI PERFORMANCE
+                </a>
+
+                <a target="_blank" href="@Url.Action("Menu", "autoloading")" class="menu_txt btn btn_btn_rainbow col-lg-2 col-md-3 m-2 pb-3 pt-3" title="Auto Loading Database Skills Operator">
+                    <i class="bi bi-person-lines-fill" style="font-size: 45px;"></i>
+                    <br />
+                    AUTO LOADING
+                </a>
+
+
+
+                @* EXCLUDE PIM APP -START HERE *@
+
+                <a target="_blank" href="http://ptmi/inventory" class="menu_txt btn btn_btn_rainbow col-lg-2 col-md-3 m-2 pb-3 pt-3 uppercase" title="Go to PTMI Inventory Website">
+                    <i class="bi bi-bank" style="font-size: 45px;"></i>
+                    <br />
+                    PTMI INVENTORY
+                </a>
+                <a target="_blank" href="http://dckr00801341a:8080/prototype/" class="menu_txt btn btn_btn_rainbow col-lg-2 col-md-3 m-2 pb-3 pt-3" title="Go to MDS System Website">
+                    <i class="bi bi-stack" style="font-size: 45px;"></i>
+                    <br />
+                    MDS SYSTEM
+                </a>
+
+                <a target="_blank" href="http://wckr00801196:8095/" class="menu_txt btn btn_btn_rainbow col-lg-2 col-md-3 m-2 pb-3 pt-3" title="Go to PTMI Mold Locator Website">
+                    <i class="bi bi-search" style="font-size: 45px;"></i>
+                    <br />
+                    MOLD LOCATOR
+                </a>
+            </div>
+        </div>
+        <!-- END HERE -->
+        @* AUTO REFRESH *@
+        @*<div class="justify-content-center mt-lg-4 mt-md-2">
+                <h6>
+                    Auto refresh:
+                    <span class="fw-bold" id="countdown" style="font-weight:700"></span> s
+                </h6>
+            </div>*@
+    </div>
+</div>
+<!-- End #main -->
+
+<script>
+    var timeLeft = 60; // Waktu dalam detik (300 detik = 5 menit, start from 299)
+    var countdown = setInterval(function () {
+        // Menghitung menit
+        var minutes = Math.floor(timeLeft / 60);
+        // Menghitung detik
+        var seconds = timeLeft % 60;
+        // Menggabungkan menit dan detik
+        var countdownStr = minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
+        // Menampilkan countdown
+        document.getElementById("countdown").innerHTML = countdownStr;
+        if (timeLeft == 0) {
+            location.reload();
+        }
+        timeLeft--;
+    }, 1000);
+
+    setTimeout(function () {
+        setTimeout(arguments.callee, 60000); // coba lagi setelah 5 menit
+    }, 60000);
+</script>

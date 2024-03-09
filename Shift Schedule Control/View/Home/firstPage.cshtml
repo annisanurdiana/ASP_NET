@@ -1,0 +1,134 @@
+﻿@model IEnumerable<OEE_SSC.Models.pimListData>
+
+@{
+    ViewBag.Title = "PIM SSC";
+    Layout = null;
+}
+
+<title>PIM Application </title>
+
+<!-- Vendor CSS Files -->
+<link href="~/Content/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/quill/quill.snow.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+<!-- Template Main CSS File -->
+<link href="~/Content/assets/css/style.css" rel="stylesheet" />
+<link href="~/Content/assets/css/newstyle.css" rel="stylesheet" />
+
+<!-- Title Logo -->
+<link rel="icon" href="~/Content/assets/img/mattel.png" type="image/x-icon">
+
+<main class="background">
+
+    <div class="container" style="background-image: url(/Content/assets/img/gif3.gif); background-size: cover; background-repeat: no-repeat; min-width: 100%; background-color: #1e8de7ac; background-blend-mode: multiply; opacity: 5; ">
+
+        @*<div class="alert alert-danger alert-dismissible fade show mt-4 text-center" role="alert">
+                This Website is Still Under Development <b>(Status: On)</b>
+            </div>*@
+
+        <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-1">
+
+            <div class="container">
+                <div class="row justify-content-center">
+
+                    <div class="d-flex justify-content-center" style="margin-bottom:40px; padding-top:30px;">
+                        <div class="logo d-flex align-items-center w-auto" data-aos="zoom-in-up" data-aos-duration="950">
+                            <h3 class="d-lg-block animate-charcter">
+                                <b style="font-size: 39px;">P</b>LASTIC
+                                <b style="font-size: 39px;">I</b>NJECTION
+                                <b style="font-size: 39px;">M</b>OLDING
+                            </h3>
+                            @*<h5 class="d-lg-block" style="color: rgb(247, 223, 105)"><b>I</b>NJECTION <b>M</b>OLDING</h5>*@
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center" style="margin-top:10px; margin-bottom:20px;">
+
+                        <!-- End Logo -->
+                        @* FORM INPUT USER *@
+                        @using (Html.BeginForm("firstPage", "Home", FormMethod.Get))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="card_glass mb-3" style="width:125%; margin-left:-10%; position:relative;">
+
+                                <div class="card-body">
+                                    <div class="pt-1 pb-1">
+                                        <h3 class="card-title text-center pb-0 fs-2" style="color:#fff800; letter-spacing: 2px;">SSC</h3>
+                                        <div class="d-flex justify-content-center pt-3 pb-2">
+                                            <h5 class="d-lg-block" style="color: rgb(247, 223, 105); font-size:18px;">Hello, <span id="greeting"></span>!</h5>
+                                        </div>
+                                    </div>
+
+                                    @* ----------------------------------------------------------------- *@
+                                    <form class="row g-3">
+                                        <div class="col-12">
+                                            @* INPUT SHIFT *@
+                                            <label for="inputShift" class="form-label pt-2">Shift</label>
+                                            <select id="inputShift" name="shiftEmp" class="form-control text-center" style="color:#856016;" required>
+                                                <option value="">--Select Shift--</option>
+                                                <option value="1" required>1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                            </select>
+                                            @* AUTO SEARCH DATE *@
+                                            <div>
+                                                <label class="control-label col-md-2 pt-2">Date:</label>
+                                                @* Manual input date for testing *@
+                                                <input class="form-control text-center" type="date" name="dateFilter" value="@DateTime.Now.ToString("yyyy-MM-dd")" required>
+                                                @* HIDDEN INPUT DATE *@
+                                                @*<input class="form-control" type="hidden" name="dateFilter" value="@DateTime.Now.ToString("yyyy-MM-dd")">*@
+                                            </div>
+                                            <br />
+                                        </div>
+                                        @* --BUTTON SUBMIT-- *@
+                                        <div class="col-12">
+                                            <button class="btn btn_btn_rainbow w-100" type="submit" style="color:white;"><b style="font-size:17px;">Submit</b></button>
+                                        </div>
+                                        @* ----------------------------------------------------------------- *@
+                                        <div class="col-12">
+                                            <br /><p class="small mb-0">Data shift tidak ada? <a href="#" style="color: yellow">Hubungi Leader</a></p>
+                                        </div>
+
+
+                                    </form>
+
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</main>
+
+<!-- End #main -->
+
+<script>
+    const time = new Date().getHours();
+
+    let greeting;
+
+    if (time < 10) {
+        greeting = "good morning";
+    }
+    else if (time < 14) {
+        greeting = "good day";
+    }
+    else if (time < 19) {
+        greeting = "good afternoon";
+    }
+    else {
+        greeting = "good evening";
+    }
+
+    document.getElementById("greeting").innerHTML = greeting;
+</script>
+
+

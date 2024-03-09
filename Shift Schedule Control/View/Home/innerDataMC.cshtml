@@ -1,0 +1,1287 @@
+﻿@*@model OEE_SSC.Models.pim_user_output*@
+@model OEE_SSC.Models.pimListData
+@{
+    ViewBag.Title = "innerDataMC";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string partPpValue = ViewBag.part_pp;
+}
+
+<style>
+    #part_pp {
+        background-color: white;
+        margin-top: 15px;
+        padding: 10px 15px;
+        cursor: pointer;
+        font-size: 29px;
+    }
+</style>
+<!-- Referensi untuk jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<main id="" class="main" style="padding: 80px 3% 3% 3%;">
+    <div class="pagetitle">
+        <div class="row align-items-center mb-1">
+            <div class="col-auto">
+                <a href="@Url.Action("filterByMachine", "Home", new { shiftEmp = ViewBag.shift, dateFilter = ViewBag.date, n_machine = ViewBag.no_machine })" class="btn btn-link">
+                    @*<a href="@Url.Action("filterByMachine", "Home", new { shiftEmp = ViewBag.shift, dateFilter = ViewBag.date, n_machine = ViewBag.no_machine.Substring(0,1) })" class="btn btn-link">*@
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+            </div>
+            <div class="col">
+                <h1 class="text-center">SSC INJECTION MOLDING</h1>
+            </div>
+            <div class="col-auto">
+                <a href="@Url.Action("firstPage", "Home", new { shiftEmp = ViewBag.shift, dateFilter = ViewBag.date })" class="btn btn-link">
+                    <i class="bi bi-house-door"></i>
+                </a>
+            </div>
+        </div>
+        <nav class="p-2">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("firstPage", "Home", new { shiftEmp = ViewBag.shift, dateFilter = ViewBag.date })">Home</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("firstPage", "Home", new { shiftEmp = ViewBag.shift, dateFilter = ViewBag.date })">All Machines</a></li>
+                @* Akan kembali dan menampilkan list sesuai dengan shift, date, dan karakter pertama nomor shift yang telah user input *@
+                @* Substring() digunakan untuk mengambil sejumlah karakter dari sebuah string, dengan menentukan indeks awal dan jumlah karakter yang akan diambil *@
+                <li class="breadcrumb-item"><a href="@Url.Action("filterByMachine", "Home", new { shiftEmp = ViewBag.shift, dateFilter = ViewBag.date, n_machine = ViewBag.no_machine.Substring(0,1) })">Spesific Machine</a></li>
+                <li class="breadcrumb-item active">Inner Machine</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- End Page Title -->
+
+    <section class="section">
+        <div class="row">
+
+
+            <!-- LEFT: INFO MACHINE -->
+            <div class="col-lg-5">
+                <div class="card">
+                    <div class="card-body pt-3">
+                        <!-- Bordered Tabs -->
+                        <ul class="nav nav-tabs nav-tabs-bordered">
+                            <li class="nav-item">
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                            </li>
+
+                            @*<li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Machine</button>
+                                </li>*@
+
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#details-partnumber">Part Number</button>
+                            </li>
+
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#oee-summary">Summary</button>
+                            </li>
+
+                        </ul>
+
+                        <div class="tab-content pt-2">
+                            @* GENERAL INFORMATION *@
+                            <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                                <!-- Default Accordion -->
+                                <div class="accordion pt-2" id="accordionExample">
+                                    <div class="accordion-item">
+
+                                        <h2 class="accordion-header" id="headingTwo">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                                General Information
+                                            </button>
+                                        </h2>
+
+                                        <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                @* ------------------------------------- *@
+                                                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+
+                                                    <h5 class="card-title">
+                                                        General Information &nbsp;
+                                                        <a href="@Url.Action("newMachinePartnumber", "Home", new { id=ViewBag.main_id })" style="color: #012970; font-weight: 500; ">
+                                                            <i class="bi bi-pen"></i>
+                                                        </a>
+                                                    </h5>
+
+
+                                                    <div class="row" style="padding-bottom: 3%; color:purple;">
+                                                        <div class="col-lg-4 col-md-4 label"><b>ID</b></div>
+                                                        <div class="col-lg-8 col-md-8"><b>@ViewBag.main_id</b></div>
+                                                    </div>
+
+                                                    <div class="row" style="padding-bottom: 3%; color:purple;">
+                                                        <div class="col-lg-4 col-md-4 label"><b>No Machine</b></div>
+                                                        <div class="col-lg-8 col-md-8"><b>@ViewBag.no_machine</b></div>
+                                                    </div>
+
+                                                    <div class="row" style="padding-bottom: 3%; color:deeppink;">
+                                                        <div class="col-lg-4 col-md-4 label"><b>Part Number</b></div>
+                                                        <div class="col-lg-8 col-md-8"><b>@ViewBag.partnumber</b></div>
+                                                    </div>
+
+                                                    <div class="row" style="padding-bottom: 3%;">
+                                                        <div class="col-lg-4 col-md-4 label">Shift</div>
+
+                                                        <div class="col-lg-8 col-md-8">@ViewBag.shift</div>
+                                                    </div>
+
+                                                    <div class="row" style="padding-bottom: 3%;">
+                                                        <div class="col-lg-4 col-md-4 label">Date</div>
+                                                        <div class="col-lg-8 col-md-8">@ViewBag.date.ToString().Substring(0, 10)</div>
+                                                    </div>
+
+                                                    <div class="row" style="padding-bottom: 3%;">
+                                                        <div class="col-lg-4 col-md-4 label">Week Ending</div>
+                                                        <div class="col-lg-8 col-md-8">@ViewBag.we_</div>
+                                                    </div>
+
+                                                    <div class="row" style="padding-bottom: 3%;">
+                                                        <div class="col-lg-4 col-md-4 label">Operator KPK</div>
+                                                        <div class="col-lg-8 col-md-8">@ViewBag.op_kpk</div>
+                                                    </div>
+
+                                                    <div class="row" style="padding-bottom: 3%;">
+                                                        <div class="col-lg-4 col-md-4 label">Operator Name</div>
+                                                        <div class="col-lg-8 col-md-8">@ViewBag.op_name</div>
+                                                    </div>
+
+                                                    <div class="row" style="padding-bottom: 3%;">
+                                                        <div class="col-lg-4 col-md-4 label">Shiftly Target</div>
+                                                        <div class="col-lg-8 col-md-8">@ViewBag.shiftly_target pcs</div>
+                                                    </div>
+
+                                                    <div class="row" style="padding-bottom: 3%;">
+                                                        <div class="col-lg-4 col-md-4 label">Actual Output</div>
+                                                        <div class="col-lg-8 col-md-8">
+                                                            <span style="color:@(ViewBag.total_actoutput < ViewBag.shiftly_target ? "red" : "green")">@ViewBag.total_actoutput</span> pcs
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </div>
+                                                @* ------------------------------------- *@
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Default Accordion Example -->
+                                @* ------------------------------------------------ *@
+                            </div>
+
+                            @* DETALS DATA PART NUMBER *@
+                            <div class="tab-pane fade details-partnumber pt-3" id="details-partnumber">
+                                @* ------------------------------------------------ *@
+                                <!-- Default Accordion -->
+                                <div class="accordion pt-2" id="accordionExample">
+                                    <div class="accordion-item">
+
+                                        <h2 class="accordion-header" id="headingOne">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Part Number Details </button>
+                                        </h2>
+                                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                <!-- Active Table -->
+                                                @* ------------------------------------------------ *@
+                                                <h5 class="card-title">
+                                                    General Information &nbsp;
+                                                    <a href="@Url.Action("newMachinePartnumber", "Home", new { id=ViewBag.main_id })" style="color: #012970; font-weight: 500; ">
+                                                        <i class="bi bi-pen"></i>
+                                                    </a>
+                                                </h5>
+
+                                                <div class="row" style="padding-bottom: 3%;">
+                                                    <div class="col-lg-4 col-md-4 label">Part Number:</div>
+                                                    <div class="col-lg-8 col-md-8">@ViewBag.partnumber</div>
+                                                </div>
+
+                                                <div class="row" style="padding-bottom: 3%;">
+                                                    <div class="col-lg-4 col-md-4 label">Description:</div>
+                                                    <div class="col-lg-8 col-md-8">@ViewBag.DESCR</div>
+                                                </div>
+
+                                                <div class="row" style="padding-bottom: 3%;">
+                                                    <div class="col-lg-4 col-md-4 label">Mold:</div>
+                                                    <div class="col-lg-8 col-md-8">@ViewBag.MOLD</div>
+                                                </div>
+
+                                                <div class="row" style="padding-bottom: 3%;">
+                                                    <div class="col-lg-4 col-md-4 label">Material:</div>
+                                                    <div class="col-lg-8 col-md-8">@ViewBag.MATERIAL</div>
+                                                </div>
+
+                                                <div class="row" style="padding-bottom: 3%;">
+                                                    <div class="col-lg-4 col-md-4 label">Set:</div>
+                                                    @if (ViewBag.pn_set == ViewBag.pn_cav)
+                                                    {
+                                                        <div class="col-lg-8 col-md-8">-</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="col-lg-8 col-md-8">@ViewBag.pn_set</div>
+                                                    }
+                                                </div>
+
+                                                <div class="row" style="padding-bottom: 3%;">
+                                                    <div class="col-lg-4 col-md-4 label">Cavity:</div>
+                                                    <div class="col-lg-8 col-md-8">@ViewBag.pn_cav</div>
+                                                </div>
+
+                                                <div class="row" style="padding-bottom: 3%;">
+                                                    <div class="col-lg-4 col-md-4 label">Cycle Time:</div>
+                                                    <div class="col-lg-8 col-md-8">@ViewBag.CT</div>
+                                                </div>
+
+                                                <div class="row" style="padding-bottom: 3%;">
+                                                    <div class="col-lg-4 col-md-4 label">PN Colorant:</div>
+                                                    <div class="col-lg-8 col-md-8">@ViewBag.PN_COLORANT</div>
+                                                </div>
+
+                                                <!-- End Tables without borders -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Default Accordion Example -->
+                                @* ------------------------------------------------ *@
+                            </div>
+
+                            @* OEE SUMMARY *@
+                            <div class="tab-pane fade oee-summary pt-3" id="oee-summary">
+                                @* ------------------------------------------------ *@
+                                <!-- Default Accordion -->
+                                <div class="accordion pt-2" id="accordionExample">
+                                    <div class="accordion-item">
+
+                                        <h2 class="accordion-header" id="headingOne">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Overall Equipment Effectiveness Summary </button>
+                                        </h2>
+
+                                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                <!-- Active Table -->
+                                                @* ------------------------------------------------ *@
+                                                <h5 class="card-title">Brief OEE Details</h5>
+
+                                                <div class="row" style="padding-bottom: 3%;">
+                                                    <div class="col-lg-4 col-md-4 label">No Machine:</div>
+                                                    <div class="col-lg-8 col-md-8">@ViewBag.no_machine</div>
+                                                </div>
+                                                <div class="row" style="padding-bottom: 3%;">
+                                                    <div class="col-lg-4 col-md-4 label">Part Number:</div>
+                                                    <div class="col-lg-8 col-md-8">@ViewBag.partnumber</div>
+                                                </div>
+
+                                                @* ------------------REQUEST SUMMARY OEE--------------------- *@
+
+                                                <div class="row" style="padding-bottom: 3%;">
+                                                    <div class="col-lg-4 col-md-4 label">Total Downtime:</div>
+
+                                                    @if (@ViewBag.totalDT != null && @ViewBag.totalDT > 30)
+                                                    {
+                                                        <div class="col-lg-8 col-md-8"><span style="color:red;">@ViewBag.totalDT </span>minutes</div>
+                                                    }
+                                                    else if (@ViewBag.totalDT != null)
+                                                    {
+                                                        <div class="col-lg-8 col-md-8">@ViewBag.totalDT minutes</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="col-lg-8 col-md-8">0 minutes</div>
+                                                    }
+
+                                                </div>
+
+                                                <div class="row" style="padding-bottom: 3%;">
+                                                    <div class="col-lg-4 col-md-4 label">Total Reject:</div>
+                                                    @if (@ViewBag.totalRJ != null && @ViewBag.totalRJ > 10)
+                                                    {
+                                                        <div class="col-lg-8 col-md-8"><span style="color:red;">@ViewBag.totalRJ </span>pcs</div>
+                                                    }
+                                                    else if (@ViewBag.totalRJ != null)
+                                                    {
+                                                        <div class="col-lg-8 col-md-8">@ViewBag.totalRJ pcs</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="col-lg-8 col-md-8">0 pcs</div>
+                                                    }
+                                                </div>
+
+                                                <div class="row" style="padding-bottom: 3%;">
+                                                    <div class="col-lg-4 col-md-4 label">Good Output:</div>
+                                                    <div class="col-lg-8 col-md-8">
+                                                        <span style="color:@(ViewBag.total_good_output < ViewBag.shiftly_target ? "red" : "green")">@ViewBag.total_good_output</span> pcs
+                                                    </div>
+                                                </div>
+
+                                                <div class="row" style="padding-bottom: 3%;">
+                                                    <div class="col-lg-4 col-md-4 label">Actual Output Pcs:</div>
+                                                    <div class="col-lg-8 col-md-8">
+                                                        <span style="color:@(ViewBag.total_output_pcs < ViewBag.shiftly_target ? "red" : "green")">@ViewBag.total_output_pcs</span> pcs
+                                                    </div>
+                                                </div>
+
+                                                <div class="row" style="padding-bottom: 3%;">
+                                                    <div class="col-lg-4 col-md-4 label">Shiftly Target:</div>
+                                                    <div class="col-lg-8 col-md-8">@ViewBag.shiftly_target pcs</div>
+                                                </div>
+
+                                                <div class="row" style="padding-bottom: 3%;">
+                                                    <div class="col-lg-4 col-md-4 label">Notes:</div>
+                                                    <div class="col-lg-8 col-md-8">@ViewBag.pn_notes </div>
+                                                </div>
+
+                                                @* ------------------------------------------------ *@
+                                                <!-- End Tables without borders -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Default Accordion Example -->
+                                @* ------------------------------------------------ *@
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Bordered Tabs -->
+                </div>
+            </div>
+
+
+            <!-- RIGHT: SSC INJECTION MOLDING -->
+            <div class="col-lg-7">
+                <div id="sscCard" class="card">
+
+
+                    <div class="card-body">
+
+                        <div class="row justify-content-center">
+                            <div class="col-9">
+                                <h5 class="card-title text-center m-3">Update Data Per Two Hours</h5>
+                            </div>
+                            <div class="col-3 ">
+                                <button class="btn border-primary card-title @(!string.IsNullOrEmpty(partPpValue) ? "btn-primary" : "")" id="part_pp" onclick="changeColor('part_pp')">PP</button>
+                            </div>
+
+                        </div>
+
+
+                        @*@using (Html.BeginForm("innerDataMC", "Home", FormMethod.Post))*@
+
+                        @using (Html.BeginForm("innerDataMC_2", "Home", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <input name="main_id" type="hidden" value="@ViewBag.main_id">
+
+                            <!-- Apakah PART PP? jika ya maka aktifkan hidden input-->
+                            <input name="part_pp" id="part_pp_input" type="hidden" value="@(!string.IsNullOrEmpty(partPpValue) ? "YES" : "-")">
+
+                            <!---->
+
+
+                            <!-- Update Data Per Two Hours -->
+                            <table class="table table-hove text-center align-center">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Time</th>
+                                        <th scope="col">Actual Output</th>
+                                        <th scope="col">Availability</th>
+                                        <th scope="col">Quality</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>@ViewBag.time1</th>
+                                        <td>
+                                            @if (@ViewBag.actual_plan1 != 0)
+                                            {
+                                                <input type="number" name="actual_plan1" class="form-control" value="@ViewBag.actual_plan1" style="justify-content: center" />
+                                            }
+                                            else
+                                            {
+                                                <input type="number" name="actual_plan1" class="form-control" value="" style="justify-content: center" />
+                                            }
+                                        </td>
+                                        <td>
+                                            <!-- Downtime Modal Form centered Modal -->
+                                            <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#dt_modal" data-output-id="@ViewBag.hourPlan_o1">Downtime 1</button>
+
+                                        </td>
+                                        <td>
+                                            <!-- Reject Modal Form centered Modal -->
+                                            @if (@ViewBag.actual_plan1 != 0)
+                                            {
+                                                <button type="button" class="btn btn-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#rj_modal" data-output-id="@ViewBag.hourPlan_o1">Reject 1</button>
+
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-secondary rounded-pill" onclick="showAlert()">Reject 1</button>
+                                            }
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>@ViewBag.time2</th>
+                                        <td>
+                                            @if (@ViewBag.actual_plan2 != 0)
+                                            {
+                                                <input type="number" name="actual_plan2" class="form-control" value="@ViewBag.actual_plan2" style="justify-content: center" />
+                                            }
+                                            else
+                                            {
+                                                <input type="number" name="actual_plan2" class="form-control" value="" style="justify-content: center" />
+                                            }
+                                        </td>
+                                        <td>
+                                            <!-- Downtime Modal Form centered Modal -->
+                                            <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#dt_modal" data-output-id="@ViewBag.hourPlan_o2">Downtime 2</button>
+                                        </td>
+                                        <td>
+                                            <!-- Reject Modal Form centered Modal -->
+                                            @if (@ViewBag.actual_plan2 != 0)
+                                            {
+                                                <button type="button" class="btn btn-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#rj_modal" data-output-id="@ViewBag.hourPlan_o2">Reject 2</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-secondary rounded-pill" onclick="showAlert()">Reject 2</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>@ViewBag.time3</th>
+                                        <td>
+                                            @if (@ViewBag.actual_plan3 != 0)
+                                            {
+                                                <input type="number" name="actual_plan3" class="form-control" value="@ViewBag.actual_plan3" style="justify-content: center" />
+                                            }
+                                            else
+                                            {
+                                                <input type="number" name="actual_plan3" class="form-control" value="" style="justify-content: center" />
+                                            }
+                                        </td>
+                                        <td>
+                                            <!-- Downtime Modal Form centered Modal -->
+                                            <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#dt_modal" data-output-id="@ViewBag.hourPlan_o3">Downtime 3</button>
+                                        </td>
+                                        <td>
+                                            <!-- Reject Modal Form centered Modal -->
+                                            @if (@ViewBag.actual_plan3 != 0)
+                                            {
+                                                <button type="button" class="btn btn-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#rj_modal" data-output-id="@ViewBag.hourPlan_o3">Reject 3</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-secondary rounded-pill" onclick="showAlert()">Reject 3</button>
+                                            }
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>@ViewBag.time4</th>
+                                        <td>
+                                            @if (@ViewBag.actual_plan4 != 0)
+                                            {
+                                                <input type="number" name="actual_plan4" class="form-control" value="@ViewBag.actual_plan4" style="justify-content: center" />
+                                            }
+                                            else
+                                            {
+                                                <input type="number" name="actual_plan4" class="form-control" value="" style="justify-content: center" />
+                                            }
+                                        </td>
+                                        <td>
+                                            <!-- Downtime Modal Form centered Modal -->
+                                            <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#dt_modal" data-output-id="@ViewBag.hourPlan_o4">Downtime 4</button>
+                                        </td>
+                                        <td>
+                                            <!-- Reject Modal Form centered Modal -->
+                                            @if (@ViewBag.actual_plan4 != 0)
+                                            {
+                                                <button type="button" class="btn btn-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#rj_modal" data-output-id="@ViewBag.hourPlan_o4">Reject 4</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-secondary rounded-pill" onclick="showAlert()">Reject 4</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>@ViewBag.time5</th>
+                                        <td>
+                                            @if (@ViewBag.actual_plan5 != 0)
+                                            {
+                                                <input type="number" name="actual_plan5" class="form-control" value="@ViewBag.actual_plan5" style="justify-content: center" />
+                                            }
+                                            else
+                                            {
+                                                <input type="number" name="actual_plan5" class="form-control" value="" style="justify-content: center" />
+                                            }
+                                        </td>
+                                        <td>
+                                            <!-- Downtime Modal Form centered Modal -->
+                                            <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#dt_modal" data-output-id="@ViewBag.hourPlan_o5">Downtime 5</button>
+                                        </td>
+                                        <td>
+                                            <!-- Reject Modal Form centered Modal -->
+                                            @if (@ViewBag.actual_plan5 != 0)
+                                            {
+                                                <button type="button" class="btn btn-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#rj_modal" data-output-id="@ViewBag.hourPlan_o5">Reject 5</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-secondary rounded-pill" onclick="showAlert()">Reject 5</button>
+                                            }
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <th>@ViewBag.time6</th>
+                                        <td>
+                                            @if (@ViewBag.actual_plan6 != 0)
+                                            {
+                                                <input type="number" name="actual_plan6" class="form-control" value="@ViewBag.actual_plan6" style="justify-content: center" />
+                                            }
+                                            else
+                                            {
+                                                <input type="number" name="actual_plan6" class="form-control" value="" style="justify-content: center" />
+                                            }
+                                        </td>
+                                        <td>
+                                            <!-- Downtime Modal Form centered Modal -->
+                                            <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#dt_modal" data-output-id="@ViewBag.hourPlan_o6">Downtime 6</button>
+                                        </td>
+                                        <td>
+                                            <!-- Reject Modal Form centered Modal -->
+                                            @if (@ViewBag.actual_plan6 != 0)
+                                            {
+                                                <button type="button" class="btn btn-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#rj_modal" data-output-id="@ViewBag.hourPlan_o6">Reject 6</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-secondary rounded-pill" onclick="showAlert()">Reject 6</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>@ViewBag.time7</th>
+                                        <td>
+                                            @if (@ViewBag.actual_plan7 != 0)
+                                            {
+                                                <input type="number" name="actual_plan7" class="form-control" value="@ViewBag.actual_plan7" style="justify-content: center" />
+                                            }
+                                            else
+                                            {
+                                                <input type="number" name="actual_plan7" class="form-control" value="" style="justify-content: center" />
+                                            }
+                                        </td>
+                                        <td>
+                                            <!-- Downtime Modal Form centered Modal -->
+                                            <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#dt_modal" data-output-id="@ViewBag.hourPlan_o7">Downtime 7</button>
+                                        </td>
+                                        <td>
+                                            <!-- Reject Modal Form centered Modal -->
+                                            @if (@ViewBag.actual_plan7 != 0)
+                                            {
+                                                <button type="button" class="btn btn-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#rj_modal" data-output-id="@ViewBag.hourPlan_o7">Reject 7</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-secondary rounded-pill" onclick="showAlert()">Reject 7</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>@ViewBag.time8</th>
+                                        <td>
+                                            @if (@ViewBag.actual_plan8 != 0)
+                                            {
+                                                <input type="number" name="actual_plan8" class="form-control" value="@ViewBag.actual_plan8" style="justify-content: center" />
+                                            }
+                                            else
+                                            {
+                                                <input type="number" name="actual_plan8" class="form-control" value="" style="justify-content: center" />
+                                            }
+                                        </td>
+                                        <td>
+                                            <!-- Downtime Modal Form centered Modal -->
+                                            <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#dt_modal" data-output-id="@ViewBag.hourPlan_o8">Downtime 8</button>
+                                        </td>
+                                        <td>
+                                            <!-- Reject Modal Form centered Modal -->
+                                            @if (@ViewBag.actual_plan8 != 0)
+                                            {
+                                                <button type="button" class="btn btn-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#rj_modal" data-output-id="@ViewBag.hourPlan_o8">Reject 8</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-secondary rounded-pill" onclick="showAlert()">Reject 8</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                    @if (@ViewBag.shift != 3)
+                                    {
+                                        <tr>
+                                            <th>@ViewBag.time9</th>
+                                            <td>
+                                                @if (@ViewBag.actual_plan9 != 0)
+                                                {
+                                                    <input type="number" name="actual_plan9" class="form-control" value="@ViewBag.actual_plan9" style="justify-content: center" />
+                                                }
+                                                else
+                                                {
+                                                    <input type="number" name="actual_plan9" class="form-control" value="" style="justify-content: center" />
+                                                }
+                                            </td>
+                                            <td>
+                                                <!-- Downtime Modal Form centered Modal -->
+                                                <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#dt_modal" data-output-id="@ViewBag.hourPlan_o9">Downtime 9</button>
+                                            </td>
+                                            <td>
+                                                <!-- Reject Modal Form centered Modal -->
+                                                @if (@ViewBag.actual_plan9 != 0)
+                                                {
+                                                    <button type="button" class="btn btn-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#rj_modal" data-output-id="@ViewBag.hourPlan_o9">Reject 9</button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="btn btn-secondary rounded-pill" onclick="showAlert()">Reject 9</button>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                    <tr id="notes">
+                                        <th>PN/MC Note</th>
+                                        <td>
+                                            <select name="pn_notes" class="form-select" required>
+                                                <option selected value="-">-- Select Note --</option>
+                                                <option value="Blocked Cavity" @(ViewBag.pn_notes == "Blocked Cavity" ? "selected" : "")>Blocked Cavity</option>
+                                                <option value="CT Lama - Quality Issue" @(ViewBag.pn_notes == "CT Lama - Quality Issue" ? "selected" : "")>CT Lama - Quality Issue</option>
+                                                <option value="CT Lama - Process Issue" @(ViewBag.pn_notes == "CT Lama - Process Issue" ? "selected" : "")>CT Lama - Process Issue</option>
+                                                @*<option value="CT Over" @(ViewBag.pn_notes == "CT Over" ? "selected" : "")>CT Over (Kecepetan)</option>*@
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- End Table with hoverable rows -->
+                            <center>
+                                <button type="submit" class="btn btn-primary rounded-pill w-50 me-2">SAVE</button>
+                                @*<button type="button" class="btn btn-info rounded-pill w-25 ms-2" data-bs-toggle="modal" data-bs-target="#notes_modal">Notes</button>*@
+                            </center>
+
+                        }
+
+                        <!----------------------------------------------------------------------->
+                        @* DOWNTIME - HIDDEN MODAL FORM *@
+                        <!----------------------------------------------------------------------->
+                        <!-- Start Downtime Modal Form centered Modal-->
+                        <div class="modal fade" id="dt_modal" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Downtime Modal Content</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+
+                                    @* ----------CONTENT - FORM---------- *@
+                                    <!--------- MODAL START --------->
+                                    @using (Html.BeginForm("outputDowntime", "Home", FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <div class="modal-body">
+
+                                            <div class="row mb-3">
+                                                <div class="col-sm-8">
+                                                    <input class="form-control" name="model.main_id_dt" type="hidden" value="@ViewBag.main_id">
+                                                    <input class="form-control" name="model.hour_counter" type="hidden" value="">
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label for="inputTime" class="col-sm-4 col-form-label">Time Start</label>
+                                                <div class="col-sm-8">
+                                                    <input id="start" name="model.dt_start" type="time" class="form-control" value="" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label for="inputTime" class="col-sm-4 col-form-label">Time Finish</label>
+                                                <div class="col-sm-8">
+                                                    <input id="finish" name="model.dt_finish" type="time" class="form-control" value="" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-sm-4 col-form-label">Downtime Reason</label>
+                                                <div class="col-sm-8">
+                                                    <select class="form-select" name="model.downtime_code" id="pim_downtime" aria-label="Default select example" required>
+                                                        <option selected disabled value="">-- Select Reason --</option>
+                                                        @foreach (var item in Model.pim_Downtimes.Where(x => x.dt_code != "ST26" && x.dt_code != "MT1").OrderBy(x => x.newid))
+                                                        {
+                                                            <option value="@item.dt_code"> @item.newid - @item.dt_remarks</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3" id="downtime_notes" >
+                                                <label for="dt_notes" class="col-sm-4 col-form-label">Notes</label>
+                                                <div class="col-sm-8">
+                                                    <textarea class="form-control" name="model.downtime_notes" rows="2" cols="50" minlength="5" maxlength="24"></textarea>
+                                                    @*<textarea class="form-control" name="dt_notes" rows="2" cols="50" maxlength="24"></textarea>*@
+                                                </div>
+                                            </div>
+                                            <!--- MODAL FORM FOOTER -->
+                                            <div class="row mb-3 pt-5">
+                                                <div class="col-sm-12 modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-danger">Submit Downtime</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @* ----------END - FORM---------- *@
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Downtime Modal Form centered Modal-->
+                        <!----------------------------------------------------------------------->
+                        @* REJECT - HIDDEN MODAL FORM *@
+                        <!----------------------------------------------------------------------->
+                        <!-- Start Reject Modal Form centered Modal-->
+                        <div class="modal fade" id="rj_modal" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Reject Modal Content</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+
+                                    @using (Html.BeginForm("outputReject", "Home", FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        <!-- REJECT MODAL START -->
+                                        <div class="modal-body">
+                                            <!-- DOWNTIME FORM -->
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <!-- General Form Elements -->
+                                                    <div class="needs-validation" novalidate>
+
+                                                        @* ------------- *@
+
+                                                        <div class="row mb-3">
+                                                            <div class="col-sm-8">
+                                                                <input class="form-control" name="model.main_id_rj" type="hidden" value="@ViewBag.main_id">
+                                                                <input class="form-control" name="model.hour_counter" type="hidden" value="">
+                                                            </div>
+                                                        </div>
+
+                                                        @* ------------- *@
+
+                                                        <div class="row mb-3">
+                                                            <label for="inputPassword" class="col-sm-4 col-form-label">Quantity</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="number" name="model.reject_qty" class="form-control" value="" min="1" required>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-3">
+                                                            <label class="col-sm-4 col-form-label">Remarks</label>
+                                                            <div class="col-sm-8">
+                                                                <select class="form-select" name="model.reject_code" id="validationCustom04" aria-label="Default select example" required>
+                                                                    <option selected disabled value="">-- Select Reject Reason --</option>
+                                                                    @foreach (var item in Model.pim_Rejects)
+                                                                    {
+                                                                        <option value="@item.rj_code"> @item.rj_code. @item.rj_remarks</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-3">
+                                                            <label for="inputPassword" class="col-sm-4 col-form-label">Notes</label>
+                                                            <div class="col-sm-8">
+                                                                <textarea class="form-control" name="model.reject_notes" rows="2" cols="50" maxlength="24"></textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-3 pt-5 modal-footer">
+                                                            <div class="col-sm-12">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-warning">Submit Reject</button>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <!-- End General Form Elements -->
+
+                                                </div>
+                                            </div>
+                                            <!-- END DOWNTIME FORM -->
+                                        </div>
+                                        <!-- REJECT MODAL END -->
+                                    }
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Reject Modal Form centered Modal-->
+                        @* REJECT - HIDDEN MODAL FORM *@
+                        <!----------------------------------------------------------------------->
+                        <!-- Start Reject Modal Form centered Modal-->
+                        <div class="modal fade" id="notes_modal" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Write Notes</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+
+                                    @using (Html.BeginForm("outputNotes", "Home", FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        <!-- REJECT MODAL START -->
+                                        <div class="modal-body">
+                                            <!-- DOWNTIME FORM -->
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <!-- General Form Elements -->
+                                                    <div class="needs-validation" novalidate>
+
+                                                        @* ------------- *@
+
+                                                        <div class="row mb-3">
+                                                            <div class="col-sm-8">
+                                                                <input class="form-control" name="model.main_id_rj" type="hidden" value="@ViewBag.main_id">
+                                                                <input class="form-control" name="model.hour_counter" type="hidden" value="">
+                                                            </div>
+                                                        </div>
+
+                                                        @* ------------- *@
+
+
+                                                        <div class="row mb-1">
+                                                            <label for="inputPassword" class="col-sm-4 col-form-label">Notes</label>
+                                                            <div class="col-sm-8">
+                                                                <textarea class="form-control" name="model.reject_notes" rows="3" cols="50" maxlength="100"></textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-1 pt-2 modal-footer">
+                                                            <div class="col-sm-12">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-info">Submit</button>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <!-- End General Form Elements -->
+
+                                                </div>
+                                            </div>
+                                            <!-- END DOWNTIME FORM -->
+                                        </div>
+                                        <!-- REJECT MODAL END -->
+                                    }
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Reject Modal Form centered Modal-->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div class="row">
+            <!-- REPORT -->
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body pt-3">
+                        <!-- Bordered Tabs -->
+                        <ul class="nav nav-tabs nav-tabs-bordered">
+                            <li class="nav-item">
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#downtime-report">Downtime Report</button>
+                            </li>
+
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#reject-report">Reject Report</button>
+                            </li>
+
+                        </ul>
+                        <div class="tab-content pt-2">
+                            @* DETALS DOWNTIME OUTPUT *@
+                            <div class="tab-pane fade show active downtime-report" id="downtime-report">
+                                <!-- REPORT - DOWNTIME OUTPUT -->
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-body">
+
+                                            <h5 class="card-title">
+                                                <!-- Tambahkan tombol refresh di dalam view -->
+                                                <button class="btn btn-success" onclick="location.reload();" style="margin-right:1%;"><i class="bi bi-arrow-clockwise"></i>&emsp;Refresh</button>
+                                                Total Downtime Machine @ViewBag.no_machine: <b>@ViewBag.totalDT minutes</b>
+                                            </h5>
+
+
+                                            <!-- Menampilkan Downtime Output -->
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">No</th>
+                                                        <th scope="col">Start</th>
+                                                        <th scope="col">Finish</th>
+                                                        <th scope="col">Hour</th>
+                                                        <th scope="col">Durations</th>
+                                                        <th scope="col">Not Run</th>
+                                                        <th scope="col">Remarks</th>
+                                                        <th scope="col">Notes</th>
+                                                        <th scope="col">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        int count_a = 0;
+                                                    }
+                                                    @foreach (var item in Model.VO_DOWNTIMEs)
+                                                    {
+                                                        <tr>
+                                                            <td>@(count_a+1)</td>
+                                                            <td>@item.dt_start</td>
+                                                            <td>@item.dt_finish</td>
+                                                            <td>@item.hour_counter</td>
+                                                            @if (@item.downtime_code != "PD9" && item.downtime_code != "Z02")
+                                                            {
+                                                                <td>@item.duration_minutes minutes</td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td>-</td>
+                                                            }
+                                                            <!--NOT RUNNING tidak ada Schedule masukkan ke sini-->
+                                                            @if (@item.downtime_code == "PD9" || item.downtime_code == "Z02")
+                                                            {
+                                                                <td>@item.duration_minutes minutes</td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td>-</td>
+                                                            }
+                                                            <td>@item.dt_remarks</td>
+                                                            <td>@item.downtime_notes</td>
+                                                            <td>
+                                                                @using (Html.BeginForm("innerDataMC", "Home", new { main_id = item.main_id_dt }, FormMethod.Post))
+                                                                {
+                                                                    @*@Html.AntiForgeryToken()*@
+                                                                    @Html.ActionLink("Delete", "downtimeDelete", new { id = item.downtime_id }, new
+                                                                    {
+                                                                        onclick = "return confirm('Apakah kamu yakin ingin menghapus data dengan nomor mesin \"" + item.no_machine + "\" dengan part number \"" + item.partnumber + "\" ?');",
+                                                                       @class = "btn btn-danger",
+                                                                       style = "color:white;"
+                                                                    })
+
+                                                                    @*<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item?')">
+                                                                            Delete<i class="fas fa-trash-alt"></i>
+                                                                        </button>*@
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                        count_a++;
+                                                    }
+
+                                                </tbody>
+                                            </table>
+                                            <!-- End Table with stripped rows -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @* --------------------------------- *@
+                            </div>
+
+                            @* DETALS REJECT OUTPUT *@
+                            <div class="tab-pane fade reject-report" pt-3" id="reject-report">
+                                <!-- REPORT - REJECT OUTPUT -->
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <!-- Tambahkan tombol refresh di dalam view -->
+                                                <button class="btn btn-success" onclick="location.reload();" style="margin-right:1%;"><i class="bi bi-arrow-clockwise"></i>&emsp;Refresh</button>
+                                                Total Reject Machine @ViewBag.no_machine: <b>@ViewBag.totalRJ pcs</b>
+                                            </h6>
+
+                                            <!-- Menampilkan Reject Output -->
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">No</th>
+                                                        <th scope="col">Part</th>
+                                                        <th scope="col">Hour</th>
+                                                        <th scope="col">Quantity</th>
+                                                        <th scope="col">Code</th>
+                                                        <th scope="col">Details</th>
+                                                        <th scope="col">Notes</th>
+                                                        <th scope="col">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        int count_b = 0;
+                                                    }
+                                                    @foreach (var item in Model.VO_REJECTs)
+                                                    {
+                                                        <tr style="max-width:100%;">
+                                                            <td>@(count_b+1)</td>
+                                                            <td>@item.partnumber</td>
+                                                            <td> jam ke: @item.hour_counter</td>
+                                                            <td>@item.reject_qty</td>
+                                                            <td>@item.reject_code</td>
+                                                            <td>@item.rj_remarks</td>
+                                                            <td>@item.reject_notes</td>
+                                                            <td>
+                                                                @using (Html.BeginForm("innerDataMC", "Home", new { main_id = item.main_id_rj }, FormMethod.Post))
+                                                                {
+                                                                    @Html.AntiForgeryToken()
+                                                                    @Html.ActionLink("Delete", "rejectDelete", new { reject_id = item.reject_id }, new
+                                                                    {
+                                                                        onclick = "return confirm('Apakah kamu yakin ingin menghapus data dengan nomor mesin \"" + item.no_machine + "\" dengan part number \"" + item.partnumber + "\" ?');",
+                                                                    @class = "btn btn-danger",
+                                                                    style = "color:white;"
+                                                                    })
+
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                        count_b++;
+                                                    }
+                                                </tbody>
+                                            </table>
+                                            <!-- End Table with stripped rows -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @* --------------------------------- *@
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!-- End Bordered Tabs -->
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </section>
+</main>
+<!-- End #main -->
+<!-- Script untuk Bootstrap -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@* MENGIRIM NILAI ID MASING-MASING MODAL FORM *@
+
+
+<!-- Javascript PP -->
+<!-- Javascript PP -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Panggil fungsi untuk menginisialisasi warna dan nilai
+        initializeColorAndValue();
+    });
+
+    function initializeColorAndValue() {
+        var button = document.getElementById('part_pp');
+        var part_ppInput = document.getElementById('part_pp_input');
+
+        // Periksa apakah ViewBag.part_pp memiliki nilai
+        if ('@ViewBag.part_pp' === 'YES') {
+            // Jika memiliki nilai, atur warna dan nilai awal
+            button.classList.add('btn-primary');
+            button.style.backgroundColor = '#0d6efd';
+            button.style.color = 'white';
+            part_ppInput.value = 'YES';
+        } else {
+            // Jika tidak memiliki nilai, atur warna dan nilai awal
+            button.style.backgroundColor = 'white';
+            button.style.color = '#0d6efd';
+            button.style.border = '2px solid';
+            part_ppInput.value = '-';
+        }
+    }
+
+    function changeColor(buttonId) {
+        var button = document.getElementById(buttonId);
+        var part_ppInput = document.getElementById('part_pp_input');
+
+        // Ubah warna button dari biru menjadi putih jika diklik ganti value >> ' - '
+        if (button.classList.contains('btn-primary')) {
+            button.classList.remove('btn-primary');
+            button.style.backgroundColor = 'white';
+            button.style.border = '2px solid';
+            button.style.color = '#0d6efd';
+            part_ppInput.value = '-';
+        } else {
+            button.classList.add('btn-primary');
+            button.style.backgroundColor = '#0d6efd';
+            button.style.color = 'white';
+            part_ppInput.value = 'YES';
+        }
+    }
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $('.btn-warning[data-bs-toggle="modal"]').click(function () {
+            var outputId = $(this).data('output-id');
+            $('#rj_modal input[name="model.hour_counter"]').val(outputId);
+        });
+
+        // Reset modal form saat modal ditutup
+        $('#rj_modal').on('hidden.bs.modal', function () {
+            $('#rj_modal input[name="model.hour_counter"]').val('');
+        });
+
+        $('.btn-danger[data-bs-toggle="modal"]').click(function () {
+            var outputId = $(this).data('output-id');
+            $('#dt_modal input[name="model.hour_counter"]').val(outputId);
+        });
+
+        // Reset modal form saat modal ditutup
+        $('#dt_modal').on('hidden.bs.modal', function () {
+            $('#dt_modal input[name="model.hour_counter"]').val('');
+        });
+    });
+</script>
+
+
+
+<script>
+    $(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            $('#dt_modal').modal('hide'); // Hide the modal
+        });
+    });
+    $(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            $('#rj_modal').modal('hide'); // Hide the modal
+        });
+    });
+
+    $(function () {
+        $("form").submit(function () {
+            $("#sscCard").load(location.href + " #sscCard");
+            return false;
+        });
+    });
+
+    /*location.reload(); // Refresh the page*/
+    $(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            var alert = $('#alert_submit');
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (data) {
+                    alert.removeClass('alert-danger').addClass('alert-success').text('Data saved successfully').fadeIn();
+                    startCountdown(alert, 15); // start 15-second countdown
+                    location.reload(); // refresh halaman
+                },
+                error: function (data) {
+                    alert.removeClass('alert-success').addClass('alert-danger').text('Error saving data').fadeIn();
+                    location.reload(); // refresh halaman
+                }
+            });
+        });
+
+        // Tidak berfungsi == alert tidak muncul
+        function startCountdown(alert, duration) {
+            var timer = duration, minutes, seconds;
+            var countdown = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                alert.find('.countdown').text(minutes + ":" + seconds);
+
+                if (--timer < 0) {
+                    clearInterval(countdown);
+                    alert.fadeOut();
+                }
+            }, 1000);
+        }
+    });
+
+    // Notes Handle
+    $(function () {
+        $("#pim_downtime").change(function () {
+            var selectedValue = $(this).val();
+
+            if (selectedValue === "Z01" || selectedValue === "MC27") {
+                $("#downtime_notes").attr("required", true);
+                $("#downtime_notes").show();
+            } else {
+                $("#downtime_notes").removeAttr("required");
+                $("#downtime_notes").hide();
+            }
+        });
+
+    });
+
+
+    function showAlert() {
+        document.getElementById("alert_actual_plan").style.display = "block";
+        setTimeout(function () {
+            document.getElementById("alert_actual_plan").style.display = "none";
+        }, 10000);
+    }
+
+    $(document).ready(function () {
+        $('form').submit(function (event) {
+            var start = $('#start').val();
+            var finish = $('#finish').val();
+            var duration = getDuration(start, finish);
+            if (duration > 60) {
+                event.preventDefault();
+                var alertBox = alert("Downtime tidak boleh lebih dari 1 jam.");
+                setTimeout(function () {
+                    $(alertBox).fadeOut('slow');
+                }, 15000); // menghapus alert setelah 15 detik
+            }
+        });
+
+        function getDuration(start, finish) {
+            var start_time = new Date("1970-01-01 " + start);
+            var finish_time = new Date("1970-01-01 " + finish);
+            var duration = finish_time - start_time;
+            var duration_in_minutes = duration / 1000 / 60;
+            return duration_in_minutes;
+        }
+    });
+
+</script>

@@ -1,0 +1,81 @@
+﻿@model IEnumerable<OEE_SSC.Models.pim_user_kpk>
+@{
+    ViewBag.Title = "importDataKPK";
+}
+
+<h2>importDataKPK</h2>
+
+
+<section class="section" style="padding: 80px 5% 3% 5%;">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <h2>Import KPK Data from Excel</h2>
+
+            @using (Html.BeginForm("importDataKPK", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="form-group mb-4">
+                    <label for="file">Excel File:</label>
+                    <input type="file" name="file" id="file" class="form-control" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Update KPK</button>
+            }
+
+            @if (ViewBag.Message != null)
+            {
+                <p class="text-success">@ViewBag.Message</p>
+            }
+
+            @if (ViewBag.Error != null)
+            {
+                <p class="text-danger">@ViewBag.Error</p>
+            }
+
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10 pt-lg-5">
+            <div class="card col-lg-12">
+                <div class="card-body ps-5 pe-5 pt-4 pb-3">
+
+                    <h5 class="card-title"> PLASTIC INJECTION MOLDING - MEMBER LIST </h5>
+                    @*<h1>@ViewBag.formattedDate</h1>*@
+                    <!-- Table with hoverable rows -->
+                    <form method="post" action="@Url.Action("importDataKPK", "Home")" style="font-size:small">
+                        @*<input type="submit" class="btn btn-success mb-4" value="Import Data" />*@
+
+                        <table class="table table-borderless datatable">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>KPK</th>
+                                    <th>Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int count = 1;
+                                }
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@count</td>
+                                        <td>@item.op_kpk</td>
+                                        <td>@item.op_name</td>
+                                    </tr>
+                                    count++;
+                                }
+                            </tbody>
+                        </table>
+                    </form>
+                    <!-- End Table with hoverable rows -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>

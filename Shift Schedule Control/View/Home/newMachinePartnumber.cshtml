@@ -1,0 +1,168 @@
+﻿@model OEE_SSC.Models.PIM_SSC_MAIN
+
+@{
+    ViewBag.Title = "newMachinePartnumber";
+}
+
+<h2>Edit Data newMachinePartnumber </h2>
+
+<section class="section" style="padding: 85px 55px 40px 55px;">
+    <div class="row justify-content-center">
+
+
+        <div class="col-lg-9 col-md-11 pt-lg-5">
+
+            @* VALIDATION (PART NUMBER AND NO MACHINE) *@
+            @if (TempData["Error_add_new"] != null)
+            {
+                <div id="alert_submit2" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-octagon me-1"></i>
+                    @TempData["Error_add_new"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+
+
+            <div class="card col-lg-12">
+                <div class="card-body">
+
+                    <form method="post" action="@Url.Action("newMachinePartnumber")">
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+
+                            <h1>@ViewBag.WeekEnding</h1>
+                            <h5 class="card-title"> Masukkan Informasi Data Machine @ViewBag.no_machine  </h5>
+                            <hr />
+
+
+                            <input name="main_id" type="hidden" value="@ViewBag.main_id">
+                            <input name="date_" type="hidden" value=" @ViewBag.date_">
+                            <input name="no_machine" type="hidden" value="@ViewBag.no_machine">
+                            <input name="shift_" type="hidden" value="@ViewBag.shift_">
+                            <input name="we_" type="hidden" value="@ViewBag.we_">
+
+                            <input name="total_actoutput" type="hidden" value="@ViewBag.total_actoutput">
+                            <input name="total_output_pcs" type="hidden" value="@ViewBag.total_output_pcs">
+                            <input name="mc_area" type="hidden" value="@ViewBag.mc_area">
+
+                            <input name="part_pp" type="hidden" value="@ViewBag.part_pp">
+                            <input name="pn_notes" type="hidden" value="@ViewBag.pn_notes">
+
+                            <!---->
+
+                            <div class="row mb-3 pt-3">
+                                <label for="op_kpk" class="col-sm-3 col-form-label">KPK Operator:</label>
+                                <div class="col-sm-9">
+                                    <input name="op_kpk" type="number" class="form-control" value="@ViewBag.op_kpk" placeholder="Masukkan kpk operator" minlength="5" pattern="[A-Za-z0-9]{5,}" required>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="partnumber" class="col-sm-3 col-form-label">Part Number:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" id="partnumberInput" onkeyup="this.value = this.value.toUpperCase()" name="partnumber" class="form-control" value="@ViewBag.partnumber" placeholder="Masukkan part number" minlength="9" required>
+
+                                </div>
+                            </div>
+                            @* ---- Display CT if CT doesn't exist in DB' *@
+                            @*<div class="row mb-3" id="cycleTimeSection">
+                                <label for="pn_ct" class="col-sm-3 col-form-label">Cycle Time (CT):</label>
+                                <div class="col-sm-9">
+                                    <input type="number" name="pn_ct" class="form-control" value="@ViewBag.pn_ct" min="1" placeholder="Masukkan cycle time">
+                                </div>
+                            </div>*@
+
+
+
+                            <div class="row mb-3">
+                                <label for="shiftly_target" class="col-sm-3 col-form-label">Shiftly Target:</label>
+                                <div class="col-sm-9">
+                                    <input type="number" name="sch" class="form-control" value="@ViewBag.sch" min="1" placeholder="Masukkan Cycle Time" required>
+
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 pb-3">
+                                <!--pn_cav per Part Number minimal nilai cav = 1-->
+                                <label for="pn_cav" class="col-lg-3 col-sm-3 col-form-label">Cav:</label>
+                                <div class="col-lg-4 col-sm-4">
+                                    <input name="pn_cav" type="number" class="form-control" value="@ViewBag.pn_cav" min="1" placeholder="Masukkan CAV" required>
+                                </div>
+                                <!--pn_set per Part Number-->
+                                <label for="pn_set" class="col-lg-1 col-sm-1 col-form-label">Set Toy:</label>
+                                <div class="col-lg-4 col-sm-4">
+
+
+                                    @if (ViewBag.pn_set == ViewBag.pn_cav)
+                                    {
+                                        <input name="pn_set" type="number" class="form-control" value="0" placeholder="Masukkan SET" required>
+                                    }
+                                    else
+                                    {
+                                        <input name="pn_set" type="number" class="form-control" value="@ViewBag.pn_set" placeholder="Masukkan SET" required>
+                                    }
+
+                                </div>
+                            </div>
+
+
+
+
+                            <hr />
+
+                            <div class="row mb-3 pt-3">
+                                <div class="col-sm-12">
+                                    @if (ViewBag.op_kpk != null && ViewBag.partnumber != null && ViewBag.sch != null)
+                                    {
+                                        <a type="button" class="btn btn-primary me-1" href="@Url.Action("innerDataMC", "Home", new { main_id = ViewBag.main_id })">Cancel</a>
+
+                                    }
+                                    else
+                                    {
+                                        <a type="button" class="btn btn-secondary" href="@Url.Action("filterByMachine", "Home", new { shiftEmp = Model.shift_, dateFilter = Model.date_, n_machine = Model.no_machine})"> Cancel </a>
+
+                                    }
+                                    <button type="submit" class="btn btn-success">Save</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@*<script>
+    $(document).ready(function () {
+        // Fungsi untuk menangani perubahan pada input partnumber
+        $('#partnumberInput').on('input', function () {
+            var partnumberValue = $(this).val();
+
+            // Kirim permintaan Ajax ke server
+            $.ajax({
+                url: '/Home/NewMachinePartnumber_getCT',
+                type: 'GET',
+                data: { partnumber: partnumberValue },
+                success: function (result) {
+                    // Tampilkan atau sembunyikan elemen berdasarkan hasil Ajax
+                    if (result === null) {
+                        $('#cycleTimeSection').show();
+                    } else {
+                        // Gunakan hasil sesuai dengan properti yang ada pada objek JSON yang diterima
+                        // Misal, jika hasil dari MDS_PART_NUMBER_LIST, Anda mungkin ingin menggunakan result.NAMA_PROP
+                        $('#cycleTimeSection').hide();
+                    }
+                },
+                error: function () {
+                    console.log('Error during Ajax request');
+                }
+            });
+        });
+    });
+
+
+</script>*@

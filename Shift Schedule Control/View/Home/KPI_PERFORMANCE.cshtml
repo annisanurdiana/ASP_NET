@@ -1,0 +1,702 @@
+﻿<!-- Update the model type -->
+
+@model IEnumerable<OEE_SSC.Models.pim_kpi_performance>
+@{
+    ViewBag.Title = "General Data";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main id="" class="main" style="padding: 85px 35px 40px 35px;">
+    <section class="section">
+        <div class="row justify-content-center mt2 p-5">
+            <div class="col-lg-11 col-md-12">
+
+                <div class="card">
+
+
+                    <div class="card-body">
+                        @*<p>START: @ViewBag.LWP_startDate</p>
+                            <p>END: @ViewBag.LWP_endDate</p>
+                            <p>Previous WE: @ViewBag.previousWeekEnding</p>
+                            <br />*@
+
+                        <h3 class="card-title text-center m-3">KPI PERFORMANCE on Week Ending @ViewBag.weekEnding</h3>
+
+                        <!-- Table with KPI Data -->
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>KPI</th>
+                                    <th>LWP</th>
+                                    @foreach (var date in ViewBag.Dates)
+                                    {
+                                        <th>@date.ToString("ddd dd/MM")</th>
+                                    }
+                                    <th>WTD</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var kvp in ViewBag.KPIs)
+                                {
+                                    var kpiName = kvp.Key;
+                                    var kpiValues = kvp.Value;
+
+                                    <tr>
+                                        <td>@kpiName</td>
+                                        <!-- LAST WEEK PERFORMANCE -->
+                                        <td>
+                                            @if (ViewBag.AverageLwpValues.ContainsKey(kpiName))
+                                            {
+                                                var averageLwpValue = ViewBag.AverageLwpValues[kpiName];
+
+                                                // Check if averageLwpValue is an integer
+                                                if (averageLwpValue % 1 == 0)
+                                                {
+                                                    // Display "N/A" if the value is 0
+                                                    if (averageLwpValue == 0)
+                                                    {
+                                                        <p class="text-secondary"> N/A</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        //var value_percent = averageLwpValue * 100;
+                                                        var value_percent = averageLwpValue;
+                                                        // Show the value with the unit based on the KPI name
+                                                        if (kpiName == "AUDIT 5S")
+                                                        {
+                                                            if (averageLwpValue >= 4.5)
+                                                            {
+                                                                <p class="text-success"> @averageLwpValue</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p class="text-danger"> @averageLwpValue</p>
+                                                            }
+                                                        }
+                                                        else if (kpiName == "COMPLIANCE")
+                                                        {
+                                                            if (averageLwpValue > 100)
+                                                            {
+                                                                <p class="text-danger"> @value_percent %</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p class="text-success"> @value_percent %</p>
+                                                            }
+                                                        }
+                                                        else if (kpiName == "EHS PATROL")
+                                                        {
+                                                            if (averageLwpValue > 100)
+                                                            {
+                                                                <p class="text-danger"> @value_percent %</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p class="text-success"> @value_percent %</p>
+                                                            }
+                                                        }
+                                                        else if (kpiName == "EFF")
+                                                        {
+                                                            if (averageLwpValue > 107)
+                                                            {
+                                                                <p class="text-danger"> @value_percent %</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p class="text-success"> @value_percent %</p>
+                                                            }
+                                                        }
+                                                        else if (kpiName == "DSA ITEM")
+                                                        {
+                                                            if (averageLwpValue > 90)
+                                                            {
+                                                                <p class="text-danger"> @value_percent %</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p class="text-success"> @value_percent %</p>
+                                                            }
+                                                        }
+                                                        else if (kpiName == "DSA VOLUME")
+                                                        {
+                                                            if (averageLwpValue > 98)
+                                                            {
+                                                                <p class="text-danger"> @value_percent %</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p class="text-success"> @value_percent %</p>
+                                                            }
+                                                        }
+                                                        else if (kpiName == "LBO PO (PCS)")
+                                                        {
+                                                            if (averageLwpValue > 0)
+                                                            {
+                                                                <p class="text-danger"> @averageLwpValue pcs</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p class="text-success"> @averageLwpValue pcs</p>
+                                                            }
+                                                        }
+                                                        else if (kpiName == "LBO PO (PPM)" || kpiName == "SCRAP")
+                                                        {
+                                                            if ((kpiName == "LBO PO (PPM)" && averageLwpValue >= 230) || kpiName == "SCRAP" && averageLwpValue >= 1300)
+                                                            {
+                                                                <p class="text-success"> @averageLwpValue ppm</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p class="text-danger"> @averageLwpValue ppm</p>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <p>@value_percent %</p>
+                                                        }
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    var value_percent = averageLwpValue ;
+                                                    // Show the value with the unit based on the KPI name
+                                                    if (kpiName == "AUDIT 5S")
+                                                    {
+                                                        if (averageLwpValue >= 4.5)
+                                                        {
+                                                            <p class="text-success"> @averageLwpValue.ToString("F2")</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p class="text-danger"> @averageLwpValue.ToString("F2")</p>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "COMPLIANCE")
+                                                    {
+                                                        if (averageLwpValue > 100)
+                                                        {
+                                                            <p class="text-success"> @value_percent.ToString("F2")  %</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p class="text-danger"> @value_percent.ToString("F2")  %</p>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "EHS PATROL")
+                                                    {
+                                                        if (averageLwpValue > 100)
+                                                        {
+                                                            <p class="text-success"> @value_percent.ToString("F2")  %</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p class="text-danger"> @value_percent.ToString("F2")  %</p>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "EFFICIENCY")
+                                                    {
+                                                        if (averageLwpValue > 107)
+                                                        {
+                                                            <p class="text-success"> @value_percent.ToString("F2")  %</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p class="text-danger"> @value_percent.ToString("F2")  %</p>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "DSA ITEM")
+                                                    {
+                                                        if (averageLwpValue > 90)
+                                                        {
+                                                            <p class="text-success"> @value_percent.ToString("F2")  %</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p class="text-danger"> @value_percent.ToString("F2")  %</p>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "DSA VOLUME")
+                                                    {
+                                                        if (averageLwpValue > 98)
+                                                        {
+                                                            <p class="text-success"> @value_percent.ToString("F2")  %</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p class="text-danger"> @value_percent.ToString("F2")  %</p>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "LBO PO (PCS)")
+                                                    {
+                                                        if (averageLwpValue > 0)
+                                                        {
+                                                            <p class="text-success"> @averageLwpValue pcs</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p class="text-danger"> @averageLwpValue pcs</p>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "LBO PO (PPM)" || kpiName == "SCRAP")
+                                                    {
+                                                        if ((kpiName == "LBO PO (PPM)" && averageLwpValue >= 230) || kpiName == "SCRAP" && averageLwpValue >= 1300)
+                                                        {
+                                                            <p class="text-success"> @averageLwpValue.ToString("F2")  ppm</p>
+                                                        }
+                                                        else
+                                                        {
+                                                            <p class="text-danger"> @averageLwpValue.ToString("F2")  ppm</p>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <p>@value_percent.ToString("F2")  %</p>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <p>-</p>
+                                            }
+                                        </td>
+
+                                        <!-- MONDAY TO SATURDAY VALUES -->
+                                        @foreach (var date in ViewBag.Dates)
+                                        {
+                                            // Get the value for the current date from the dictionary, default to 0 if not found
+                                            var value = kpiValues.ContainsKey(date) ? kpiValues[date] : 0;
+
+                                            // Check if the value is a whole number
+                                            if (value % 1 == 0)
+                                            {
+                                                // Display "N/A" if the value is 0
+                                                if (value == 0)
+                                                {
+                                                    <td> N/A</td>
+                                                }
+                                                else
+                                                {
+                                                    var value_percent = value ;
+                                                    // Show the value with the unit based on the KPI name
+                                                    if (kpiName == "AUDIT 5S")
+                                                    {
+                                                        if (value >= 4.5)
+                                                        {
+                                                            <td class="text-success"> @value.ToString("F2")</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-danger"> @value.ToString("F2")</td>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "COMPLIANCE")
+                                                    {
+                                                        if (value > 100)
+                                                        {
+                                                            <td class="text-success"> @value_percent %</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-danger"> @value_percent %</td>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "EHS PATROL")
+                                                    {
+                                                        if (value > 100)
+                                                        {
+                                                            <td class="text-success"> @value_percent %</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-danger"> @value_percent %</td>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "EFFICIENCY")
+                                                    {
+                                                        if (value > 107)
+                                                        {
+                                                            <td class="text-success"> @value_percent %</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-danger"> @value_percent %</td>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "DSA ITEM")
+                                                    {
+                                                        if (value > 90)
+                                                        {
+                                                            <td class="text-success"> @value_percent %</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-danger"> @value_percent %</td>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "DSA VOLUME")
+                                                    {
+                                                        if (value > 98)
+                                                        {
+                                                            <td class="text-success"> @value_percent %</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-danger"> @value_percent %</td>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "LBO PO (PCS)")
+                                                    {
+                                                        if (value > 0)
+                                                        {
+                                                            <td class="text-success"> @value pcs</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-danger"> @value pcs</td>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "LBO PO (PPM)" || kpiName == "SCRAP")
+                                                    {
+                                                        if ((kpiName == "LBO PO (PPM)" && value >= 230) || kpiName == "SCRAP" && value >= 1300)
+                                                        {
+                                                            <td class="text-success"> @value ppm</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-danger"> @value ppm</td>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>@value_percent %</td>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                var value_percent = value ;
+                                                // Show the value with the unit based on the KPI name
+                                                if (kpiName == "AUDIT 5S")
+                                                {
+                                                    if (value >= 4.5)
+                                                    {
+                                                        <td class="text-success"> @value.ToString("F2")</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-danger"> @value.ToString("F2")</td>
+                                                    }
+                                                }
+                                                else if (kpiName == "COMPLIANCE")
+                                                {
+                                                    if (value > 100)
+                                                    {
+                                                        <td class="text-success"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-danger"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                }
+                                                else if (kpiName == "EHS PATROL")
+                                                {
+                                                    if (value > 100)
+                                                    {
+                                                        <td class="text-success"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-danger"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                }
+                                                else if (kpiName == "EFFICIENCY")
+                                                {
+                                                    if (value > 107)
+                                                    {
+                                                        <td class="text-success"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-danger"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                }
+                                                else if (kpiName == "DSA ITEM")
+                                                {
+                                                    if (value > 90)
+                                                    {
+                                                        <td class="text-success"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-danger"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                }
+                                                else if (kpiName == "DSA VOLUME")
+                                                {
+                                                    if (value > 98)
+                                                    {
+                                                        <td class="text-success"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-danger"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                }
+                                                else if (kpiName == "LBO PO (PCS)")
+                                                {
+                                                    if (value > 0)
+                                                    {
+                                                        <td class="text-success"> @value pcs</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-danger"> @value pcs</td>
+                                                    }
+                                                }
+                                                else if (kpiName == "LBO PO (PPM)" || kpiName == "SCRAP")
+                                                {
+                                                    if ((kpiName == "LBO PO (PPM)" && value >= 230) || kpiName == "SCRAP" && value >= 1300)
+                                                    {
+                                                        <td class="text-success"> @value.ToString("F2") ppm</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-danger"> @value.ToString("F2") ppm</td>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <td>@value_percent.ToString("F2") %</td>
+                                                }
+                                            }
+                                        }
+
+                                        <!-- WEEK TO DATE -->
+                                        @if (ViewBag.AverageWtdValues.ContainsKey(kpiName))
+                                        {
+                                            var wtdValue = ViewBag.AverageWtdValues[kpiName];
+                                            //@wtdValue.ToString("F2")
+
+                                            // Check if the value is a whole number
+                                            if (wtdValue % 1 == 0)
+                                            {
+                                                // Display "N/A" if the value is 0
+                                                if (wtdValue == 0)
+                                                {
+                                                    <td class="text-secondary"> N/A</td>
+                                                }
+                                                else
+                                                {
+                                                    //var value_percent = wtdValue * 100;
+                                                    var value_percent = wtdValue ;
+                                                    // Show the wtdValue with the unit based on the KPI name
+                                                    if (kpiName == "AUDIT 5S")
+                                                    {
+                                                        if (wtdValue >= 4.5)
+                                                        {
+                                                            <td class="text-success"> @wtdValue</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-danger"> @wtdValue</td>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "COMPLIANCE")
+                                                    {
+                                                        if (wtdValue > 100)
+                                                        {
+                                                            <td class="text-success"> @value_percent %</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-danger"> @value_percent %</td>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "EHS PATROL")
+                                                    {
+                                                        if (wtdValue > 100)
+                                                        {
+                                                            <td class="text-success"> @value_percent %</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-danger"> @value_percent %</td>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "EFFICIENCY")
+                                                    {
+                                                        if (wtdValue > 107)
+                                                        {
+                                                            <td class="text-success"> @value_percent %</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-danger"> @value_percent %</td>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "DSA ITEM")
+                                                    {
+                                                        if (wtdValue > 90)
+                                                        {
+                                                            <td class="text-success"> @value_percent %</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-danger"> @value_percent %</td>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "DSA VOLUME")
+                                                    {
+                                                        if (wtdValue > 98)
+                                                        {
+                                                            <td class="text-success"> @value_percent %</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-danger"> @value_percent %</td>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "LBO PO (PCS)")
+                                                    {
+                                                        if (wtdValue > 0)
+                                                        {
+                                                            <td class="text-success"> @wtdValue pcs</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-danger"> @wtdValue pcs</td>
+                                                        }
+                                                    }
+                                                    else if (kpiName == "LBO PO (PPM)" || kpiName == "SCRAP")
+                                                    {
+                                                        if ((kpiName == "LBO PO (PPM)" && wtdValue >= 230) || kpiName == "SCRAP" && wtdValue >= 1300)
+                                                        {
+                                                            <td class="text-success"> @wtdValue ppm</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-danger"> @wtdValue ppm</td>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>@value_percent %</td>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+
+                                                //var value_percent = wtdValue * 100;
+                                                var value_percent = wtdValue;
+                                                // Show the wtdValue with the unit based on the KPI name
+                                                if (kpiName == "AUDIT 5S")
+                                                {
+                                                    if (wtdValue >= 4.5)
+                                                    {
+                                                        <td class="text-success"> @wtdValue.ToString("F2")</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-danger"> @wtdValue.ToString("F2")</td>
+                                                    }
+                                                }
+                                                else if (kpiName == "COMPLIANCE")
+                                                {
+                                                    if (wtdValue > 100)
+                                                    {
+                                                        <td class="text-success"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-danger"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                }
+                                                else if (kpiName == "EHS PATROL")
+                                                {
+                                                    if (wtdValue > 100)
+                                                    {
+                                                        <td class="text-success"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-danger"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                }
+                                                else if (kpiName == "EFFICIENCY")
+                                                {
+                                                    if (wtdValue > 107)
+                                                    {
+                                                        <td class="text-success"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-danger"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                }
+                                                else if (kpiName == "DSA ITEM")
+                                                {
+                                                    if (wtdValue > 90)
+                                                    {
+                                                        <td class="text-success"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-danger"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                }
+                                                else if (kpiName == "DSA VOLUME")
+                                                {
+                                                    if (wtdValue > 98)
+                                                    {
+                                                        <td class="text-success"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-danger"> @value_percent.ToString("F2") %</td>
+                                                    }
+                                                }
+                                                else if (kpiName == "LBO PO (PCS)")
+                                                {
+                                                    if (wtdValue > 0)
+                                                    {
+                                                        <td class="text-success"> @wtdValue pcs</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-danger"> @wtdValue pcs</td>
+                                                    }
+                                                }
+                                                else if (kpiName == "LBO PO (PPM)" || kpiName == "SCRAP")
+                                                {
+                                                    if ((kpiName == "LBO PO (PPM)" && wtdValue >= 230) || kpiName == "SCRAP" && wtdValue >= 1300)
+                                                    {
+                                                        <td class="text-success"> @wtdValue.ToString("F2") ppm</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-danger"> @wtdValue.ToString("F2") ppm</td>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <td>@value_percent.ToString("F2") %</td>
+                                                }
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            <td> - </td>
+                                        }
+                                    </tr>
+                                }
+                        </table>
+                        <!-- End Table with KPI Data -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

@@ -1,0 +1,513 @@
+﻿@model OEE_SSC.Models.pimListData
+@{
+    //ViewBag.Title = "generalDataMC";
+    // mengarah dari
+    ViewBag.Title = "General Data";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    DateTime currentDate = DateTime.Now;
+    DateTime targetDate = ViewBag.dateFilter;
+
+    //Menambahkan satu hari ke targetDate
+    currentDate = currentDate.AddDays(-8);
+}
+
+<main id="" class="main" style="padding: 85px 35px 40px 35px;">
+
+    <div class="d-flex  justify-content-lg-center">
+        <div class="pagetitle pt-3">
+            @*<h1>General Tables</h1>*@
+            @*<nav>
+                    <ol class="breadcrumb d-flex justify-content-lg-center">
+                        <li class="breadcrumb-item">Home</li>
+                        <li class="breadcrumb-item">
+                            <a href="@Url.Action("filterByMachine", "Home", new { shiftEmp = Model.FirstOrDefault().shift, dateFilter = Model.FirstOrDefault().date})">All Machine</a>
+                        </li>
+                    </ol>
+                </nav>*@
+        </div>
+    </div>
+
+    <!-- End Page Title -->
+
+    <section class="section">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-12 pt-lg-2">
+
+                @if (TempData["Message"] != null)
+                {
+
+                    <div id="alert_submit2" class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["Message"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                @if (TempData["Error"] != null)
+                {
+
+                    <div id="alert_submit2" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-octagon me-1"></i>
+                        @TempData["Error"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                @* VALIDATION (PART NUMBER AND NO MACHINE) *@
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <div id="alert_submit2" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-octagon me-1"></i>
+                        @TempData["Error"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @* NEW IMPORT DATA VALIDATION (PART NUMBER AND NO MACHINE) *@
+
+
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorImport))
+                {
+
+                    <div id="alert_submit2" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-octagon me-1"></i>
+                        @ViewBag.ErrorImport
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(ViewBag.MessageImport))
+                {
+
+                    <div id="alert_submit2" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check-circle me-1"></i>
+                        @ViewBag.MessageImport
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                @*@{
+                        DateTime myDate = (DateTime)Session["myDate"];
+                        string formattedDate = myDate.ToString("M/d/yyyy");
+                        string truncatedDate = formattedDate.Substring(0, 10);
+                    }
+                    <p>@truncatedDate</p>*@
+
+                <nav>
+                    <ol class="breadcrumb d-flex justify-content-lg-start">
+                        <li class="breadcrumb-item">Home</li>
+                        <li class="breadcrumb-item">
+                            <a href="@Url.Action("firstPage", "Home", new { shiftEmp = @ViewBag.ShiftEmp, dateFilter = @ViewBag.dateFilter})">All Machine</a>
+                        </li>
+                    </ol>
+                </nav>
+                <div class="card col-lg-12">
+                    <div class="card-body">
+                        @*<h5 class="card-title">List Semua Machine dan Part Number, shift: @Session["myShift"], tanggal: @Session["myDate"].ToString().Substring(0, 10)  </h5>*@
+
+                        <h5 class="card-title">
+                            List Semua Machine Pada: @ViewBag.dateFilter.ToShortDateString()
+                            <span class="text-dark" style="float: right">Shift: @ViewBag.ShiftEmp</span>
+                        </h5>
+
+                        @* SHOW ALL MACHINE *@
+                        <a class="btn btn-secondary" href="@Url.Action("firstPage", "Home", new { shiftEmp = @ViewBag.ShiftEmp, dateFilter = @ViewBag.dateFilter })">Show All Machine</a>
+
+                        @* FILTER BY MACHINE *@
+                        <!-- Filter by Machine Modal Form centered Modal -->
+                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#filter_by_machine">Filter by Machine</button>
+                        <!-- Start Filter by Machine Modal Form centered Modal-->
+                        <div class="modal fade" id="filter_by_machine" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Filter by Machine</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+
+                                    <!-- FILTER BY MACHINE - MODAL START -->
+                                    @using (Html.BeginForm("filterByMachine", "Home", FormMethod.Get))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <div class="modal-body">
+                                            <!-- Filter by Machine FORM -->
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <!-- General Form Elements -->
+                                                    <form class="needs-validation" novalidate>
+
+                                                        @* ----- Input Readonly ---- *@
+
+                                                        <!-- SHIFT -->
+                                                        <div class="row mb-3">
+                                                            <label for="date" class="col-sm-4 col-form-label">Shift:</label>
+                                                            <div class="col-sm-8">
+                                                                <input class="form-control" name="shiftEmp" type="number" value="@ViewBag.ShiftEmp" style="background-color:gainsboro" readonly>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- DATE -->
+                                                        <div class="row mb-3">
+                                                            <label for="date" class="col-sm-4 col-form-label">Date:</label>
+                                                            <div class="col-sm-8">
+                                                                <input name="dateFilter" type="hidden" value="@Session["myDate"]">
+                                                                <input class="form-control" name="" type="text" value="@ViewBag.dateFilter.ToShortDateString()" style="background-color:gainsboro" readonly>
+                                                                @*<input type="hidden" class="form-control" name="dateFilter" value="@DateTime.Now.ToString("yyyy-MM-dd")" required>*@
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-3">
+                                                            <label for="no_machine" class="col-sm-4 col-form-label">No Machine:</label>
+                                                            <div class="col-sm-8">
+                                                                @*<input class="form-control" name="n_machine" type="text" value="">*@
+
+                                                                <select class="form-select" name="n_machine" aria-label="Default select example" required>
+                                                                    <option selected disabled value="">-- Select Machine --</option>
+                                                                    <!-- Dropdown Machine A sampai Z dengan value A sampai Z -->
+                                                                    @for (char c = 'A'; c <= 'Z'; c++)
+                                                                    {
+                                                                        <option value="@c">@c</option>
+                                                                    }
+                                                                    <!-- Dropdown setelah Z -->
+                                                                    @for (char c1 = 'A'; c1 <= 'A'; c1++)
+                                                                    {
+                                                                        <!-- menampilkan Machine AA, jika bertambah jadi AB rubah saja c2 <= 'A' menjadi  c2 <= 'B'-->
+                                                                        for (char c2 = 'A'; c2 <= 'A'; c2++)
+                                                                        {
+                                                                            <option value="@($"{c1}{c2}")">@($"{c1}{c2}")</option>
+                                                                        }
+                                                                    }
+                                                                </select>
+
+
+
+                                                                <div class="invalid-feedback">
+                                                                    Please select a valid "No Machine".
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-3 pt-5">
+                                                            <div class="col-sm-12">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                <button type="submit" class="btn btn-info">Filter</button>
+                                                            </div>
+                                                        </div>
+
+                                                    </form><!-- End General Form Elements -->
+
+                                                </div>
+                                            </div>
+                                            <!-- END Filter by Machine FORM -->
+                                        </div>
+                                        <!-- Filter by Machine MODAL END -->
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Filter by Machine Modal Form centered Modal-->
+
+                        @* MODAL FORM ADD PART NUMBER *@
+                        <!-- Add Part Number Modal Form centered Modal -->
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#add_partnumber">Add Part Number</button>
+                        <!-- Start Add Part Number Modal Form centered Modal-->
+                        <div class="modal fade" id="add_partnumber" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Add Part Number</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <!-- Add Part Number MODAL START -->
+
+                                    @using (Html.BeginForm("AddPartNumber", "Home"))
+                                    {
+                                        @*@Html.AntiForgeryToken()*@
+                                        <div class="modal-body">
+                                            <!-- Add Part Number FORM -->
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <!-- General Form Elements -->
+                                                    <form class="needs-validation" novalidate>
+
+                                                        <!--HIDDEN INPUT VALUE = 0 agar condionts di reject button active-->
+
+                                                        <input name="actual_plan1" type="hidden" value="0" />
+                                                        <input name="actual_plan2" type="hidden" value="0" />
+                                                        <input name="actual_plan3" type="hidden" value="0" />
+                                                        <input name="actual_plan4" type="hidden" value="0" />
+                                                        <input name="actual_plan5" type="hidden" value="0" />
+                                                        <input name="actual_plan6" type="hidden" value="0" />
+                                                        <input name="actual_plan7" type="hidden" value="0" />
+                                                        <input name="actual_plan8" type="hidden" value="0" />
+
+                                                        @if (@ViewBag.ShiftEmp != 3)
+                                                        {
+                                                            <input name="actual_plan9" type="hidden" value="0" />
+                                                        }
+
+
+                                                        <!---->
+                                                        <div class="row mb-3">
+                                                            <label for="date" class="col-sm-4 col-form-label">Shift:</label>
+                                                            <!-- SHIFT -->
+                                                            <div class="col-sm-8">
+                                                                <input type="number" name="shift" class="form-control" value="@ViewBag.ShiftEmp" style="background-color:gainsboro" readonly>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-3">
+                                                            <label for="date" class="col-sm-4 col-form-label">Date:</label>
+                                                            <!-- DATE -->
+                                                            <div class="col-sm-8">
+                                                                <input name="date" type="hidden" value="@Session["myDate"]">
+                                                                <input class="form-control" name="" type="text" value=" @ViewBag.dateFilter.ToShortDateString()" style="background-color:gainsboro" readonly>
+                                                                @*<input type="date" name="date" class="form-control" value="@Session["myDate"].ToString().Substring(0, 10)" style="background-color: gainsboro" readonly>*@
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-3">
+                                                            <label for="op_kpk" class="col-sm-4 col-form-label">KPK Operator:</label>
+                                                            <div class="col-sm-8">
+                                                                <input name="op_kpk" type="number" class="form-control" value="" placeholder="Enter Kpk" minlength="5" pattern="[A-Za-z0-9]{5,}" required>
+                                                                <div class="invalid-feedback">
+                                                                    Please select a valid "KPK".
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-3">
+                                                            <label ffor="no_machine" class="col-sm-4 col-form-label">No Machine:</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" id="inputText" onkeyup="this.value = this.value.toUpperCase()" name="no_machine" class="form-control" value="" placeholder="Masukkan no machine" minlength="3" required>
+                                                                @*<input name="no_machine" type="text" class="form-control" value="" placeholder="Enter No Machine" minlength="3" required>*@
+                                                                <div class="invalid-feedback">
+                                                                    Please select a valid "No Machine".
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-3">
+                                                            <label for="partnumber" class="col-sm-4 col-form-label">Part Number</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" id="inputText" onkeyup="this.value = this.value.toUpperCase()" name="partnumber" class="form-control" value="" placeholder="Masukkan part number" minlength="9" required>
+                                                                <div class="invalid-feedback">
+                                                                    Please select a valid "Part Number".
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-3">
+                                                            <label for="sch" class="col-sm-4 col-form-label">Shiftly Target</label>
+                                                            <div class="col-sm-8">
+                                                                <input name="sch" type="number" class="form-control" value="" placeholder="Enter Shiftly Target" minlength="2" required>
+                                                                <div class="invalid-feedback">
+                                                                    Please select a valid "Part Number".
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- isi nilai PN_CAV -->
+                                                        <div class="row mb-3">
+                                                            <label for="pn_cav" class="col-sm-4 col-form-label">CAV</label>
+                                                            <div class="col-sm-8">
+                                                                <input name="pn_cav" type="number" class="form-control" value="" min="1" placeholder="Masukkan CAV" required>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- isi nilai PN_SET -->
+                                                        <div class="row mb-3">
+                                                            <label for="pn_set" class="col-sm-4 col-form-label">SET</label>
+                                                            <div class="col-sm-8">
+                                                                <input name="pn_set" type="number" class="form-control" value="" placeholder="Masukkan SET" required>
+                                                            </div>
+                                                        </div>
+
+
+
+                                                        <div class="row mb-3 pt-5">
+                                                            <div class="col-sm-12">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <input type="submit" value="Submit" class="btn btn-warning" />
+                                                            </div>
+                                                        </div>
+
+                                                    </form><!-- End General Form Elements -->
+
+                                                </div>
+                                            </div>
+                                            <!-- END Add Part Number FORM -->
+                                        </div>
+                                        <!-- Add Part Number MODAL END -->
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Add Part Number Modal Form centered Modal-->
+
+
+                        <br />  @* ---------------------------------------------------------------------------------------------- *@ <br />
+
+
+                        <!-- Table with hoverable rows -->
+                        <table class="table table-borderless datatable" style="overflow-x: auto;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">MC</th>
+                                    <th scope="col">PN</th>
+                                    <th scope="col">Target</th>
+                                    <th scope="col">Output(s)</th>
+                                    <th scope="col">Cav</th>
+                                    <th scope="col">Set</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var item in Model.PIM_SSC_MAINs)
+                                {
+                                    <tr>
+                                        <th scope="row">
+                                            <p>@item.no_machine</p>
+                                        </th>
+                                        <td>
+                                            <p>@item.partnumber</p>
+                                        </td>
+                                        <td>
+                                            <p>@item.sch</p>
+                                        </td>
+                                        <td>
+                                            @if (item.sch != null)
+                                            {
+                                                <p><span style="color:@(item.total_actoutput < item.sch ? "red" : "green")">@item.total_actoutput</span> / @item.sch</p>
+                                            }
+                                            else
+                                            {
+                                                <p><span style="color:@(item.total_actoutput < item.sch ? "red" : "green")">@item.total_actoutput </span></p>
+                                            }
+                                        </td>
+                                        <td>
+                                            <p>@item.pn_cav</p>
+                                        </td>
+                                        <td>
+                                            @if (item.pn_set == item.pn_cav)
+                                            {
+                                                <p>-</p>
+                                            }
+                                            else
+                                            {
+                                                <p>@item.pn_set</p>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (targetDate.Date >= currentDate.Date)
+                                            {
+                                                if (string.IsNullOrEmpty(item.op_kpk))
+                                                {
+                                                    <a type="button" class="btn btn-outline-primary me-1" href="@Url.Action("newMachinePartnumber", "Home", new { id=item.main_id })"><i class="bi bi-plus me-1"></i>Add</a>
+
+                                                    @* Can't' Delete Data *@
+                                                    <button type="button" class="btn btn-secondary ms-1"><i class="bi bi-trash"></i>  </button>
+                                                }
+                                                @* Edit data jika part number tidak bernilai null *@
+                                                else
+                                                {
+                                                    <a type="button" class="btn btn-primary me-1" href="@Url.Action("innerDataMC", "Home", new { main_id=item.main_id })"><i class="bi bi-pencil-square me-1"></i>Edit</a>
+
+                                                    @* Delete Data *@
+                                                    <button type="button" class="btn btn-danger ms-1" onclick="confirmDelete(@item.main_id)"><i class="bi bi-trash"></i>  </button>
+                                                }
+
+
+                                                <script>
+                                                function confirmDelete(main_id) {
+                                                    if (confirm('Apakah kamu yakin ingin menghapus data dengan ini?')) {
+                                                        window.location.href = '@Url.Action("deleteDataMC", "Home")?main_id=' + main_id;
+                                                    }
+                                                }
+                                                </script>
+
+                                            }
+                                            else
+                                            {
+
+                                                if (string.IsNullOrEmpty(item.op_kpk))
+                                                {
+                                                    <a type="button" class="btn btn-outline-danger me-1" style="cursor:not-allowed;"><i class="bi bi-clipboard-x me-1"></i>Data Empty</a>
+                                                }
+                                                else
+                                                {
+                                                    <a type="button" class="btn btn-outline-success me-1" href="@Url.Action("underMaintenance", "Home", new{ shiftEmp = ViewBag.shiftEmp, dateFilter = ViewBag.dateFilter })"><i class="bi bi-clipboard-check me-1"></i>Open SSC</a>
+
+
+                                                    <button type="button" class="btn btn-info ms-1" title="Edit SSC" data-bs-toggle="modal" data-bs-target="#edit_ssc_old"> <i class="bi bi-pencil"></i>  </button>
+                                                }
+                                            }
+
+                                            <!-- Start to EDIT SSC centered Modal-->
+                                            <div class="modal fade" id="edit_ssc_old" tabindex="-1">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Verify for SSC Editing</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+
+                                                        @using (Html.BeginForm("loginEditingSSC", "Home", FormMethod.Get))
+                                                        {
+                                                            @Html.AntiForgeryToken()
+                                                            <div class="modal-body">
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        <!-- General Form Elements -->
+                                                                        <form class="needs-validation" novalidate>
+
+                                                                            @* ----- Input Readonly ---- *@
+
+                                                                            <input class="form-control" name="main_id" type="hidden" value="@item.main_id">
+
+                                                                            <!-- SHIFT -->
+                                                                            <div class="row mb-3">
+                                                                                <label for="date" class="col-sm-4 col-form-label">Code Number</label>
+                                                                                <div class="col-sm-8">
+                                                                                    <input class="form-control" name="kpkEmpPIM" type="number" value="">
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <!-- DATE -->
+                                                                            <div class="row mb-3">
+                                                                                <label for="date" class="col-sm-4 col-form-label">Password</label>
+                                                                                <div class="col-sm-8">
+                                                                                    <input class="form-control" name="pwEmpPIM" type="password" value="">
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="row mb-1 pt-2">
+                                                                                <div class="col-sm-12">
+                                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                                    <button type="submit" class="btn btn-info">Submit</button>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </form><!-- End General Form Elements -->
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+
+                        <!-- End Table with hoverable rows -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<!-- End #main -->
