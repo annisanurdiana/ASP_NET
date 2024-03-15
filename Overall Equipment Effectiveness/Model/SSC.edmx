@@ -1,0 +1,1428 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="pim_downtime">
+          <Key>
+            <PropertyRef Name="dt_code" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="newid" Type="float" />
+          <Property Name="dt_code" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="dt_remarks" Type="varchar" MaxLength="250" />
+          <Property Name="dt_type" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="pim_downtime_total">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="dt_duration_minutes_total" Type="int" />
+          <Property Name="dt_id" Type="bigint" />
+          <Property Name="user_id" Type="bigint" />
+        </EntityType>
+        <EntityType Name="pim_kpi_performance">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DATE_" Type="date" />
+          <Property Name="WEEKENDING" Type="date" />
+          <Property Name="SHIFT_" Type="int" />
+          <Property Name="AUDIT_5S" Type="float" />
+          <Property Name="COMPLIANCE" Type="float" />
+          <Property Name="EHS_PATROL" Type="float" />
+          <Property Name="LBO_PO_PCS" Type="float" />
+          <Property Name="LBO_PO_PPM" Type="float" />
+          <Property Name="EFF" Type="float" />
+          <Property Name="SCRAP" Type="float" />
+          <Property Name="DSA_ITEM" Type="float" />
+          <Property Name="DSA_VOLUME" Type="float" />
+        </EntityType>
+        <EntityType Name="pim_oee">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="main_id" Type="bigint" />
+          <Property Name="date_" Type="date" />
+          <Property Name="we" Type="varchar" MaxLength="50" />
+          <Property Name="machine" Type="varchar" MaxLength="50" />
+          <Property Name="shift" Type="int" />
+          <Property Name="total_time" Type="decimal" Precision="38" Scale="2" />
+          <Property Name="break_" Type="decimal" Precision="38" Scale="2" />
+          <Property Name="briefing_" Type="decimal" Precision="38" Scale="2" />
+          <Property Name="available_time" Type="decimal" Precision="38" Scale="2" />
+          <Property Name="not_running" Type="decimal" Precision="38" Scale="2" />
+          <Property Name="total_breakdowntime" Type="decimal" Precision="38" Scale="2" />
+          <Property Name="operating_time" Type="decimal" Precision="38" Scale="2" />
+          <Property Name="cycle_time" Type="int" />
+          <Property Name="standard_output" Type="int" />
+          <Property Name="actual_output" Type="int" />
+          <Property Name="reject" Type="int" />
+          <Property Name="good_output" Type="int" />
+          <Property Name="var" Type="int" />
+          <Property Name="availability" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="performance" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="quality" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="oee" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="pim_part_number_list">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PART" Type="nvarchar" MaxLength="255" />
+          <Property Name="DESC" Type="nvarchar" MaxLength="255" />
+          <Property Name="MOLD" Type="nvarchar" MaxLength="255" />
+          <Property Name="FAMILY" Type="int" />
+          <Property Name="CAVITY" Type="int" />
+          <Property Name="CT" Type="int" />
+          <Property Name="MCHRS" Type="float" />
+          <Property Name="DATE_INPUT" Type="datetime" />
+        </EntityType>
+        <EntityType Name="pim_partnumber_notvalid">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="shift" Type="int" />
+          <Property Name="no_machine" Type="varchar" MaxLength="50" />
+          <Property Name="date_input" Type="datetime" />
+          <Property Name="partnumber_not_valid" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="pim_reject">
+          <Key>
+            <PropertyRef Name="rj_code" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rj_code" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="rj_remarks" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="pim_reject_total">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rj_quantity_total" Type="int" />
+          <Property Name="rj_rate_ppm" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="rj_rate_percent" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="rj_id" Type="bigint" />
+          <Property Name="user_id" Type="bigint" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_CALCULATION">
+          <Key>
+            <PropertyRef Name="totalcalc_id" />
+          </Key>
+          <Property Name="totalcalc_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="main_id_tc" Type="bigint" />
+          <Property Name="total_output_pcs" Type="int" />
+          <Property Name="total_good_output" Type="int" />
+          <Property Name="pn_stdoutput" Type="int" />
+          <Property Name="totalRJ" Type="int" />
+          <Property Name="totalNotRun" Type="int" />
+          <Property Name="totalDT" Type="int" />
+          <Property Name="total_time" Type="int" />
+          <Property Name="pn_operatingtime" Type="int" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_MAIN">
+          <Key>
+            <PropertyRef Name="main_id" />
+          </Key>
+          <Property Name="main_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="partnumber" Type="nvarchar(max)" />
+          <Property Name="mold" Type="nvarchar(max)" />
+          <Property Name="shift_" Type="int" />
+          <Property Name="date_" Type="date" />
+          <Property Name="we_" Type="nvarchar" MaxLength="50" />
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" />
+          <Property Name="op_name" Type="nvarchar(max)" />
+          <Property Name="no_machine" Type="nvarchar(max)" />
+          <Property Name="mc_area" Type="int" />
+          <Property Name="sch" Type="int" />
+          <Property Name="total_actoutput" Type="int" />
+          <Property Name="pn_ct" Type="int" />
+          <Property Name="pn_cav" Type="int" />
+          <Property Name="pn_set" Type="int" />
+          <Property Name="pengalioutput" Type="int" />
+          <Property Name="pn_notes" Type="nvarchar(max)" />
+          <Property Name="part_pp" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_O_DOWNTIME">
+          <Key>
+            <PropertyRef Name="downtime_id" />
+          </Key>
+          <Property Name="downtime_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="hour_counter" Type="bigint" />
+          <Property Name="main_id_dt" Type="bigint" />
+          <Property Name="dt_start" Type="time" Precision="0" />
+          <Property Name="dt_finish" Type="time" Precision="0" />
+          <Property Name="duration_minutes" Type="int" />
+          <Property Name="downtime_code" Type="varchar" MaxLength="50" />
+          <Property Name="downtime_notes" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_O_REJECT">
+          <Key>
+            <PropertyRef Name="reject_id" />
+          </Key>
+          <Property Name="reject_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="hour_counter" Type="bigint" />
+          <Property Name="main_id_rj" Type="bigint" />
+          <Property Name="reject_qty" Type="int" />
+          <Property Name="reject_code" Type="varchar" MaxLength="50" />
+          <Property Name="reject_notes" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_OUTPUT">
+          <Key>
+            <PropertyRef Name="output_id" />
+          </Key>
+          <Property Name="output_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="main_id_o" Type="bigint" />
+          <Property Name="hour_counter" Type="int" />
+          <Property Name="actoutput" Type="int" />
+          <Property Name="actoutput_pcs" Type="int" />
+        </EntityType>
+        <EntityType Name="pim_user_kpk">
+          <Key>
+            <PropertyRef Name="op_kpk" />
+          </Key>
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="op_name" Type="varchar" MaxLength="250" />
+          <Property Name="em_role" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'MMS.dbo.view_pim_output_downtime' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="view_pim_output_downtime">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="id_user" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="dt_start" Type="time" Precision="0" />
+          <Property Name="dt_finish" Type="time" Precision="0" />
+          <Property Name="dt_code" Type="varchar" MaxLength="50" />
+          <Property Name="dt_notes" Type="varchar" MaxLength="250" />
+          <Property Name="dt_id" Type="bigint" />
+          <Property Name="dt_remarks" Type="varchar" MaxLength="250" />
+          <Property Name="dt_type" Type="varchar" MaxLength="250" />
+          <Property Name="shift" Type="int" />
+          <Property Name="date" Type="date" />
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" />
+          <Property Name="op_name" Type="varchar" MaxLength="250" />
+          <Property Name="no_machine" Type="varchar" MaxLength="250" />
+          <Property Name="partnumber" Type="varchar" MaxLength="250" />
+          <Property Name="shiftly_target" Type="int" />
+          <Property Name="actual_output" Type="int" />
+          <Property Name="id_user" Type="bigint" Nullable="false" />
+          <Property Name="dt_duration_minutes" Type="int" />
+          <Property Name="not_running" Type="int" />
+          <Property Name="main_id" Type="bigint" />
+          <Property Name="we_" Type="varchar" MaxLength="50" />
+          <Property Name="mc_area" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'MMS.dbo.view_pim_output_reject' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="view_pim_output_reject">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="id_user" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="rj_quantity" Type="int" />
+          <Property Name="rj_code" Type="varchar" MaxLength="50" />
+          <Property Name="rj_notes" Type="varchar" MaxLength="250" />
+          <Property Name="rj_remarks" Type="varchar" MaxLength="250" />
+          <Property Name="shift" Type="int" />
+          <Property Name="date" Type="date" />
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" />
+          <Property Name="op_name" Type="varchar" MaxLength="250" />
+          <Property Name="no_machine" Type="varchar" MaxLength="250" />
+          <Property Name="partnumber" Type="varchar" MaxLength="250" />
+          <Property Name="shiftly_target" Type="int" />
+          <Property Name="actual_output" Type="int" />
+          <Property Name="id_user" Type="bigint" Nullable="false" />
+          <Property Name="actual_good_output" Type="int" />
+          <Property Name="rj_rate2" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="main_id" Type="bigint" />
+          <Property Name="we_" Type="varchar" MaxLength="50" />
+          <Property Name="mc_area" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'MMS.dbo.VO_DOWNTIME' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VO_DOWNTIME">
+          <Key>
+            <PropertyRef Name="downtime_id" />
+          </Key>
+          <Property Name="downtime_id" Type="bigint" Nullable="false" />
+          <Property Name="main_id_dt" Type="bigint" />
+          <Property Name="mc_area" Type="int" />
+          <Property Name="no_machine" Type="nvarchar(max)" />
+          <Property Name="partnumber" Type="nvarchar(max)" />
+          <Property Name="mold" Type="nvarchar(max)" />
+          <Property Name="we_" Type="nvarchar" MaxLength="50" />
+          <Property Name="date_" Type="date" />
+          <Property Name="shift_" Type="int" />
+          <Property Name="pn_stdoutput" Type="int" />
+          <Property Name="total_output_pcs" Type="int" />
+          <Property Name="hour_counter" Type="bigint" />
+          <Property Name="total_actoutput" Type="int" />
+          <Property Name="dt_start" Type="time" Precision="0" />
+          <Property Name="dt_finish" Type="time" Precision="0" />
+          <Property Name="duration_minutes" Type="int" />
+          <Property Name="downtime_code" Type="varchar" MaxLength="50" />
+          <Property Name="dt_remarks" Type="varchar" MaxLength="250" />
+          <Property Name="dt_type" Type="varchar" MaxLength="250" />
+          <Property Name="downtime_notes" Type="nvarchar(max)" />
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" />
+          <Property Name="op_name" Type="nvarchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'MMS.dbo.VO_MAIN_CALC' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VO_MAIN_CALC">
+          <Key>
+            <PropertyRef Name="totalcalc_id" />
+            <PropertyRef Name="main_id" />
+          </Key>
+          <Property Name="totalcalc_id" Type="bigint" Nullable="false" />
+          <Property Name="main_id" Type="bigint" Nullable="false" />
+          <Property Name="date_" Type="date" />
+          <Property Name="we_" Type="nvarchar" MaxLength="50" />
+          <Property Name="shift_" Type="int" />
+          <Property Name="no_machine" Type="nvarchar(max)" />
+          <Property Name="partnumber" Type="nvarchar(max)" />
+          <Property Name="pn_ct" Type="int" />
+          <Property Name="pn_cav" Type="int" />
+          <Property Name="pn_set" Type="int" />
+          <Property Name="pengalioutput" Type="int" />
+          <Property Name="sch" Type="int" />
+          <Property Name="total_actoutput" Type="int" />
+          <Property Name="total_output_pcs" Type="int" />
+          <Property Name="pn_stdoutput" Type="int" />
+          <Property Name="total_good_output" Type="int" />
+          <Property Name="totalRJ" Type="int" />
+          <Property Name="totalNotRun" Type="int" />
+          <Property Name="totalDT" Type="int" />
+          <Property Name="total_time" Type="int" />
+          <Property Name="pn_operatingtime" Type="int" />
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" />
+          <Property Name="op_name" Type="nvarchar(max)" />
+          <Property Name="mc_area" Type="int" />
+          <Property Name="mold" Type="nvarchar(max)" />
+          <Property Name="pn_notes" Type="nvarchar(max)" />
+          <Property Name="part_pp" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'MMS.dbo.VO_REJECT' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VO_REJECT">
+          <Key>
+            <PropertyRef Name="reject_id" />
+          </Key>
+          <Property Name="reject_id" Type="bigint" Nullable="false" />
+          <Property Name="main_id_rj" Type="bigint" />
+          <Property Name="mc_area" Type="int" />
+          <Property Name="no_machine" Type="nvarchar(max)" />
+          <Property Name="partnumber" Type="nvarchar(max)" />
+          <Property Name="mold" Type="nvarchar(max)" />
+          <Property Name="we_" Type="nvarchar" MaxLength="50" />
+          <Property Name="date_" Type="date" />
+          <Property Name="shift_" Type="int" />
+          <Property Name="pn_stdoutput" Type="int" />
+          <Property Name="total_output_pcs" Type="int" />
+          <Property Name="hour_counter" Type="bigint" />
+          <Property Name="total_actoutput" Type="int" />
+          <Property Name="reject_qty" Type="int" />
+          <Property Name="reject_code" Type="varchar" MaxLength="50" />
+          <Property Name="rj_remarks" Type="varchar" MaxLength="250" />
+          <Property Name="reject_notes" Type="varchar" MaxLength="50" />
+          <Property Name="pn_ct" Type="int" />
+          <Property Name="pn_cav" Type="int" />
+          <Property Name="pn_set" Type="int" />
+          <Property Name="pengalioutput" Type="int" />
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" />
+          <Property Name="op_name" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="FK_PIM_SSC_CALCULATION_PIM_SSC_MAIN">
+          <End Role="PIM_SSC_MAIN" Type="Self.PIM_SSC_MAIN" Multiplicity="0..1" />
+          <End Role="PIM_SSC_CALCULATION" Type="Self.PIM_SSC_CALCULATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PIM_SSC_MAIN">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="PIM_SSC_CALCULATION">
+              <PropertyRef Name="main_id_tc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_O_DOWNTIME_PIM_CODE">
+          <End Role="pim_downtime" Type="Self.pim_downtime" Multiplicity="0..1" />
+          <End Role="PIM_SSC_O_DOWNTIME" Type="Self.PIM_SSC_O_DOWNTIME" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pim_downtime">
+              <PropertyRef Name="dt_code" />
+            </Principal>
+            <Dependent Role="PIM_SSC_O_DOWNTIME">
+              <PropertyRef Name="downtime_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_O_DOWNTIME_PIM_SSC_MAIN">
+          <End Role="PIM_SSC_MAIN" Type="Self.PIM_SSC_MAIN" Multiplicity="0..1" />
+          <End Role="PIM_SSC_O_DOWNTIME" Type="Self.PIM_SSC_O_DOWNTIME" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PIM_SSC_MAIN">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="PIM_SSC_O_DOWNTIME">
+              <PropertyRef Name="main_id_dt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_O_REJECT_PIM_CODE">
+          <End Role="pim_reject" Type="Self.pim_reject" Multiplicity="0..1" />
+          <End Role="PIM_SSC_O_REJECT" Type="Self.PIM_SSC_O_REJECT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pim_reject">
+              <PropertyRef Name="rj_code" />
+            </Principal>
+            <Dependent Role="PIM_SSC_O_REJECT">
+              <PropertyRef Name="reject_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_O_REJECT_PIM_SSC_MAIN">
+          <End Role="PIM_SSC_MAIN" Type="Self.PIM_SSC_MAIN" Multiplicity="0..1" />
+          <End Role="PIM_SSC_O_REJECT" Type="Self.PIM_SSC_O_REJECT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PIM_SSC_MAIN">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="PIM_SSC_O_REJECT">
+              <PropertyRef Name="main_id_rj" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_OUTPUT_PIM_SSC_MAIN">
+          <End Role="PIM_SSC_MAIN" Type="Self.PIM_SSC_MAIN" Multiplicity="0..1" />
+          <End Role="PIM_SSC_OUTPUT" Type="Self.PIM_SSC_OUTPUT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PIM_SSC_MAIN">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="PIM_SSC_OUTPUT">
+              <PropertyRef Name="main_id_o" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MMSModelStoreContainer">
+          <EntitySet Name="pim_downtime" EntityType="Self.pim_downtime" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pim_downtime_total" EntityType="Self.pim_downtime_total" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pim_kpi_performance" EntityType="Self.pim_kpi_performance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pim_oee" EntityType="Self.pim_oee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pim_part_number_list" EntityType="Self.pim_part_number_list" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pim_partnumber_notvalid" EntityType="Self.pim_partnumber_notvalid" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pim_reject" EntityType="Self.pim_reject" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pim_reject_total" EntityType="Self.pim_reject_total" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PIM_SSC_CALCULATION" EntityType="Self.PIM_SSC_CALCULATION" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PIM_SSC_MAIN" EntityType="Self.PIM_SSC_MAIN" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PIM_SSC_O_DOWNTIME" EntityType="Self.PIM_SSC_O_DOWNTIME" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PIM_SSC_O_REJECT" EntityType="Self.PIM_SSC_O_REJECT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PIM_SSC_OUTPUT" EntityType="Self.PIM_SSC_OUTPUT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pim_user_kpk" EntityType="Self.pim_user_kpk" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="view_pim_output_downtime" EntityType="Self.view_pim_output_downtime" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [view_pim_output_downtime].[id] AS [id], 
+    [view_pim_output_downtime].[dt_start] AS [dt_start], 
+    [view_pim_output_downtime].[dt_finish] AS [dt_finish], 
+    [view_pim_output_downtime].[dt_code] AS [dt_code], 
+    [view_pim_output_downtime].[dt_notes] AS [dt_notes], 
+    [view_pim_output_downtime].[dt_id] AS [dt_id], 
+    [view_pim_output_downtime].[dt_remarks] AS [dt_remarks], 
+    [view_pim_output_downtime].[dt_type] AS [dt_type], 
+    [view_pim_output_downtime].[shift] AS [shift], 
+    [view_pim_output_downtime].[date] AS [date], 
+    [view_pim_output_downtime].[op_kpk] AS [op_kpk], 
+    [view_pim_output_downtime].[op_name] AS [op_name], 
+    [view_pim_output_downtime].[no_machine] AS [no_machine], 
+    [view_pim_output_downtime].[partnumber] AS [partnumber], 
+    [view_pim_output_downtime].[shiftly_target] AS [shiftly_target], 
+    [view_pim_output_downtime].[actual_output] AS [actual_output], 
+    [view_pim_output_downtime].[id_user] AS [id_user], 
+    [view_pim_output_downtime].[dt_duration_minutes] AS [dt_duration_minutes], 
+    [view_pim_output_downtime].[not_running] AS [not_running], 
+    [view_pim_output_downtime].[main_id] AS [main_id], 
+    [view_pim_output_downtime].[we_] AS [we_], 
+    [view_pim_output_downtime].[mc_area] AS [mc_area]
+    FROM [dbo].[view_pim_output_downtime] AS [view_pim_output_downtime]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="view_pim_output_reject" EntityType="Self.view_pim_output_reject" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [view_pim_output_reject].[id] AS [id], 
+    [view_pim_output_reject].[rj_quantity] AS [rj_quantity], 
+    [view_pim_output_reject].[rj_code] AS [rj_code], 
+    [view_pim_output_reject].[rj_notes] AS [rj_notes], 
+    [view_pim_output_reject].[rj_remarks] AS [rj_remarks], 
+    [view_pim_output_reject].[shift] AS [shift], 
+    [view_pim_output_reject].[date] AS [date], 
+    [view_pim_output_reject].[op_kpk] AS [op_kpk], 
+    [view_pim_output_reject].[op_name] AS [op_name], 
+    [view_pim_output_reject].[no_machine] AS [no_machine], 
+    [view_pim_output_reject].[partnumber] AS [partnumber], 
+    [view_pim_output_reject].[shiftly_target] AS [shiftly_target], 
+    [view_pim_output_reject].[actual_output] AS [actual_output], 
+    [view_pim_output_reject].[id_user] AS [id_user], 
+    [view_pim_output_reject].[actual_good_output] AS [actual_good_output], 
+    [view_pim_output_reject].[rj_rate2] AS [rj_rate2], 
+    [view_pim_output_reject].[main_id] AS [main_id], 
+    [view_pim_output_reject].[we_] AS [we_], 
+    [view_pim_output_reject].[mc_area] AS [mc_area]
+    FROM [dbo].[view_pim_output_reject] AS [view_pim_output_reject]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VO_DOWNTIME" EntityType="Self.VO_DOWNTIME" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VO_DOWNTIME].[downtime_id] AS [downtime_id], 
+    [VO_DOWNTIME].[main_id_dt] AS [main_id_dt], 
+    [VO_DOWNTIME].[mc_area] AS [mc_area], 
+    [VO_DOWNTIME].[no_machine] AS [no_machine], 
+    [VO_DOWNTIME].[partnumber] AS [partnumber], 
+    [VO_DOWNTIME].[mold] AS [mold], 
+    [VO_DOWNTIME].[we_] AS [we_], 
+    [VO_DOWNTIME].[date_] AS [date_], 
+    [VO_DOWNTIME].[shift_] AS [shift_], 
+    [VO_DOWNTIME].[pn_stdoutput] AS [pn_stdoutput], 
+    [VO_DOWNTIME].[total_output_pcs] AS [total_output_pcs], 
+    [VO_DOWNTIME].[hour_counter] AS [hour_counter], 
+    [VO_DOWNTIME].[total_actoutput] AS [total_actoutput], 
+    [VO_DOWNTIME].[dt_start] AS [dt_start], 
+    [VO_DOWNTIME].[dt_finish] AS [dt_finish], 
+    [VO_DOWNTIME].[duration_minutes] AS [duration_minutes], 
+    [VO_DOWNTIME].[downtime_code] AS [downtime_code], 
+    [VO_DOWNTIME].[dt_remarks] AS [dt_remarks], 
+    [VO_DOWNTIME].[dt_type] AS [dt_type], 
+    [VO_DOWNTIME].[downtime_notes] AS [downtime_notes], 
+    [VO_DOWNTIME].[op_kpk] AS [op_kpk], 
+    [VO_DOWNTIME].[op_name] AS [op_name]
+    FROM [dbo].[VO_DOWNTIME] AS [VO_DOWNTIME]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VO_MAIN_CALC" EntityType="Self.VO_MAIN_CALC" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VO_MAIN_CALC].[totalcalc_id] AS [totalcalc_id], 
+    [VO_MAIN_CALC].[main_id] AS [main_id], 
+    [VO_MAIN_CALC].[date_] AS [date_], 
+    [VO_MAIN_CALC].[we_] AS [we_], 
+    [VO_MAIN_CALC].[shift_] AS [shift_], 
+    [VO_MAIN_CALC].[no_machine] AS [no_machine], 
+    [VO_MAIN_CALC].[partnumber] AS [partnumber], 
+    [VO_MAIN_CALC].[pn_ct] AS [pn_ct], 
+    [VO_MAIN_CALC].[pn_cav] AS [pn_cav], 
+    [VO_MAIN_CALC].[pn_set] AS [pn_set], 
+    [VO_MAIN_CALC].[pengalioutput] AS [pengalioutput], 
+    [VO_MAIN_CALC].[sch] AS [sch], 
+    [VO_MAIN_CALC].[total_actoutput] AS [total_actoutput], 
+    [VO_MAIN_CALC].[total_output_pcs] AS [total_output_pcs], 
+    [VO_MAIN_CALC].[pn_stdoutput] AS [pn_stdoutput], 
+    [VO_MAIN_CALC].[total_good_output] AS [total_good_output], 
+    [VO_MAIN_CALC].[totalRJ] AS [totalRJ], 
+    [VO_MAIN_CALC].[totalNotRun] AS [totalNotRun], 
+    [VO_MAIN_CALC].[totalDT] AS [totalDT], 
+    [VO_MAIN_CALC].[total_time] AS [total_time], 
+    [VO_MAIN_CALC].[pn_operatingtime] AS [pn_operatingtime], 
+    [VO_MAIN_CALC].[op_kpk] AS [op_kpk], 
+    [VO_MAIN_CALC].[op_name] AS [op_name], 
+    [VO_MAIN_CALC].[mc_area] AS [mc_area], 
+    [VO_MAIN_CALC].[mold] AS [mold], 
+    [VO_MAIN_CALC].[pn_notes] AS [pn_notes], 
+    [VO_MAIN_CALC].[part_pp] AS [part_pp]
+    FROM [dbo].[VO_MAIN_CALC] AS [VO_MAIN_CALC]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VO_REJECT" EntityType="Self.VO_REJECT" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VO_REJECT].[reject_id] AS [reject_id], 
+    [VO_REJECT].[main_id_rj] AS [main_id_rj], 
+    [VO_REJECT].[mc_area] AS [mc_area], 
+    [VO_REJECT].[no_machine] AS [no_machine], 
+    [VO_REJECT].[partnumber] AS [partnumber], 
+    [VO_REJECT].[mold] AS [mold], 
+    [VO_REJECT].[we_] AS [we_], 
+    [VO_REJECT].[date_] AS [date_], 
+    [VO_REJECT].[shift_] AS [shift_], 
+    [VO_REJECT].[pn_stdoutput] AS [pn_stdoutput], 
+    [VO_REJECT].[total_output_pcs] AS [total_output_pcs], 
+    [VO_REJECT].[hour_counter] AS [hour_counter], 
+    [VO_REJECT].[total_actoutput] AS [total_actoutput], 
+    [VO_REJECT].[reject_qty] AS [reject_qty], 
+    [VO_REJECT].[reject_code] AS [reject_code], 
+    [VO_REJECT].[rj_remarks] AS [rj_remarks], 
+    [VO_REJECT].[reject_notes] AS [reject_notes], 
+    [VO_REJECT].[pn_ct] AS [pn_ct], 
+    [VO_REJECT].[pn_cav] AS [pn_cav], 
+    [VO_REJECT].[pn_set] AS [pn_set], 
+    [VO_REJECT].[pengalioutput] AS [pengalioutput], 
+    [VO_REJECT].[op_kpk] AS [op_kpk], 
+    [VO_REJECT].[op_name] AS [op_name]
+    FROM [dbo].[VO_REJECT] AS [VO_REJECT]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_PIM_SSC_CALCULATION_PIM_SSC_MAIN" Association="Self.FK_PIM_SSC_CALCULATION_PIM_SSC_MAIN">
+            <End Role="PIM_SSC_MAIN" EntitySet="PIM_SSC_MAIN" />
+            <End Role="PIM_SSC_CALCULATION" EntitySet="PIM_SSC_CALCULATION" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_O_DOWNTIME_PIM_CODE" Association="Self.FK_PIM_SSC_O_DOWNTIME_PIM_CODE">
+            <End Role="pim_downtime" EntitySet="pim_downtime" />
+            <End Role="PIM_SSC_O_DOWNTIME" EntitySet="PIM_SSC_O_DOWNTIME" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_O_DOWNTIME_PIM_SSC_MAIN" Association="Self.FK_PIM_SSC_O_DOWNTIME_PIM_SSC_MAIN">
+            <End Role="PIM_SSC_MAIN" EntitySet="PIM_SSC_MAIN" />
+            <End Role="PIM_SSC_O_DOWNTIME" EntitySet="PIM_SSC_O_DOWNTIME" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_O_REJECT_PIM_CODE" Association="Self.FK_PIM_SSC_O_REJECT_PIM_CODE">
+            <End Role="pim_reject" EntitySet="pim_reject" />
+            <End Role="PIM_SSC_O_REJECT" EntitySet="PIM_SSC_O_REJECT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_O_REJECT_PIM_SSC_MAIN" Association="Self.FK_PIM_SSC_O_REJECT_PIM_SSC_MAIN">
+            <End Role="PIM_SSC_MAIN" EntitySet="PIM_SSC_MAIN" />
+            <End Role="PIM_SSC_O_REJECT" EntitySet="PIM_SSC_O_REJECT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_OUTPUT_PIM_SSC_MAIN" Association="Self.FK_PIM_SSC_OUTPUT_PIM_SSC_MAIN">
+            <End Role="PIM_SSC_MAIN" EntitySet="PIM_SSC_MAIN" />
+            <End Role="PIM_SSC_OUTPUT" EntitySet="PIM_SSC_OUTPUT" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="pim_downtime">
+          <Key>
+            <PropertyRef Name="dt_code" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dt_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="dt_remarks" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="dt_type" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PIM_SSC_O_DOWNTIME" Relationship="MMSModel.FK_PIM_SSC_O_DOWNTIME_PIM_CODE" FromRole="pim_downtime" ToRole="PIM_SSC_O_DOWNTIME" />
+          <Property Name="newid" Type="Double" />
+        </EntityType>
+        <EntityType Name="pim_reject">
+          <Key>
+            <PropertyRef Name="rj_code" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rj_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="rj_remarks" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PIM_SSC_O_REJECT" Relationship="MMSModel.FK_PIM_SSC_O_REJECT_PIM_CODE" FromRole="pim_reject" ToRole="PIM_SSC_O_REJECT" />
+        </EntityType>
+        <EntityContainer Name="MMSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="pim_downtime" EntityType="Self.pim_downtime" />
+          <EntitySet Name="pim_reject" EntityType="Self.pim_reject" />
+          <EntitySet Name="view_pim_output_reject" EntityType="MMSModel.view_pim_output_reject" />
+          <EntitySet Name="view_pim_output_downtime" EntityType="MMSModel.view_pim_output_downtime" />
+          <EntitySet Name="pim_downtime_total" EntityType="MMSModel.pim_downtime_total" />
+          <EntitySet Name="pim_reject_total" EntityType="MMSModel.pim_reject_total" />
+          <EntitySet Name="pim_oee" EntityType="MMSModel.pim_oee" />
+          <EntitySet Name="pim_part_number_list" EntityType="MMSModel.pim_part_number_list" />
+          <EntitySet Name="pim_partnumber_notvalid" EntityType="MMSModel.pim_partnumber_notvalid" />
+          <EntitySet Name="PIM_SSC_CALCULATION" EntityType="MMSModel.PIM_SSC_CALCULATION" />
+          <EntitySet Name="PIM_SSC_MAIN" EntityType="MMSModel.PIM_SSC_MAIN" />
+          <EntitySet Name="PIM_SSC_O_DOWNTIME" EntityType="MMSModel.PIM_SSC_O_DOWNTIME" />
+          <EntitySet Name="PIM_SSC_O_REJECT" EntityType="MMSModel.PIM_SSC_O_REJECT" />
+          <EntitySet Name="PIM_SSC_OUTPUT" EntityType="MMSModel.PIM_SSC_OUTPUT" />
+          <AssociationSet Name="FK_PIM_SSC_O_DOWNTIME_PIM_CODE" Association="MMSModel.FK_PIM_SSC_O_DOWNTIME_PIM_CODE">
+            <End Role="pim_downtime" EntitySet="pim_downtime" />
+            <End Role="PIM_SSC_O_DOWNTIME" EntitySet="PIM_SSC_O_DOWNTIME" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_O_REJECT_PIM_CODE" Association="MMSModel.FK_PIM_SSC_O_REJECT_PIM_CODE">
+            <End Role="pim_reject" EntitySet="pim_reject" />
+            <End Role="PIM_SSC_O_REJECT" EntitySet="PIM_SSC_O_REJECT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_CALCULATION_PIM_SSC_MAIN" Association="MMSModel.FK_PIM_SSC_CALCULATION_PIM_SSC_MAIN">
+            <End Role="PIM_SSC_MAIN" EntitySet="PIM_SSC_MAIN" />
+            <End Role="PIM_SSC_CALCULATION" EntitySet="PIM_SSC_CALCULATION" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_O_DOWNTIME_PIM_SSC_MAIN" Association="MMSModel.FK_PIM_SSC_O_DOWNTIME_PIM_SSC_MAIN">
+            <End Role="PIM_SSC_MAIN" EntitySet="PIM_SSC_MAIN" />
+            <End Role="PIM_SSC_O_DOWNTIME" EntitySet="PIM_SSC_O_DOWNTIME" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_O_REJECT_PIM_SSC_MAIN" Association="MMSModel.FK_PIM_SSC_O_REJECT_PIM_SSC_MAIN">
+            <End Role="PIM_SSC_MAIN" EntitySet="PIM_SSC_MAIN" />
+            <End Role="PIM_SSC_O_REJECT" EntitySet="PIM_SSC_O_REJECT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_OUTPUT_PIM_SSC_MAIN" Association="MMSModel.FK_PIM_SSC_OUTPUT_PIM_SSC_MAIN">
+            <End Role="PIM_SSC_MAIN" EntitySet="PIM_SSC_MAIN" />
+            <End Role="PIM_SSC_OUTPUT" EntitySet="PIM_SSC_OUTPUT" />
+          </AssociationSet>
+          <EntitySet Name="VO_MAIN_CALC" EntityType="MMSModel.VO_MAIN_CALC" />
+          <EntitySet Name="VO_DOWNTIME" EntityType="MMSModel.VO_DOWNTIME" />
+          <EntitySet Name="VO_REJECT" EntityType="MMSModel.VO_REJECT" />
+          <EntitySet Name="pim_kpi_performance" EntityType="MMSModel.pim_kpi_performance" />
+          <EntitySet Name="pim_user_kpk" EntityType="MMSModel.pim_user_kpk" />
+        </EntityContainer>
+        <EntityType Name="view_pim_output_reject">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="id_user" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" />
+          <Property Name="rj_quantity" Type="Int32" />
+          <Property Name="rj_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="rj_notes" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="rj_remarks" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="shift" Type="Int32" />
+          <Property Name="date" Type="DateTime" Precision="0" />
+          <Property Name="op_kpk" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="op_name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="no_machine" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="partnumber" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="shiftly_target" Type="Int32" />
+          <Property Name="actual_output" Type="Int32" />
+          <Property Name="id_user" Type="Int64" Nullable="false" />
+          <Property Name="actual_good_output" Type="Int32" />
+          <Property Name="rj_rate2" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="main_id" Type="Int64" />
+          <Property Name="we_" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="mc_area" Type="Int32" />
+        </EntityType>
+        <EntityType Name="view_pim_output_downtime">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="id_user" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" />
+          <Property Name="dt_start" Type="Time" Precision="0" />
+          <Property Name="dt_finish" Type="Time" Precision="0" />
+          <Property Name="dt_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="dt_notes" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="dt_id" Type="Int64" />
+          <Property Name="dt_remarks" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="dt_type" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="shift" Type="Int32" />
+          <Property Name="date" Type="DateTime" Precision="0" />
+          <Property Name="op_kpk" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="op_name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="no_machine" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="partnumber" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="shiftly_target" Type="Int32" />
+          <Property Name="actual_output" Type="Int32" />
+          <Property Name="id_user" Type="Int64" Nullable="false" />
+          <Property Name="dt_duration_minutes" Type="Int32" />
+          <Property Name="not_running" Type="Int32" />
+          <Property Name="main_id" Type="Int64" />
+          <Property Name="we_" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="mc_area" Type="Int32" />
+        </EntityType>
+        <EntityType Name="pim_downtime_total">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="dt_duration_minutes_total" Type="Int32" />
+          <Property Name="dt_id" Type="Int64" />
+          <Property Name="user_id" Type="Int64" />
+        </EntityType>
+        <EntityType Name="pim_reject_total">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rj_quantity_total" Type="Int32" />
+          <Property Name="rj_rate_ppm" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="rj_rate_percent" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="rj_id" Type="Int64" />
+          <Property Name="user_id" Type="Int64" />
+        </EntityType>
+        <EntityType Name="pim_oee">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="main_id" Type="Int64" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="we" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="machine" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="shift" Type="Int32" />
+          <Property Name="total_time" Type="Decimal" Precision="38" Scale="2" />
+          <Property Name="break_" Type="Decimal" Precision="38" Scale="2" />
+          <Property Name="briefing_" Type="Decimal" Precision="38" Scale="2" />
+          <Property Name="available_time" Type="Decimal" Precision="38" Scale="2" />
+          <Property Name="not_running" Type="Decimal" Precision="38" Scale="2" />
+          <Property Name="total_breakdowntime" Type="Decimal" Precision="38" Scale="2" />
+          <Property Name="operating_time" Type="Decimal" Precision="38" Scale="2" />
+          <Property Name="cycle_time" Type="Int32" />
+          <Property Name="standard_output" Type="Int32" />
+          <Property Name="actual_output" Type="Int32" />
+          <Property Name="reject" Type="Int32" />
+          <Property Name="good_output" Type="Int32" />
+          <Property Name="var" Type="Int32" />
+          <Property Name="availability" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="performance" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="quality" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="oee" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="pim_part_number_list">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="PART" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DESC" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="MOLD" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="FAMILY" Type="Int32" />
+          <Property Name="CAVITY" Type="Int32" />
+          <Property Name="CT" Type="Int32" />
+          <Property Name="MCHRS" Type="Double" />
+          <Property Name="DATE_INPUT" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="pim_partnumber_notvalid">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_input" Type="DateTime" Precision="3" />
+          <Property Name="partnumber_not_valid" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="shift" Type="Int32" />
+          <Property Name="no_machine" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_CALCULATION">
+          <Key>
+            <PropertyRef Name="totalcalc_id" />
+          </Key>
+          <Property Name="totalcalc_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="main_id_tc" Type="Int64" />
+          <Property Name="total_output_pcs" Type="Int32" />
+          <Property Name="total_good_output" Type="Int32" />
+          <Property Name="pn_stdoutput" Type="Int32" />
+          <Property Name="totalRJ" Type="Int32" />
+          <Property Name="totalNotRun" Type="Int32" />
+          <Property Name="totalDT" Type="Int32" />
+          <Property Name="total_time" Type="Int32" />
+          <Property Name="pn_operatingtime" Type="Int32" />
+          <NavigationProperty Name="PIM_SSC_MAIN" Relationship="MMSModel.FK_PIM_SSC_CALCULATION_PIM_SSC_MAIN" FromRole="PIM_SSC_CALCULATION" ToRole="PIM_SSC_MAIN" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_MAIN">
+          <Key>
+            <PropertyRef Name="main_id" />
+          </Key>
+          <Property Name="main_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="partnumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="shift_" Type="Int32" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="we_" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="op_kpk" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="op_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="no_machine" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="sch" Type="Int32" />
+          <Property Name="total_actoutput" Type="Int32" />
+          <Property Name="pn_ct" Type="Int32" />
+          <Property Name="pn_cav" Type="Int32" />
+          <Property Name="pn_set" Type="Int32" />
+          <Property Name="pengalioutput" Type="Int32" />
+          <NavigationProperty Name="PIM_SSC_CALCULATION" Relationship="MMSModel.FK_PIM_SSC_CALCULATION_PIM_SSC_MAIN" FromRole="PIM_SSC_MAIN" ToRole="PIM_SSC_CALCULATION" />
+          <NavigationProperty Name="PIM_SSC_O_DOWNTIME" Relationship="MMSModel.FK_PIM_SSC_O_DOWNTIME_PIM_SSC_MAIN" FromRole="PIM_SSC_MAIN" ToRole="PIM_SSC_O_DOWNTIME" />
+          <NavigationProperty Name="PIM_SSC_O_REJECT" Relationship="MMSModel.FK_PIM_SSC_O_REJECT_PIM_SSC_MAIN" FromRole="PIM_SSC_MAIN" ToRole="PIM_SSC_O_REJECT" />
+          <NavigationProperty Name="PIM_SSC_OUTPUT" Relationship="MMSModel.FK_PIM_SSC_OUTPUT_PIM_SSC_MAIN" FromRole="PIM_SSC_MAIN" ToRole="PIM_SSC_OUTPUT" />
+          <Property Name="mc_area" Type="Int32" />
+          <Property Name="mold" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="pn_notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="part_pp" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_O_DOWNTIME">
+          <Key>
+            <PropertyRef Name="downtime_id" />
+          </Key>
+          <Property Name="downtime_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="main_id_dt" Type="Int64" />
+          <Property Name="dt_start" Type="Time" Precision="0" />
+          <Property Name="dt_finish" Type="Time" Precision="0" />
+          <Property Name="duration_minutes" Type="Int32" />
+          <Property Name="downtime_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="downtime_notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="pim_downtime" Relationship="MMSModel.FK_PIM_SSC_O_DOWNTIME_PIM_CODE" FromRole="PIM_SSC_O_DOWNTIME" ToRole="pim_downtime" />
+          <NavigationProperty Name="PIM_SSC_MAIN" Relationship="MMSModel.FK_PIM_SSC_O_DOWNTIME_PIM_SSC_MAIN" FromRole="PIM_SSC_O_DOWNTIME" ToRole="PIM_SSC_MAIN" />
+          <Property Name="hour_counter" Type="Int64" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_O_REJECT">
+          <Key>
+            <PropertyRef Name="reject_id" />
+          </Key>
+          <Property Name="reject_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="main_id_rj" Type="Int64" />
+          <Property Name="reject_qty" Type="Int32" />
+          <Property Name="reject_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="pim_reject" Relationship="MMSModel.FK_PIM_SSC_O_REJECT_PIM_CODE" FromRole="PIM_SSC_O_REJECT" ToRole="pim_reject" />
+          <NavigationProperty Name="PIM_SSC_MAIN" Relationship="MMSModel.FK_PIM_SSC_O_REJECT_PIM_SSC_MAIN" FromRole="PIM_SSC_O_REJECT" ToRole="PIM_SSC_MAIN" />
+          <Property Name="reject_notes" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="hour_counter" Type="Int64" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_OUTPUT">
+          <Key>
+            <PropertyRef Name="output_id" />
+          </Key>
+          <Property Name="output_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="main_id_o" Type="Int64" />
+          <Property Name="hour_counter" Type="Int32" />
+          <Property Name="actoutput" Type="Int32" />
+          <Property Name="actoutput_pcs" Type="Int32" />
+          <NavigationProperty Name="PIM_SSC_MAIN" Relationship="MMSModel.FK_PIM_SSC_OUTPUT_PIM_SSC_MAIN" FromRole="PIM_SSC_OUTPUT" ToRole="PIM_SSC_MAIN" />
+        </EntityType>
+        <Association Name="FK_PIM_SSC_O_DOWNTIME_PIM_CODE">
+          <End Type="MMSModel.pim_downtime" Role="pim_downtime" Multiplicity="0..1" />
+          <End Type="MMSModel.PIM_SSC_O_DOWNTIME" Role="PIM_SSC_O_DOWNTIME" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pim_downtime">
+              <PropertyRef Name="dt_code" />
+            </Principal>
+            <Dependent Role="PIM_SSC_O_DOWNTIME">
+              <PropertyRef Name="downtime_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_O_REJECT_PIM_CODE">
+          <End Type="MMSModel.pim_reject" Role="pim_reject" Multiplicity="0..1" />
+          <End Type="MMSModel.PIM_SSC_O_REJECT" Role="PIM_SSC_O_REJECT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pim_reject">
+              <PropertyRef Name="rj_code" />
+            </Principal>
+            <Dependent Role="PIM_SSC_O_REJECT">
+              <PropertyRef Name="reject_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_CALCULATION_PIM_SSC_MAIN">
+          <End Type="MMSModel.PIM_SSC_MAIN" Role="PIM_SSC_MAIN" Multiplicity="0..1" />
+          <End Type="MMSModel.PIM_SSC_CALCULATION" Role="PIM_SSC_CALCULATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PIM_SSC_MAIN">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="PIM_SSC_CALCULATION">
+              <PropertyRef Name="main_id_tc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_O_DOWNTIME_PIM_SSC_MAIN">
+          <End Type="MMSModel.PIM_SSC_MAIN" Role="PIM_SSC_MAIN" Multiplicity="0..1" />
+          <End Type="MMSModel.PIM_SSC_O_DOWNTIME" Role="PIM_SSC_O_DOWNTIME" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PIM_SSC_MAIN">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="PIM_SSC_O_DOWNTIME">
+              <PropertyRef Name="main_id_dt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_O_REJECT_PIM_SSC_MAIN">
+          <End Type="MMSModel.PIM_SSC_MAIN" Role="PIM_SSC_MAIN" Multiplicity="0..1" />
+          <End Type="MMSModel.PIM_SSC_O_REJECT" Role="PIM_SSC_O_REJECT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PIM_SSC_MAIN">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="PIM_SSC_O_REJECT">
+              <PropertyRef Name="main_id_rj" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_OUTPUT_PIM_SSC_MAIN">
+          <End Type="MMSModel.PIM_SSC_MAIN" Role="PIM_SSC_MAIN" Multiplicity="0..1" />
+          <End Type="MMSModel.PIM_SSC_OUTPUT" Role="PIM_SSC_OUTPUT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PIM_SSC_MAIN">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="PIM_SSC_OUTPUT">
+              <PropertyRef Name="main_id_o" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="VO_MAIN_CALC">
+          <Key>
+            <PropertyRef Name="totalcalc_id" />
+            <PropertyRef Name="main_id" />
+          </Key>
+          <Property Name="totalcalc_id" Type="Int64" Nullable="false" />
+          <Property Name="main_id" Type="Int64" Nullable="false" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="we_" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="shift_" Type="Int32" />
+          <Property Name="no_machine" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="partnumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="pn_ct" Type="Int32" />
+          <Property Name="pn_cav" Type="Int32" />
+          <Property Name="pn_set" Type="Int32" />
+          <Property Name="pengalioutput" Type="Int32" />
+          <Property Name="sch" Type="Int32" />
+          <Property Name="total_actoutput" Type="Int32" />
+          <Property Name="total_output_pcs" Type="Int32" />
+          <Property Name="pn_stdoutput" Type="Int32" />
+          <Property Name="total_good_output" Type="Int32" />
+          <Property Name="totalRJ" Type="Int32" />
+          <Property Name="totalNotRun" Type="Int32" />
+          <Property Name="totalDT" Type="Int32" />
+          <Property Name="total_time" Type="Int32" />
+          <Property Name="pn_operatingtime" Type="Int32" />
+          <Property Name="op_kpk" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="op_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="mc_area" Type="Int32" />
+          <Property Name="mold" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="pn_notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="part_pp" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="VO_DOWNTIME">
+          <Key>
+            <PropertyRef Name="downtime_id" />
+          </Key>
+          <Property Name="downtime_id" Type="Int64" Nullable="false" />
+          <Property Name="main_id_dt" Type="Int64" />
+          <Property Name="mc_area" Type="Int32" />
+          <Property Name="no_machine" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="partnumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="mold" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="we_" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="shift_" Type="Int32" />
+          <Property Name="pn_stdoutput" Type="Int32" />
+          <Property Name="total_output_pcs" Type="Int32" />
+          <Property Name="hour_counter" Type="Int64" />
+          <Property Name="total_actoutput" Type="Int32" />
+          <Property Name="dt_start" Type="Time" Precision="0" />
+          <Property Name="dt_finish" Type="Time" Precision="0" />
+          <Property Name="duration_minutes" Type="Int32" />
+          <Property Name="downtime_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="dt_remarks" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="dt_type" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="downtime_notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="op_kpk" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="op_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VO_REJECT">
+          <Key>
+            <PropertyRef Name="reject_id" />
+          </Key>
+          <Property Name="reject_id" Type="Int64" Nullable="false" />
+          <Property Name="main_id_rj" Type="Int64" />
+          <Property Name="mc_area" Type="Int32" />
+          <Property Name="no_machine" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="partnumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="mold" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="we_" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="shift_" Type="Int32" />
+          <Property Name="pn_stdoutput" Type="Int32" />
+          <Property Name="total_output_pcs" Type="Int32" />
+          <Property Name="hour_counter" Type="Int64" />
+          <Property Name="total_actoutput" Type="Int32" />
+          <Property Name="reject_qty" Type="Int32" />
+          <Property Name="reject_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="rj_remarks" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="reject_notes" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="pn_ct" Type="Int32" />
+          <Property Name="pn_cav" Type="Int32" />
+          <Property Name="pn_set" Type="Int32" />
+          <Property Name="pengalioutput" Type="Int32" />
+          <Property Name="op_kpk" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="op_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="pim_kpi_performance">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DATE_" Type="DateTime" Precision="0" />
+          <Property Name="SHIFT_" Type="Int32" />
+          <Property Name="AUDIT_5S" Type="Double" />
+          <Property Name="COMPLIANCE" Type="Double" />
+          <Property Name="EHS_PATROL" Type="Double" />
+          <Property Name="LBO_PO_PCS" Type="Double" />
+          <Property Name="LBO_PO_PPM" Type="Double" />
+          <Property Name="EFF" Type="Double" />
+          <Property Name="SCRAP" Type="Double" />
+          <Property Name="DSA_ITEM" Type="Double" />
+          <Property Name="DSA_VOLUME" Type="Double" />
+          <Property Name="WEEKENDING" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="pim_user_kpk">
+          <Key>
+            <PropertyRef Name="op_kpk" />
+          </Key>
+          <Property Name="op_kpk" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="op_name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="em_role" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MMSModelStoreContainer" CdmEntityContainer="MMSEntities">
+          <EntitySetMapping Name="pim_downtime">
+            <EntityTypeMapping TypeName="MMSModel.pim_downtime">
+              <MappingFragment StoreEntitySet="pim_downtime">
+                <ScalarProperty Name="newid" ColumnName="newid" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="dt_code" ColumnName="dt_code" />
+                <ScalarProperty Name="dt_remarks" ColumnName="dt_remarks" />
+                <ScalarProperty Name="dt_type" ColumnName="dt_type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pim_reject">
+            <EntityTypeMapping TypeName="MMSModel.pim_reject">
+              <MappingFragment StoreEntitySet="pim_reject">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="rj_code" ColumnName="rj_code" />
+                <ScalarProperty Name="rj_remarks" ColumnName="rj_remarks" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="view_pim_output_reject">
+            <EntityTypeMapping TypeName="MMSModel.view_pim_output_reject">
+              <MappingFragment StoreEntitySet="view_pim_output_reject">
+                <ScalarProperty Name="mc_area" ColumnName="mc_area" />
+                <ScalarProperty Name="we_" ColumnName="we_" />
+                <ScalarProperty Name="main_id" ColumnName="main_id" />
+                <ScalarProperty Name="rj_rate2" ColumnName="rj_rate2" />
+                <ScalarProperty Name="actual_good_output" ColumnName="actual_good_output" />
+                <ScalarProperty Name="id_user" ColumnName="id_user" />
+                <ScalarProperty Name="actual_output" ColumnName="actual_output" />
+                <ScalarProperty Name="shiftly_target" ColumnName="shiftly_target" />
+                <ScalarProperty Name="partnumber" ColumnName="partnumber" />
+                <ScalarProperty Name="no_machine" ColumnName="no_machine" />
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="shift" ColumnName="shift" />
+                <ScalarProperty Name="rj_remarks" ColumnName="rj_remarks" />
+                <ScalarProperty Name="rj_notes" ColumnName="rj_notes" />
+                <ScalarProperty Name="rj_code" ColumnName="rj_code" />
+                <ScalarProperty Name="rj_quantity" ColumnName="rj_quantity" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="view_pim_output_downtime">
+            <EntityTypeMapping TypeName="MMSModel.view_pim_output_downtime">
+              <MappingFragment StoreEntitySet="view_pim_output_downtime">
+                <ScalarProperty Name="mc_area" ColumnName="mc_area" />
+                <ScalarProperty Name="we_" ColumnName="we_" />
+                <ScalarProperty Name="main_id" ColumnName="main_id" />
+                <ScalarProperty Name="not_running" ColumnName="not_running" />
+                <ScalarProperty Name="dt_duration_minutes" ColumnName="dt_duration_minutes" />
+                <ScalarProperty Name="id_user" ColumnName="id_user" />
+                <ScalarProperty Name="actual_output" ColumnName="actual_output" />
+                <ScalarProperty Name="shiftly_target" ColumnName="shiftly_target" />
+                <ScalarProperty Name="partnumber" ColumnName="partnumber" />
+                <ScalarProperty Name="no_machine" ColumnName="no_machine" />
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="shift" ColumnName="shift" />
+                <ScalarProperty Name="dt_type" ColumnName="dt_type" />
+                <ScalarProperty Name="dt_remarks" ColumnName="dt_remarks" />
+                <ScalarProperty Name="dt_id" ColumnName="dt_id" />
+                <ScalarProperty Name="dt_notes" ColumnName="dt_notes" />
+                <ScalarProperty Name="dt_code" ColumnName="dt_code" />
+                <ScalarProperty Name="dt_finish" ColumnName="dt_finish" />
+                <ScalarProperty Name="dt_start" ColumnName="dt_start" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pim_downtime_total">
+            <EntityTypeMapping TypeName="MMSModel.pim_downtime_total">
+              <MappingFragment StoreEntitySet="pim_downtime_total">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="dt_id" ColumnName="dt_id" />
+                <ScalarProperty Name="dt_duration_minutes_total" ColumnName="dt_duration_minutes_total" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pim_reject_total">
+            <EntityTypeMapping TypeName="MMSModel.pim_reject_total">
+              <MappingFragment StoreEntitySet="pim_reject_total">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="rj_id" ColumnName="rj_id" />
+                <ScalarProperty Name="rj_rate_percent" ColumnName="rj_rate_percent" />
+                <ScalarProperty Name="rj_rate_ppm" ColumnName="rj_rate_ppm" />
+                <ScalarProperty Name="rj_quantity_total" ColumnName="rj_quantity_total" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pim_oee">
+            <EntityTypeMapping TypeName="MMSModel.pim_oee">
+              <MappingFragment StoreEntitySet="pim_oee">
+                <ScalarProperty Name="oee" ColumnName="oee" />
+                <ScalarProperty Name="quality" ColumnName="quality" />
+                <ScalarProperty Name="performance" ColumnName="performance" />
+                <ScalarProperty Name="availability" ColumnName="availability" />
+                <ScalarProperty Name="var" ColumnName="var" />
+                <ScalarProperty Name="good_output" ColumnName="good_output" />
+                <ScalarProperty Name="reject" ColumnName="reject" />
+                <ScalarProperty Name="actual_output" ColumnName="actual_output" />
+                <ScalarProperty Name="standard_output" ColumnName="standard_output" />
+                <ScalarProperty Name="cycle_time" ColumnName="cycle_time" />
+                <ScalarProperty Name="operating_time" ColumnName="operating_time" />
+                <ScalarProperty Name="total_breakdowntime" ColumnName="total_breakdowntime" />
+                <ScalarProperty Name="not_running" ColumnName="not_running" />
+                <ScalarProperty Name="available_time" ColumnName="available_time" />
+                <ScalarProperty Name="briefing_" ColumnName="briefing_" />
+                <ScalarProperty Name="break_" ColumnName="break_" />
+                <ScalarProperty Name="total_time" ColumnName="total_time" />
+                <ScalarProperty Name="shift" ColumnName="shift" />
+                <ScalarProperty Name="machine" ColumnName="machine" />
+                <ScalarProperty Name="we" ColumnName="we" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="main_id" ColumnName="main_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pim_part_number_list">
+            <EntityTypeMapping TypeName="MMSModel.pim_part_number_list">
+              <MappingFragment StoreEntitySet="pim_part_number_list">
+                <ScalarProperty Name="DATE_INPUT" ColumnName="DATE_INPUT" />
+                <ScalarProperty Name="MCHRS" ColumnName="MCHRS" />
+                <ScalarProperty Name="CT" ColumnName="CT" />
+                <ScalarProperty Name="CAVITY" ColumnName="CAVITY" />
+                <ScalarProperty Name="FAMILY" ColumnName="FAMILY" />
+                <ScalarProperty Name="MOLD" ColumnName="MOLD" />
+                <ScalarProperty Name="DESC" ColumnName="DESC" />
+                <ScalarProperty Name="PART" ColumnName="PART" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pim_partnumber_notvalid">
+            <EntityTypeMapping TypeName="MMSModel.pim_partnumber_notvalid">
+              <MappingFragment StoreEntitySet="pim_partnumber_notvalid">
+                <ScalarProperty Name="no_machine" ColumnName="no_machine" />
+                <ScalarProperty Name="shift" ColumnName="shift" />
+                <ScalarProperty Name="partnumber_not_valid" ColumnName="partnumber_not_valid" />
+                <ScalarProperty Name="date_input" ColumnName="date_input" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PIM_SSC_CALCULATION">
+            <EntityTypeMapping TypeName="MMSModel.PIM_SSC_CALCULATION">
+              <MappingFragment StoreEntitySet="PIM_SSC_CALCULATION">
+                <ScalarProperty Name="pn_operatingtime" ColumnName="pn_operatingtime" />
+                <ScalarProperty Name="total_time" ColumnName="total_time" />
+                <ScalarProperty Name="totalDT" ColumnName="totalDT" />
+                <ScalarProperty Name="totalNotRun" ColumnName="totalNotRun" />
+                <ScalarProperty Name="totalRJ" ColumnName="totalRJ" />
+                <ScalarProperty Name="pn_stdoutput" ColumnName="pn_stdoutput" />
+                <ScalarProperty Name="total_good_output" ColumnName="total_good_output" />
+                <ScalarProperty Name="total_output_pcs" ColumnName="total_output_pcs" />
+                <ScalarProperty Name="main_id_tc" ColumnName="main_id_tc" />
+                <ScalarProperty Name="totalcalc_id" ColumnName="totalcalc_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PIM_SSC_MAIN">
+            <EntityTypeMapping TypeName="MMSModel.PIM_SSC_MAIN">
+              <MappingFragment StoreEntitySet="PIM_SSC_MAIN">
+                <ScalarProperty Name="part_pp" ColumnName="part_pp" />
+                <ScalarProperty Name="pn_notes" ColumnName="pn_notes" />
+                <ScalarProperty Name="mold" ColumnName="mold" />
+                <ScalarProperty Name="mc_area" ColumnName="mc_area" />
+                <ScalarProperty Name="pengalioutput" ColumnName="pengalioutput" />
+                <ScalarProperty Name="pn_set" ColumnName="pn_set" />
+                <ScalarProperty Name="pn_cav" ColumnName="pn_cav" />
+                <ScalarProperty Name="pn_ct" ColumnName="pn_ct" />
+                <ScalarProperty Name="total_actoutput" ColumnName="total_actoutput" />
+                <ScalarProperty Name="sch" ColumnName="sch" />
+                <ScalarProperty Name="no_machine" ColumnName="no_machine" />
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="we_" ColumnName="we_" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="shift_" ColumnName="shift_" />
+                <ScalarProperty Name="partnumber" ColumnName="partnumber" />
+                <ScalarProperty Name="main_id" ColumnName="main_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PIM_SSC_O_DOWNTIME">
+            <EntityTypeMapping TypeName="MMSModel.PIM_SSC_O_DOWNTIME">
+              <MappingFragment StoreEntitySet="PIM_SSC_O_DOWNTIME">
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="downtime_notes" ColumnName="downtime_notes" />
+                <ScalarProperty Name="downtime_code" ColumnName="downtime_code" />
+                <ScalarProperty Name="duration_minutes" ColumnName="duration_minutes" />
+                <ScalarProperty Name="dt_finish" ColumnName="dt_finish" />
+                <ScalarProperty Name="dt_start" ColumnName="dt_start" />
+                <ScalarProperty Name="main_id_dt" ColumnName="main_id_dt" />
+                <ScalarProperty Name="downtime_id" ColumnName="downtime_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PIM_SSC_O_REJECT">
+            <EntityTypeMapping TypeName="MMSModel.PIM_SSC_O_REJECT">
+              <MappingFragment StoreEntitySet="PIM_SSC_O_REJECT">
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="reject_notes" ColumnName="reject_notes" />
+                <ScalarProperty Name="reject_code" ColumnName="reject_code" />
+                <ScalarProperty Name="reject_qty" ColumnName="reject_qty" />
+                <ScalarProperty Name="main_id_rj" ColumnName="main_id_rj" />
+                <ScalarProperty Name="reject_id" ColumnName="reject_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PIM_SSC_OUTPUT">
+            <EntityTypeMapping TypeName="MMSModel.PIM_SSC_OUTPUT">
+              <MappingFragment StoreEntitySet="PIM_SSC_OUTPUT">
+                <ScalarProperty Name="actoutput_pcs" ColumnName="actoutput_pcs" />
+                <ScalarProperty Name="actoutput" ColumnName="actoutput" />
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="main_id_o" ColumnName="main_id_o" />
+                <ScalarProperty Name="output_id" ColumnName="output_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VO_MAIN_CALC">
+            <EntityTypeMapping TypeName="MMSModel.VO_MAIN_CALC">
+              <MappingFragment StoreEntitySet="VO_MAIN_CALC">
+                <ScalarProperty Name="part_pp" ColumnName="part_pp" />
+                <ScalarProperty Name="pn_notes" ColumnName="pn_notes" />
+                <ScalarProperty Name="mold" ColumnName="mold" />
+                <ScalarProperty Name="mc_area" ColumnName="mc_area" />
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="pn_operatingtime" ColumnName="pn_operatingtime" />
+                <ScalarProperty Name="total_time" ColumnName="total_time" />
+                <ScalarProperty Name="totalDT" ColumnName="totalDT" />
+                <ScalarProperty Name="totalNotRun" ColumnName="totalNotRun" />
+                <ScalarProperty Name="totalRJ" ColumnName="totalRJ" />
+                <ScalarProperty Name="total_good_output" ColumnName="total_good_output" />
+                <ScalarProperty Name="pn_stdoutput" ColumnName="pn_stdoutput" />
+                <ScalarProperty Name="total_output_pcs" ColumnName="total_output_pcs" />
+                <ScalarProperty Name="total_actoutput" ColumnName="total_actoutput" />
+                <ScalarProperty Name="sch" ColumnName="sch" />
+                <ScalarProperty Name="pengalioutput" ColumnName="pengalioutput" />
+                <ScalarProperty Name="pn_set" ColumnName="pn_set" />
+                <ScalarProperty Name="pn_cav" ColumnName="pn_cav" />
+                <ScalarProperty Name="pn_ct" ColumnName="pn_ct" />
+                <ScalarProperty Name="partnumber" ColumnName="partnumber" />
+                <ScalarProperty Name="no_machine" ColumnName="no_machine" />
+                <ScalarProperty Name="shift_" ColumnName="shift_" />
+                <ScalarProperty Name="we_" ColumnName="we_" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="main_id" ColumnName="main_id" />
+                <ScalarProperty Name="totalcalc_id" ColumnName="totalcalc_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VO_DOWNTIME">
+            <EntityTypeMapping TypeName="MMSModel.VO_DOWNTIME">
+              <MappingFragment StoreEntitySet="VO_DOWNTIME">
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="downtime_notes" ColumnName="downtime_notes" />
+                <ScalarProperty Name="dt_type" ColumnName="dt_type" />
+                <ScalarProperty Name="dt_remarks" ColumnName="dt_remarks" />
+                <ScalarProperty Name="downtime_code" ColumnName="downtime_code" />
+                <ScalarProperty Name="duration_minutes" ColumnName="duration_minutes" />
+                <ScalarProperty Name="dt_finish" ColumnName="dt_finish" />
+                <ScalarProperty Name="dt_start" ColumnName="dt_start" />
+                <ScalarProperty Name="total_actoutput" ColumnName="total_actoutput" />
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="total_output_pcs" ColumnName="total_output_pcs" />
+                <ScalarProperty Name="pn_stdoutput" ColumnName="pn_stdoutput" />
+                <ScalarProperty Name="shift_" ColumnName="shift_" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="we_" ColumnName="we_" />
+                <ScalarProperty Name="mold" ColumnName="mold" />
+                <ScalarProperty Name="partnumber" ColumnName="partnumber" />
+                <ScalarProperty Name="no_machine" ColumnName="no_machine" />
+                <ScalarProperty Name="mc_area" ColumnName="mc_area" />
+                <ScalarProperty Name="main_id_dt" ColumnName="main_id_dt" />
+                <ScalarProperty Name="downtime_id" ColumnName="downtime_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VO_REJECT">
+            <EntityTypeMapping TypeName="MMSModel.VO_REJECT">
+              <MappingFragment StoreEntitySet="VO_REJECT">
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="pengalioutput" ColumnName="pengalioutput" />
+                <ScalarProperty Name="pn_set" ColumnName="pn_set" />
+                <ScalarProperty Name="pn_cav" ColumnName="pn_cav" />
+                <ScalarProperty Name="pn_ct" ColumnName="pn_ct" />
+                <ScalarProperty Name="reject_notes" ColumnName="reject_notes" />
+                <ScalarProperty Name="rj_remarks" ColumnName="rj_remarks" />
+                <ScalarProperty Name="reject_code" ColumnName="reject_code" />
+                <ScalarProperty Name="reject_qty" ColumnName="reject_qty" />
+                <ScalarProperty Name="total_actoutput" ColumnName="total_actoutput" />
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="total_output_pcs" ColumnName="total_output_pcs" />
+                <ScalarProperty Name="pn_stdoutput" ColumnName="pn_stdoutput" />
+                <ScalarProperty Name="shift_" ColumnName="shift_" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="we_" ColumnName="we_" />
+                <ScalarProperty Name="mold" ColumnName="mold" />
+                <ScalarProperty Name="partnumber" ColumnName="partnumber" />
+                <ScalarProperty Name="no_machine" ColumnName="no_machine" />
+                <ScalarProperty Name="mc_area" ColumnName="mc_area" />
+                <ScalarProperty Name="main_id_rj" ColumnName="main_id_rj" />
+                <ScalarProperty Name="reject_id" ColumnName="reject_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pim_kpi_performance">
+            <EntityTypeMapping TypeName="MMSModel.pim_kpi_performance">
+              <MappingFragment StoreEntitySet="pim_kpi_performance">
+                <ScalarProperty Name="WEEKENDING" ColumnName="WEEKENDING" />
+                <ScalarProperty Name="DSA_VOLUME" ColumnName="DSA_VOLUME" />
+                <ScalarProperty Name="DSA_ITEM" ColumnName="DSA_ITEM" />
+                <ScalarProperty Name="SCRAP" ColumnName="SCRAP" />
+                <ScalarProperty Name="EFF" ColumnName="EFF" />
+                <ScalarProperty Name="LBO_PO_PPM" ColumnName="LBO_PO_PPM" />
+                <ScalarProperty Name="LBO_PO_PCS" ColumnName="LBO_PO_PCS" />
+                <ScalarProperty Name="EHS_PATROL" ColumnName="EHS_PATROL" />
+                <ScalarProperty Name="COMPLIANCE" ColumnName="COMPLIANCE" />
+                <ScalarProperty Name="AUDIT_5S" ColumnName="AUDIT_5S" />
+                <ScalarProperty Name="SHIFT_" ColumnName="SHIFT_" />
+                <ScalarProperty Name="DATE_" ColumnName="DATE_" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pim_user_kpk">
+            <EntityTypeMapping TypeName="MMSModel.pim_user_kpk">
+              <MappingFragment StoreEntitySet="pim_user_kpk">
+                <ScalarProperty Name="em_role" ColumnName="em_role" />
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

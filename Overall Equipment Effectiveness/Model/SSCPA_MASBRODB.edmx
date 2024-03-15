@@ -1,0 +1,1103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="masbroModel2.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="pa_cd_defectmolded">
+          <Key>
+            <PropertyRef Name="CODE" />
+          </Key>
+          <Property Name="CODE" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DETAILS" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="pa_cd_downtime">
+          <Key>
+            <PropertyRef Name="DT_CODE" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DT_CODE" Type="int" Nullable="false" />
+          <Property Name="DT_REMARKS" Type="varchar" MaxLength="250" />
+          <Property Name="DT_TYPE" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="pa_cd_reject">
+          <Key>
+            <PropertyRef Name="RJ_CODE" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RJ_CODE" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="RJ_REMARK" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="pa_part_number_list">
+          <Key>
+            <PropertyRef Name="PN" />
+          </Key>
+          <Property Name="PN" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="DESCRIPTION" Type="varchar" MaxLength="255" />
+          <Property Name="OUTPUT_HOURLY" Type="float" />
+        </EntityType>
+        <EntityType Name="pa_ssc_main">
+          <Key>
+            <PropertyRef Name="main_id" />
+          </Key>
+          <Property Name="main_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="pn" Type="varchar" MaxLength="50" />
+          <Property Name="shift_" Type="int" />
+          <Property Name="date_" Type="date" />
+          <Property Name="we_" Type="date" />
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" />
+          <Property Name="op_name" Type="varchar" MaxLength="250" />
+          <Property Name="no_index" Type="varchar" MaxLength="50" />
+          <Property Name="shiftly_target" Type="int" />
+          <Property Name="hourly_target" Type="float" />
+          <Property Name="total_actual_output" Type="int" />
+          <Property Name="pn_notes" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="pa_ssc_output">
+          <Key>
+            <PropertyRef Name="output_id" />
+          </Key>
+          <Property Name="output_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="main_id_o" Type="bigint" />
+          <Property Name="hour_counter" Type="int" />
+          <Property Name="actual_output" Type="int" />
+        </EntityType>
+        <EntityType Name="pa_ssc_output_defectmolded">
+          <Key>
+            <PropertyRef Name="defect_id" />
+          </Key>
+          <Property Name="defect_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="main_id_dm" Type="bigint" />
+          <Property Name="hour_counter" Type="int" Nullable="false" />
+          <Property Name="defect_qty" Type="int" />
+          <Property Name="defect_code" Type="varchar" MaxLength="50" />
+          <Property Name="defect_notes" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="pa_ssc_outputcalculated">
+          <Key>
+            <PropertyRef Name="totalcalc_id" />
+          </Key>
+          <Property Name="totalcalc_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="main_id_tc" Type="bigint" />
+          <Property Name="total_output_pcs" Type="int" />
+          <Property Name="total_good_output" Type="int" />
+          <Property Name="pn_stdoutput" Type="int" />
+          <Property Name="totalRj" Type="int" />
+          <Property Name="totalDm" Type="int" />
+          <Property Name="totalNotRun" Type="int" />
+          <Property Name="totalDT" Type="int" />
+          <Property Name="total_time" Type="int" />
+          <Property Name="pn_operatingtime" Type="int" />
+        </EntityType>
+        <EntityType Name="pa_ssc_outputdowntime">
+          <Key>
+            <PropertyRef Name="downtime_id" />
+          </Key>
+          <Property Name="downtime_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="main_id_dt" Type="bigint" />
+          <Property Name="hour_counter" Type="int" />
+          <Property Name="dt_start" Type="time" Precision="7" />
+          <Property Name="dt_finish" Type="time" Precision="7" />
+          <Property Name="duration_minutes" Type="int" />
+          <Property Name="downtime_code" Type="int" />
+          <Property Name="downtime_notes" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="pa_ssc_outputreject">
+          <Key>
+            <PropertyRef Name="reject_id" />
+          </Key>
+          <Property Name="reject_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="main_id_rj" Type="bigint" />
+          <Property Name="hour_counter" Type="int" />
+          <Property Name="reject_qty" Type="int" />
+          <Property Name="reject_code" Type="varchar" MaxLength="50" />
+          <Property Name="reject_notes" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="pa_user_kpk">
+          <Key>
+            <PropertyRef Name="op_kpk" />
+          </Key>
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="op_name" Type="varchar(max)" />
+          <Property Name="em_role" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'masbro.dbo.View_PA_DEFECTMOLDED' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="View_PA_DEFECTMOLDED">
+          <Key>
+            <PropertyRef Name="defect_id" />
+            <PropertyRef Name="hour_counter" />
+          </Key>
+          <Property Name="defect_id" Type="bigint" Nullable="false" />
+          <Property Name="main_id_dm" Type="bigint" />
+          <Property Name="we_" Type="date" />
+          <Property Name="date_" Type="date" />
+          <Property Name="shift_" Type="int" />
+          <Property Name="no_index" Type="varchar" MaxLength="50" />
+          <Property Name="pn" Type="varchar" MaxLength="50" />
+          <Property Name="hourly_target" Type="float" />
+          <Property Name="shiftly_target" Type="int" />
+          <Property Name="total_actual_output" Type="int" />
+          <Property Name="total_output_pcs" Type="int" />
+          <Property Name="pn_stdoutput" Type="int" />
+          <Property Name="total_good_output" Type="int" />
+          <Property Name="totalDm" Type="int" />
+          <Property Name="hour_counter" Type="int" Nullable="false" />
+          <Property Name="defect_qty" Type="int" />
+          <Property Name="defect_code" Type="varchar" MaxLength="50" />
+          <Property Name="DETAILS" Type="varchar" MaxLength="250" />
+          <Property Name="defect_notes" Type="varchar" MaxLength="250" />
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" />
+          <Property Name="op_name" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'masbro.dbo.View_PA_DOWNTIME_' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="View_PA_DOWNTIME_">
+          <Key>
+            <PropertyRef Name="downtime_id" />
+          </Key>
+          <Property Name="downtime_id" Type="bigint" Nullable="false" />
+          <Property Name="main_id_dt" Type="bigint" />
+          <Property Name="no_index" Type="varchar" MaxLength="50" />
+          <Property Name="pn" Type="varchar" MaxLength="50" />
+          <Property Name="we_" Type="date" />
+          <Property Name="date_" Type="date" />
+          <Property Name="shift_" Type="int" />
+          <Property Name="pn_stdoutput" Type="int" />
+          <Property Name="total_output_pcs" Type="int" />
+          <Property Name="hour_counter" Type="int" />
+          <Property Name="dt_start" Type="time" Precision="7" />
+          <Property Name="dt_finish" Type="time" Precision="7" />
+          <Property Name="duration_minutes" Type="int" />
+          <Property Name="downtime_code" Type="int" />
+          <Property Name="DT_REMARKS" Type="varchar" MaxLength="250" />
+          <Property Name="DT_TYPE" Type="varchar" MaxLength="250" />
+          <Property Name="downtime_notes" Type="varchar(max)" />
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" />
+          <Property Name="op_name" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'masbro.dbo.View_PA_MAIN_CALC' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="View_PA_MAIN_CALC">
+          <Key>
+            <PropertyRef Name="totalcalc_id" />
+          </Key>
+          <Property Name="totalcalc_id" Type="bigint" Nullable="false" />
+          <Property Name="main_id_tc" Type="bigint" />
+          <Property Name="we_" Type="date" />
+          <Property Name="date_" Type="date" />
+          <Property Name="shift_" Type="int" />
+          <Property Name="no_index" Type="varchar" MaxLength="50" />
+          <Property Name="pn" Type="varchar" MaxLength="50" />
+          <Property Name="shiftly_target" Type="int" />
+          <Property Name="total_actual_output" Type="int" />
+          <Property Name="pn_stdoutput" Type="int" />
+          <Property Name="total_good_output" Type="int" />
+          <Property Name="totalRj" Type="int" />
+          <Property Name="totalNotRun" Type="int" />
+          <Property Name="totalDT" Type="int" />
+          <Property Name="total_time" Type="int" />
+          <Property Name="pn_operatingtime" Type="int" />
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" />
+          <Property Name="op_name" Type="varchar" MaxLength="250" />
+          <Property Name="totalDm" Type="int" />
+          <Property Name="total_output_pcs" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'masbro.dbo.View_PA_REJECT' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="View_PA_REJECT">
+          <Key>
+            <PropertyRef Name="reject_id" />
+          </Key>
+          <Property Name="reject_id" Type="bigint" Nullable="false" />
+          <Property Name="main_id_rj" Type="bigint" />
+          <Property Name="no_index" Type="varchar" MaxLength="50" />
+          <Property Name="pn" Type="varchar" MaxLength="50" />
+          <Property Name="we_" Type="date" />
+          <Property Name="date_" Type="date" />
+          <Property Name="shift_" Type="int" />
+          <Property Name="pn_stdoutput" Type="int" />
+          <Property Name="total_output_pcs" Type="int" />
+          <Property Name="hour_counter" Type="int" />
+          <Property Name="total_actual_output" Type="int" />
+          <Property Name="reject_qty" Type="int" />
+          <Property Name="reject_code" Type="varchar" MaxLength="50" />
+          <Property Name="RJ_REMARK" Type="varchar" MaxLength="250" />
+          <Property Name="reject_notes" Type="varchar" MaxLength="250" />
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" />
+          <Property Name="op_name" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <Association Name="FK_pa_ssc_maindefectmolded">
+          <End Role="pa_ssc_main" Type="Self.pa_ssc_main" Multiplicity="0..1" />
+          <End Role="pa_ssc_output_defectmolded" Type="Self.pa_ssc_output_defectmolded" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pa_ssc_main">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="pa_ssc_output_defectmolded">
+              <PropertyRef Name="main_id_dm" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_pa_ssc_output_defectmolded">
+          <End Role="pa_cd_defectmolded" Type="Self.pa_cd_defectmolded" Multiplicity="0..1" />
+          <End Role="pa_ssc_output_defectmolded" Type="Self.pa_ssc_output_defectmolded" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pa_cd_defectmolded">
+              <PropertyRef Name="CODE" />
+            </Principal>
+            <Dependent Role="pa_ssc_output_defectmolded">
+              <PropertyRef Name="defect_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PA_SSC_OUTPUT_PA_SSC_MAIN">
+          <End Role="pa_ssc_main" Type="Self.pa_ssc_main" Multiplicity="0..1" />
+          <End Role="pa_ssc_output" Type="Self.pa_ssc_output" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pa_ssc_main">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="pa_ssc_output">
+              <PropertyRef Name="main_id_o" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PA_SSC_OUTPUTCALCULATED_PA_SSC_MAIN">
+          <End Role="pa_ssc_main" Type="Self.pa_ssc_main" Multiplicity="0..1" />
+          <End Role="pa_ssc_outputcalculated" Type="Self.pa_ssc_outputcalculated" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pa_ssc_main">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="pa_ssc_outputcalculated">
+              <PropertyRef Name="main_id_tc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PA_SSC_OUTPUTDOWNTIME_PA_CODE">
+          <End Role="pa_cd_downtime" Type="Self.pa_cd_downtime" Multiplicity="0..1" />
+          <End Role="pa_ssc_outputdowntime" Type="Self.pa_ssc_outputdowntime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pa_cd_downtime">
+              <PropertyRef Name="DT_CODE" />
+            </Principal>
+            <Dependent Role="pa_ssc_outputdowntime">
+              <PropertyRef Name="downtime_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PA_SSC_OUTPUTDOWNTIME_PA_SSC_MAIN">
+          <End Role="pa_ssc_main" Type="Self.pa_ssc_main" Multiplicity="0..1" />
+          <End Role="pa_ssc_outputdowntime" Type="Self.pa_ssc_outputdowntime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pa_ssc_main">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="pa_ssc_outputdowntime">
+              <PropertyRef Name="main_id_dt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PA_SSC_OUTPUTREJECT_PA_CODE">
+          <End Role="pa_cd_reject" Type="Self.pa_cd_reject" Multiplicity="0..1" />
+          <End Role="pa_ssc_outputreject" Type="Self.pa_ssc_outputreject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pa_cd_reject">
+              <PropertyRef Name="RJ_CODE" />
+            </Principal>
+            <Dependent Role="pa_ssc_outputreject">
+              <PropertyRef Name="reject_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PA_SSC_OUTPUTREJECT_PA_SSC_MAIN">
+          <End Role="pa_ssc_main" Type="Self.pa_ssc_main" Multiplicity="0..1" />
+          <End Role="pa_ssc_outputreject" Type="Self.pa_ssc_outputreject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pa_ssc_main">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="pa_ssc_outputreject">
+              <PropertyRef Name="main_id_rj" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="masbroModel2StoreContainer">
+          <EntitySet Name="pa_cd_defectmolded" EntityType="Self.pa_cd_defectmolded" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pa_cd_downtime" EntityType="Self.pa_cd_downtime" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pa_cd_reject" EntityType="Self.pa_cd_reject" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pa_part_number_list" EntityType="Self.pa_part_number_list" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pa_ssc_main" EntityType="Self.pa_ssc_main" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pa_ssc_output" EntityType="Self.pa_ssc_output" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pa_ssc_output_defectmolded" EntityType="Self.pa_ssc_output_defectmolded" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pa_ssc_outputcalculated" EntityType="Self.pa_ssc_outputcalculated" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pa_ssc_outputdowntime" EntityType="Self.pa_ssc_outputdowntime" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pa_ssc_outputreject" EntityType="Self.pa_ssc_outputreject" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pa_user_kpk" EntityType="Self.pa_user_kpk" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="View_PA_DEFECTMOLDED" EntityType="Self.View_PA_DEFECTMOLDED" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [View_PA_DEFECTMOLDED].[defect_id] AS [defect_id], 
+    [View_PA_DEFECTMOLDED].[main_id_dm] AS [main_id_dm], 
+    [View_PA_DEFECTMOLDED].[we_] AS [we_], 
+    [View_PA_DEFECTMOLDED].[date_] AS [date_], 
+    [View_PA_DEFECTMOLDED].[shift_] AS [shift_], 
+    [View_PA_DEFECTMOLDED].[no_index] AS [no_index], 
+    [View_PA_DEFECTMOLDED].[pn] AS [pn], 
+    [View_PA_DEFECTMOLDED].[hourly_target] AS [hourly_target], 
+    [View_PA_DEFECTMOLDED].[shiftly_target] AS [shiftly_target], 
+    [View_PA_DEFECTMOLDED].[total_actual_output] AS [total_actual_output], 
+    [View_PA_DEFECTMOLDED].[total_output_pcs] AS [total_output_pcs], 
+    [View_PA_DEFECTMOLDED].[pn_stdoutput] AS [pn_stdoutput], 
+    [View_PA_DEFECTMOLDED].[total_good_output] AS [total_good_output], 
+    [View_PA_DEFECTMOLDED].[totalDm] AS [totalDm], 
+    [View_PA_DEFECTMOLDED].[hour_counter] AS [hour_counter], 
+    [View_PA_DEFECTMOLDED].[defect_qty] AS [defect_qty], 
+    [View_PA_DEFECTMOLDED].[defect_code] AS [defect_code], 
+    [View_PA_DEFECTMOLDED].[DETAILS] AS [DETAILS], 
+    [View_PA_DEFECTMOLDED].[defect_notes] AS [defect_notes], 
+    [View_PA_DEFECTMOLDED].[op_kpk] AS [op_kpk], 
+    [View_PA_DEFECTMOLDED].[op_name] AS [op_name]
+    FROM [dbo].[View_PA_DEFECTMOLDED] AS [View_PA_DEFECTMOLDED]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="View_PA_DOWNTIME_" EntityType="Self.View_PA_DOWNTIME_" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [View_PA_DOWNTIME_].[downtime_id] AS [downtime_id], 
+    [View_PA_DOWNTIME_].[main_id_dt] AS [main_id_dt], 
+    [View_PA_DOWNTIME_].[no_index] AS [no_index], 
+    [View_PA_DOWNTIME_].[pn] AS [pn], 
+    [View_PA_DOWNTIME_].[we_] AS [we_], 
+    [View_PA_DOWNTIME_].[date_] AS [date_], 
+    [View_PA_DOWNTIME_].[shift_] AS [shift_], 
+    [View_PA_DOWNTIME_].[pn_stdoutput] AS [pn_stdoutput], 
+    [View_PA_DOWNTIME_].[total_output_pcs] AS [total_output_pcs], 
+    [View_PA_DOWNTIME_].[hour_counter] AS [hour_counter], 
+    [View_PA_DOWNTIME_].[dt_start] AS [dt_start], 
+    [View_PA_DOWNTIME_].[dt_finish] AS [dt_finish], 
+    [View_PA_DOWNTIME_].[duration_minutes] AS [duration_minutes], 
+    [View_PA_DOWNTIME_].[downtime_code] AS [downtime_code], 
+    [View_PA_DOWNTIME_].[DT_REMARKS] AS [DT_REMARKS], 
+    [View_PA_DOWNTIME_].[DT_TYPE] AS [DT_TYPE], 
+    [View_PA_DOWNTIME_].[downtime_notes] AS [downtime_notes], 
+    [View_PA_DOWNTIME_].[op_kpk] AS [op_kpk], 
+    [View_PA_DOWNTIME_].[op_name] AS [op_name]
+    FROM [dbo].[View_PA_DOWNTIME_] AS [View_PA_DOWNTIME_]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="View_PA_MAIN_CALC" EntityType="Self.View_PA_MAIN_CALC" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [View_PA_MAIN_CALC].[totalcalc_id] AS [totalcalc_id], 
+    [View_PA_MAIN_CALC].[main_id_tc] AS [main_id_tc], 
+    [View_PA_MAIN_CALC].[we_] AS [we_], 
+    [View_PA_MAIN_CALC].[date_] AS [date_], 
+    [View_PA_MAIN_CALC].[shift_] AS [shift_], 
+    [View_PA_MAIN_CALC].[no_index] AS [no_index], 
+    [View_PA_MAIN_CALC].[pn] AS [pn], 
+    [View_PA_MAIN_CALC].[shiftly_target] AS [shiftly_target], 
+    [View_PA_MAIN_CALC].[total_actual_output] AS [total_actual_output], 
+    [View_PA_MAIN_CALC].[pn_stdoutput] AS [pn_stdoutput], 
+    [View_PA_MAIN_CALC].[total_good_output] AS [total_good_output], 
+    [View_PA_MAIN_CALC].[totalRj] AS [totalRj], 
+    [View_PA_MAIN_CALC].[totalNotRun] AS [totalNotRun], 
+    [View_PA_MAIN_CALC].[totalDT] AS [totalDT], 
+    [View_PA_MAIN_CALC].[total_time] AS [total_time], 
+    [View_PA_MAIN_CALC].[pn_operatingtime] AS [pn_operatingtime], 
+    [View_PA_MAIN_CALC].[op_kpk] AS [op_kpk], 
+    [View_PA_MAIN_CALC].[op_name] AS [op_name], 
+    [View_PA_MAIN_CALC].[totalDm] AS [totalDm], 
+    [View_PA_MAIN_CALC].[total_output_pcs] AS [total_output_pcs]
+    FROM [dbo].[View_PA_MAIN_CALC] AS [View_PA_MAIN_CALC]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="View_PA_REJECT" EntityType="Self.View_PA_REJECT" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [View_PA_REJECT].[reject_id] AS [reject_id], 
+    [View_PA_REJECT].[main_id_rj] AS [main_id_rj], 
+    [View_PA_REJECT].[no_index] AS [no_index], 
+    [View_PA_REJECT].[pn] AS [pn], 
+    [View_PA_REJECT].[we_] AS [we_], 
+    [View_PA_REJECT].[date_] AS [date_], 
+    [View_PA_REJECT].[shift_] AS [shift_], 
+    [View_PA_REJECT].[pn_stdoutput] AS [pn_stdoutput], 
+    [View_PA_REJECT].[total_output_pcs] AS [total_output_pcs], 
+    [View_PA_REJECT].[hour_counter] AS [hour_counter], 
+    [View_PA_REJECT].[total_actual_output] AS [total_actual_output], 
+    [View_PA_REJECT].[reject_qty] AS [reject_qty], 
+    [View_PA_REJECT].[reject_code] AS [reject_code], 
+    [View_PA_REJECT].[RJ_REMARK] AS [RJ_REMARK], 
+    [View_PA_REJECT].[reject_notes] AS [reject_notes], 
+    [View_PA_REJECT].[op_kpk] AS [op_kpk], 
+    [View_PA_REJECT].[op_name] AS [op_name]
+    FROM [dbo].[View_PA_REJECT] AS [View_PA_REJECT]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_pa_ssc_maindefectmolded" Association="Self.FK_pa_ssc_maindefectmolded">
+            <End Role="pa_ssc_main" EntitySet="pa_ssc_main" />
+            <End Role="pa_ssc_output_defectmolded" EntitySet="pa_ssc_output_defectmolded" />
+          </AssociationSet>
+          <AssociationSet Name="FK_pa_ssc_output_defectmolded" Association="Self.FK_pa_ssc_output_defectmolded">
+            <End Role="pa_cd_defectmolded" EntitySet="pa_cd_defectmolded" />
+            <End Role="pa_ssc_output_defectmolded" EntitySet="pa_ssc_output_defectmolded" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PA_SSC_OUTPUT_PA_SSC_MAIN" Association="Self.FK_PA_SSC_OUTPUT_PA_SSC_MAIN">
+            <End Role="pa_ssc_main" EntitySet="pa_ssc_main" />
+            <End Role="pa_ssc_output" EntitySet="pa_ssc_output" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PA_SSC_OUTPUTCALCULATED_PA_SSC_MAIN" Association="Self.FK_PA_SSC_OUTPUTCALCULATED_PA_SSC_MAIN">
+            <End Role="pa_ssc_main" EntitySet="pa_ssc_main" />
+            <End Role="pa_ssc_outputcalculated" EntitySet="pa_ssc_outputcalculated" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PA_SSC_OUTPUTDOWNTIME_PA_CODE" Association="Self.FK_PA_SSC_OUTPUTDOWNTIME_PA_CODE">
+            <End Role="pa_cd_downtime" EntitySet="pa_cd_downtime" />
+            <End Role="pa_ssc_outputdowntime" EntitySet="pa_ssc_outputdowntime" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PA_SSC_OUTPUTDOWNTIME_PA_SSC_MAIN" Association="Self.FK_PA_SSC_OUTPUTDOWNTIME_PA_SSC_MAIN">
+            <End Role="pa_ssc_main" EntitySet="pa_ssc_main" />
+            <End Role="pa_ssc_outputdowntime" EntitySet="pa_ssc_outputdowntime" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PA_SSC_OUTPUTREJECT_PA_CODE" Association="Self.FK_PA_SSC_OUTPUTREJECT_PA_CODE">
+            <End Role="pa_cd_reject" EntitySet="pa_cd_reject" />
+            <End Role="pa_ssc_outputreject" EntitySet="pa_ssc_outputreject" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PA_SSC_OUTPUTREJECT_PA_SSC_MAIN" Association="Self.FK_PA_SSC_OUTPUTREJECT_PA_SSC_MAIN">
+            <End Role="pa_ssc_main" EntitySet="pa_ssc_main" />
+            <End Role="pa_ssc_outputreject" EntitySet="pa_ssc_outputreject" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="masbroModel2" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="pa_cd_defectmolded">
+          <Key>
+            <PropertyRef Name="CODE" />
+          </Key>
+          <Property Name="CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DETAILS" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="pa_ssc_output_defectmolded" Relationship="Self.FK_pa_ssc_output_defectmolded" FromRole="pa_cd_defectmolded" ToRole="pa_ssc_output_defectmolded" />
+        </EntityType>
+        <EntityType Name="pa_cd_downtime">
+          <Key>
+            <PropertyRef Name="DT_CODE" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DT_CODE" Type="Int32" Nullable="false" />
+          <Property Name="DT_REMARKS" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="DT_TYPE" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="pa_ssc_outputdowntime" Relationship="Self.FK_PA_SSC_OUTPUTDOWNTIME_PA_CODE" FromRole="pa_cd_downtime" ToRole="pa_ssc_outputdowntime" />
+        </EntityType>
+        <EntityType Name="pa_cd_reject">
+          <Key>
+            <PropertyRef Name="RJ_CODE" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RJ_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RJ_REMARK" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="pa_ssc_outputreject" Relationship="Self.FK_PA_SSC_OUTPUTREJECT_PA_CODE" FromRole="pa_cd_reject" ToRole="pa_ssc_outputreject" />
+        </EntityType>
+        <EntityType Name="pa_part_number_list">
+          <Key>
+            <PropertyRef Name="PN" />
+          </Key>
+          <Property Name="PN" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DESCRIPTION" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="OUTPUT_HOURLY" Type="Double" />
+        </EntityType>
+        <EntityType Name="pa_ssc_main">
+          <Key>
+            <PropertyRef Name="main_id" />
+          </Key>
+          <Property Name="main_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="pn" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="shift_" Type="Int32" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="we_" Type="DateTime" Precision="0" />
+          <Property Name="op_kpk" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="op_name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="no_index" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="shiftly_target" Type="Int32" />
+          <Property Name="hourly_target" Type="Double" />
+          <Property Name="total_actual_output" Type="Int32" />
+          <Property Name="pn_notes" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="pa_ssc_output_defectmolded" Relationship="Self.FK_pa_ssc_maindefectmolded" FromRole="pa_ssc_main" ToRole="pa_ssc_output_defectmolded" />
+          <NavigationProperty Name="pa_ssc_output" Relationship="Self.FK_PA_SSC_OUTPUT_PA_SSC_MAIN" FromRole="pa_ssc_main" ToRole="pa_ssc_output" />
+          <NavigationProperty Name="pa_ssc_outputcalculated" Relationship="Self.FK_PA_SSC_OUTPUTCALCULATED_PA_SSC_MAIN" FromRole="pa_ssc_main" ToRole="pa_ssc_outputcalculated" />
+          <NavigationProperty Name="pa_ssc_outputdowntime" Relationship="Self.FK_PA_SSC_OUTPUTDOWNTIME_PA_SSC_MAIN" FromRole="pa_ssc_main" ToRole="pa_ssc_outputdowntime" />
+          <NavigationProperty Name="pa_ssc_outputreject" Relationship="Self.FK_PA_SSC_OUTPUTREJECT_PA_SSC_MAIN" FromRole="pa_ssc_main" ToRole="pa_ssc_outputreject" />
+        </EntityType>
+        <EntityType Name="pa_ssc_output">
+          <Key>
+            <PropertyRef Name="output_id" />
+          </Key>
+          <Property Name="output_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="main_id_o" Type="Int64" />
+          <Property Name="hour_counter" Type="Int32" />
+          <Property Name="actual_output" Type="Int32" />
+          <NavigationProperty Name="pa_ssc_main" Relationship="Self.FK_PA_SSC_OUTPUT_PA_SSC_MAIN" FromRole="pa_ssc_output" ToRole="pa_ssc_main" />
+        </EntityType>
+        <EntityType Name="pa_ssc_output_defectmolded">
+          <Key>
+            <PropertyRef Name="defect_id" />
+          </Key>
+          <Property Name="defect_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="main_id_dm" Type="Int64" />
+          <Property Name="hour_counter" Type="Int32" Nullable="false" />
+          <Property Name="defect_qty" Type="Int32" />
+          <Property Name="defect_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="defect_notes" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="pa_cd_defectmolded" Relationship="Self.FK_pa_ssc_output_defectmolded" FromRole="pa_ssc_output_defectmolded" ToRole="pa_cd_defectmolded" />
+          <NavigationProperty Name="pa_ssc_main" Relationship="Self.FK_pa_ssc_maindefectmolded" FromRole="pa_ssc_output_defectmolded" ToRole="pa_ssc_main" />
+        </EntityType>
+        <EntityType Name="pa_ssc_outputcalculated">
+          <Key>
+            <PropertyRef Name="totalcalc_id" />
+          </Key>
+          <Property Name="totalcalc_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="main_id_tc" Type="Int64" />
+          <Property Name="total_output_pcs" Type="Int32" />
+          <Property Name="total_good_output" Type="Int32" />
+          <Property Name="pn_stdoutput" Type="Int32" />
+          <Property Name="totalRj" Type="Int32" />
+          <Property Name="totalDm" Type="Int32" />
+          <Property Name="totalNotRun" Type="Int32" />
+          <Property Name="totalDT" Type="Int32" />
+          <Property Name="total_time" Type="Int32" />
+          <Property Name="pn_operatingtime" Type="Int32" />
+          <NavigationProperty Name="pa_ssc_main" Relationship="Self.FK_PA_SSC_OUTPUTCALCULATED_PA_SSC_MAIN" FromRole="pa_ssc_outputcalculated" ToRole="pa_ssc_main" />
+        </EntityType>
+        <EntityType Name="pa_ssc_outputdowntime">
+          <Key>
+            <PropertyRef Name="downtime_id" />
+          </Key>
+          <Property Name="downtime_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="main_id_dt" Type="Int64" />
+          <Property Name="hour_counter" Type="Int32" />
+          <Property Name="dt_start" Type="Time" Precision="7" />
+          <Property Name="dt_finish" Type="Time" Precision="7" />
+          <Property Name="duration_minutes" Type="Int32" />
+          <Property Name="downtime_code" Type="Int32" />
+          <Property Name="downtime_notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="pa_cd_downtime" Relationship="Self.FK_PA_SSC_OUTPUTDOWNTIME_PA_CODE" FromRole="pa_ssc_outputdowntime" ToRole="pa_cd_downtime" />
+          <NavigationProperty Name="pa_ssc_main" Relationship="Self.FK_PA_SSC_OUTPUTDOWNTIME_PA_SSC_MAIN" FromRole="pa_ssc_outputdowntime" ToRole="pa_ssc_main" />
+        </EntityType>
+        <EntityType Name="pa_ssc_outputreject">
+          <Key>
+            <PropertyRef Name="reject_id" />
+          </Key>
+          <Property Name="reject_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="main_id_rj" Type="Int64" />
+          <Property Name="hour_counter" Type="Int32" />
+          <Property Name="reject_qty" Type="Int32" />
+          <Property Name="reject_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="reject_notes" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="pa_cd_reject" Relationship="Self.FK_PA_SSC_OUTPUTREJECT_PA_CODE" FromRole="pa_ssc_outputreject" ToRole="pa_cd_reject" />
+          <NavigationProperty Name="pa_ssc_main" Relationship="Self.FK_PA_SSC_OUTPUTREJECT_PA_SSC_MAIN" FromRole="pa_ssc_outputreject" ToRole="pa_ssc_main" />
+        </EntityType>
+        <EntityType Name="pa_user_kpk">
+          <Key>
+            <PropertyRef Name="op_kpk" />
+          </Key>
+          <Property Name="op_kpk" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="op_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="em_role" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_pa_ssc_output_defectmolded">
+          <End Role="pa_cd_defectmolded" Type="Self.pa_cd_defectmolded" Multiplicity="0..1" />
+          <End Role="pa_ssc_output_defectmolded" Type="Self.pa_ssc_output_defectmolded" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pa_cd_defectmolded">
+              <PropertyRef Name="CODE" />
+            </Principal>
+            <Dependent Role="pa_ssc_output_defectmolded">
+              <PropertyRef Name="defect_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PA_SSC_OUTPUTDOWNTIME_PA_CODE">
+          <End Role="pa_cd_downtime" Type="Self.pa_cd_downtime" Multiplicity="0..1" />
+          <End Role="pa_ssc_outputdowntime" Type="Self.pa_ssc_outputdowntime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pa_cd_downtime">
+              <PropertyRef Name="DT_CODE" />
+            </Principal>
+            <Dependent Role="pa_ssc_outputdowntime">
+              <PropertyRef Name="downtime_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PA_SSC_OUTPUTREJECT_PA_CODE">
+          <End Role="pa_cd_reject" Type="Self.pa_cd_reject" Multiplicity="0..1" />
+          <End Role="pa_ssc_outputreject" Type="Self.pa_ssc_outputreject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pa_cd_reject">
+              <PropertyRef Name="RJ_CODE" />
+            </Principal>
+            <Dependent Role="pa_ssc_outputreject">
+              <PropertyRef Name="reject_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_pa_ssc_maindefectmolded">
+          <End Role="pa_ssc_main" Type="Self.pa_ssc_main" Multiplicity="0..1" />
+          <End Role="pa_ssc_output_defectmolded" Type="Self.pa_ssc_output_defectmolded" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pa_ssc_main">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="pa_ssc_output_defectmolded">
+              <PropertyRef Name="main_id_dm" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PA_SSC_OUTPUT_PA_SSC_MAIN">
+          <End Role="pa_ssc_main" Type="Self.pa_ssc_main" Multiplicity="0..1" />
+          <End Role="pa_ssc_output" Type="Self.pa_ssc_output" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pa_ssc_main">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="pa_ssc_output">
+              <PropertyRef Name="main_id_o" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PA_SSC_OUTPUTCALCULATED_PA_SSC_MAIN">
+          <End Role="pa_ssc_main" Type="Self.pa_ssc_main" Multiplicity="0..1" />
+          <End Role="pa_ssc_outputcalculated" Type="Self.pa_ssc_outputcalculated" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pa_ssc_main">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="pa_ssc_outputcalculated">
+              <PropertyRef Name="main_id_tc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PA_SSC_OUTPUTDOWNTIME_PA_SSC_MAIN">
+          <End Role="pa_ssc_main" Type="Self.pa_ssc_main" Multiplicity="0..1" />
+          <End Role="pa_ssc_outputdowntime" Type="Self.pa_ssc_outputdowntime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pa_ssc_main">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="pa_ssc_outputdowntime">
+              <PropertyRef Name="main_id_dt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PA_SSC_OUTPUTREJECT_PA_SSC_MAIN">
+          <End Role="pa_ssc_main" Type="Self.pa_ssc_main" Multiplicity="0..1" />
+          <End Role="pa_ssc_outputreject" Type="Self.pa_ssc_outputreject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pa_ssc_main">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="pa_ssc_outputreject">
+              <PropertyRef Name="main_id_rj" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="masbroEntitiessSSC_PA" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="pa_cd_defectmolded" EntityType="Self.pa_cd_defectmolded" />
+          <EntitySet Name="pa_cd_downtime" EntityType="Self.pa_cd_downtime" />
+          <EntitySet Name="pa_cd_reject" EntityType="Self.pa_cd_reject" />
+          <EntitySet Name="pa_part_number_list" EntityType="Self.pa_part_number_list" />
+          <EntitySet Name="pa_ssc_main" EntityType="Self.pa_ssc_main" />
+          <EntitySet Name="pa_ssc_output" EntityType="Self.pa_ssc_output" />
+          <EntitySet Name="pa_ssc_output_defectmolded" EntityType="Self.pa_ssc_output_defectmolded" />
+          <EntitySet Name="pa_ssc_outputcalculated" EntityType="Self.pa_ssc_outputcalculated" />
+          <EntitySet Name="pa_ssc_outputdowntime" EntityType="Self.pa_ssc_outputdowntime" />
+          <EntitySet Name="pa_ssc_outputreject" EntityType="Self.pa_ssc_outputreject" />
+          <EntitySet Name="pa_user_kpk" EntityType="Self.pa_user_kpk" />
+          <AssociationSet Name="FK_pa_ssc_output_defectmolded" Association="Self.FK_pa_ssc_output_defectmolded">
+            <End Role="pa_cd_defectmolded" EntitySet="pa_cd_defectmolded" />
+            <End Role="pa_ssc_output_defectmolded" EntitySet="pa_ssc_output_defectmolded" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PA_SSC_OUTPUTDOWNTIME_PA_CODE" Association="Self.FK_PA_SSC_OUTPUTDOWNTIME_PA_CODE">
+            <End Role="pa_cd_downtime" EntitySet="pa_cd_downtime" />
+            <End Role="pa_ssc_outputdowntime" EntitySet="pa_ssc_outputdowntime" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PA_SSC_OUTPUTREJECT_PA_CODE" Association="Self.FK_PA_SSC_OUTPUTREJECT_PA_CODE">
+            <End Role="pa_cd_reject" EntitySet="pa_cd_reject" />
+            <End Role="pa_ssc_outputreject" EntitySet="pa_ssc_outputreject" />
+          </AssociationSet>
+          <AssociationSet Name="FK_pa_ssc_maindefectmolded" Association="Self.FK_pa_ssc_maindefectmolded">
+            <End Role="pa_ssc_main" EntitySet="pa_ssc_main" />
+            <End Role="pa_ssc_output_defectmolded" EntitySet="pa_ssc_output_defectmolded" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PA_SSC_OUTPUT_PA_SSC_MAIN" Association="Self.FK_PA_SSC_OUTPUT_PA_SSC_MAIN">
+            <End Role="pa_ssc_main" EntitySet="pa_ssc_main" />
+            <End Role="pa_ssc_output" EntitySet="pa_ssc_output" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PA_SSC_OUTPUTCALCULATED_PA_SSC_MAIN" Association="Self.FK_PA_SSC_OUTPUTCALCULATED_PA_SSC_MAIN">
+            <End Role="pa_ssc_main" EntitySet="pa_ssc_main" />
+            <End Role="pa_ssc_outputcalculated" EntitySet="pa_ssc_outputcalculated" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PA_SSC_OUTPUTDOWNTIME_PA_SSC_MAIN" Association="Self.FK_PA_SSC_OUTPUTDOWNTIME_PA_SSC_MAIN">
+            <End Role="pa_ssc_main" EntitySet="pa_ssc_main" />
+            <End Role="pa_ssc_outputdowntime" EntitySet="pa_ssc_outputdowntime" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PA_SSC_OUTPUTREJECT_PA_SSC_MAIN" Association="Self.FK_PA_SSC_OUTPUTREJECT_PA_SSC_MAIN">
+            <End Role="pa_ssc_main" EntitySet="pa_ssc_main" />
+            <End Role="pa_ssc_outputreject" EntitySet="pa_ssc_outputreject" />
+          </AssociationSet>
+          <EntitySet Name="View_PA_DEFECTMOLDED" EntityType="masbroModel2.View_PA_DEFECTMOLDED" />
+          <EntitySet Name="View_PA_DOWNTIME_" EntityType="masbroModel2.View_PA_DOWNTIME_" />
+          <EntitySet Name="View_PA_MAIN_CALC" EntityType="masbroModel2.View_PA_MAIN_CALC" />
+          <EntitySet Name="View_PA_REJECT" EntityType="masbroModel2.View_PA_REJECT" />
+        </EntityContainer>
+        <EntityType Name="View_PA_DEFECTMOLDED">
+          <Key>
+            <PropertyRef Name="defect_id" />
+            <PropertyRef Name="hour_counter" />
+          </Key>
+          <Property Name="defect_id" Type="Int64" Nullable="false" />
+          <Property Name="main_id_dm" Type="Int64" />
+          <Property Name="we_" Type="DateTime" Precision="0" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="shift_" Type="Int32" />
+          <Property Name="no_index" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="pn" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="hourly_target" Type="Double" />
+          <Property Name="shiftly_target" Type="Int32" />
+          <Property Name="total_actual_output" Type="Int32" />
+          <Property Name="total_output_pcs" Type="Int32" />
+          <Property Name="pn_stdoutput" Type="Int32" />
+          <Property Name="total_good_output" Type="Int32" />
+          <Property Name="totalDm" Type="Int32" />
+          <Property Name="hour_counter" Type="Int32" Nullable="false" />
+          <Property Name="defect_qty" Type="Int32" />
+          <Property Name="defect_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DETAILS" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="defect_notes" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="op_kpk" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="op_name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="View_PA_DOWNTIME_">
+          <Key>
+            <PropertyRef Name="downtime_id" />
+          </Key>
+          <Property Name="downtime_id" Type="Int64" Nullable="false" />
+          <Property Name="main_id_dt" Type="Int64" />
+          <Property Name="no_index" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="pn" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="we_" Type="DateTime" Precision="0" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="shift_" Type="Int32" />
+          <Property Name="pn_stdoutput" Type="Int32" />
+          <Property Name="total_output_pcs" Type="Int32" />
+          <Property Name="hour_counter" Type="Int32" />
+          <Property Name="dt_start" Type="Time" Precision="7" />
+          <Property Name="dt_finish" Type="Time" Precision="7" />
+          <Property Name="duration_minutes" Type="Int32" />
+          <Property Name="downtime_code" Type="Int32" />
+          <Property Name="DT_REMARKS" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="DT_TYPE" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="downtime_notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="op_kpk" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="op_name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="View_PA_MAIN_CALC">
+          <Key>
+            <PropertyRef Name="totalcalc_id" />
+          </Key>
+          <Property Name="totalcalc_id" Type="Int64" Nullable="false" />
+          <Property Name="main_id_tc" Type="Int64" />
+          <Property Name="we_" Type="DateTime" Precision="0" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="shift_" Type="Int32" />
+          <Property Name="no_index" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="pn" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="shiftly_target" Type="Int32" />
+          <Property Name="total_actual_output" Type="Int32" />
+          <Property Name="pn_stdoutput" Type="Int32" />
+          <Property Name="total_good_output" Type="Int32" />
+          <Property Name="totalRj" Type="Int32" />
+          <Property Name="totalNotRun" Type="Int32" />
+          <Property Name="totalDT" Type="Int32" />
+          <Property Name="total_time" Type="Int32" />
+          <Property Name="pn_operatingtime" Type="Int32" />
+          <Property Name="op_kpk" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="op_name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="totalDm" Type="Int32" />
+          <Property Name="total_output_pcs" Type="Int32" />
+        </EntityType>
+        <EntityType Name="View_PA_REJECT">
+          <Key>
+            <PropertyRef Name="reject_id" />
+          </Key>
+          <Property Name="reject_id" Type="Int64" Nullable="false" />
+          <Property Name="main_id_rj" Type="Int64" />
+          <Property Name="no_index" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="pn" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="we_" Type="DateTime" Precision="0" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="shift_" Type="Int32" />
+          <Property Name="pn_stdoutput" Type="Int32" />
+          <Property Name="total_output_pcs" Type="Int32" />
+          <Property Name="hour_counter" Type="Int32" />
+          <Property Name="total_actual_output" Type="Int32" />
+          <Property Name="reject_qty" Type="Int32" />
+          <Property Name="reject_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RJ_REMARK" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="reject_notes" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="op_kpk" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="op_name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="masbroModel2StoreContainer" CdmEntityContainer="masbroEntitiessSSC_PA">
+          <EntitySetMapping Name="pa_cd_defectmolded">
+            <EntityTypeMapping TypeName="masbroModel2.pa_cd_defectmolded">
+              <MappingFragment StoreEntitySet="pa_cd_defectmolded">
+                <ScalarProperty Name="CODE" ColumnName="CODE" />
+                <ScalarProperty Name="DETAILS" ColumnName="DETAILS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pa_cd_downtime">
+            <EntityTypeMapping TypeName="masbroModel2.pa_cd_downtime">
+              <MappingFragment StoreEntitySet="pa_cd_downtime">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DT_CODE" ColumnName="DT_CODE" />
+                <ScalarProperty Name="DT_REMARKS" ColumnName="DT_REMARKS" />
+                <ScalarProperty Name="DT_TYPE" ColumnName="DT_TYPE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pa_cd_reject">
+            <EntityTypeMapping TypeName="masbroModel2.pa_cd_reject">
+              <MappingFragment StoreEntitySet="pa_cd_reject">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="RJ_CODE" ColumnName="RJ_CODE" />
+                <ScalarProperty Name="RJ_REMARK" ColumnName="RJ_REMARK" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pa_part_number_list">
+            <EntityTypeMapping TypeName="masbroModel2.pa_part_number_list">
+              <MappingFragment StoreEntitySet="pa_part_number_list">
+                <ScalarProperty Name="PN" ColumnName="PN" />
+                <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+                <ScalarProperty Name="OUTPUT_HOURLY" ColumnName="OUTPUT_HOURLY" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pa_ssc_main">
+            <EntityTypeMapping TypeName="masbroModel2.pa_ssc_main">
+              <MappingFragment StoreEntitySet="pa_ssc_main">
+                <ScalarProperty Name="main_id" ColumnName="main_id" />
+                <ScalarProperty Name="pn" ColumnName="pn" />
+                <ScalarProperty Name="shift_" ColumnName="shift_" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="we_" ColumnName="we_" />
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="no_index" ColumnName="no_index" />
+                <ScalarProperty Name="shiftly_target" ColumnName="shiftly_target" />
+                <ScalarProperty Name="hourly_target" ColumnName="hourly_target" />
+                <ScalarProperty Name="total_actual_output" ColumnName="total_actual_output" />
+                <ScalarProperty Name="pn_notes" ColumnName="pn_notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pa_ssc_output">
+            <EntityTypeMapping TypeName="masbroModel2.pa_ssc_output">
+              <MappingFragment StoreEntitySet="pa_ssc_output">
+                <ScalarProperty Name="output_id" ColumnName="output_id" />
+                <ScalarProperty Name="main_id_o" ColumnName="main_id_o" />
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="actual_output" ColumnName="actual_output" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pa_ssc_output_defectmolded">
+            <EntityTypeMapping TypeName="masbroModel2.pa_ssc_output_defectmolded">
+              <MappingFragment StoreEntitySet="pa_ssc_output_defectmolded">
+                <ScalarProperty Name="defect_id" ColumnName="defect_id" />
+                <ScalarProperty Name="main_id_dm" ColumnName="main_id_dm" />
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="defect_qty" ColumnName="defect_qty" />
+                <ScalarProperty Name="defect_code" ColumnName="defect_code" />
+                <ScalarProperty Name="defect_notes" ColumnName="defect_notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pa_ssc_outputcalculated">
+            <EntityTypeMapping TypeName="masbroModel2.pa_ssc_outputcalculated">
+              <MappingFragment StoreEntitySet="pa_ssc_outputcalculated">
+                <ScalarProperty Name="totalcalc_id" ColumnName="totalcalc_id" />
+                <ScalarProperty Name="main_id_tc" ColumnName="main_id_tc" />
+                <ScalarProperty Name="total_output_pcs" ColumnName="total_output_pcs" />
+                <ScalarProperty Name="total_good_output" ColumnName="total_good_output" />
+                <ScalarProperty Name="pn_stdoutput" ColumnName="pn_stdoutput" />
+                <ScalarProperty Name="totalRj" ColumnName="totalRj" />
+                <ScalarProperty Name="totalDm" ColumnName="totalDm" />
+                <ScalarProperty Name="totalNotRun" ColumnName="totalNotRun" />
+                <ScalarProperty Name="totalDT" ColumnName="totalDT" />
+                <ScalarProperty Name="total_time" ColumnName="total_time" />
+                <ScalarProperty Name="pn_operatingtime" ColumnName="pn_operatingtime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pa_ssc_outputdowntime">
+            <EntityTypeMapping TypeName="masbroModel2.pa_ssc_outputdowntime">
+              <MappingFragment StoreEntitySet="pa_ssc_outputdowntime">
+                <ScalarProperty Name="downtime_id" ColumnName="downtime_id" />
+                <ScalarProperty Name="main_id_dt" ColumnName="main_id_dt" />
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="dt_start" ColumnName="dt_start" />
+                <ScalarProperty Name="dt_finish" ColumnName="dt_finish" />
+                <ScalarProperty Name="duration_minutes" ColumnName="duration_minutes" />
+                <ScalarProperty Name="downtime_code" ColumnName="downtime_code" />
+                <ScalarProperty Name="downtime_notes" ColumnName="downtime_notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pa_ssc_outputreject">
+            <EntityTypeMapping TypeName="masbroModel2.pa_ssc_outputreject">
+              <MappingFragment StoreEntitySet="pa_ssc_outputreject">
+                <ScalarProperty Name="reject_id" ColumnName="reject_id" />
+                <ScalarProperty Name="main_id_rj" ColumnName="main_id_rj" />
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="reject_qty" ColumnName="reject_qty" />
+                <ScalarProperty Name="reject_code" ColumnName="reject_code" />
+                <ScalarProperty Name="reject_notes" ColumnName="reject_notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pa_user_kpk">
+            <EntityTypeMapping TypeName="masbroModel2.pa_user_kpk">
+              <MappingFragment StoreEntitySet="pa_user_kpk">
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="em_role" ColumnName="em_role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="View_PA_DEFECTMOLDED">
+            <EntityTypeMapping TypeName="masbroModel2.View_PA_DEFECTMOLDED">
+              <MappingFragment StoreEntitySet="View_PA_DEFECTMOLDED">
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="defect_notes" ColumnName="defect_notes" />
+                <ScalarProperty Name="DETAILS" ColumnName="DETAILS" />
+                <ScalarProperty Name="defect_code" ColumnName="defect_code" />
+                <ScalarProperty Name="defect_qty" ColumnName="defect_qty" />
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="totalDm" ColumnName="totalDm" />
+                <ScalarProperty Name="total_good_output" ColumnName="total_good_output" />
+                <ScalarProperty Name="pn_stdoutput" ColumnName="pn_stdoutput" />
+                <ScalarProperty Name="total_output_pcs" ColumnName="total_output_pcs" />
+                <ScalarProperty Name="total_actual_output" ColumnName="total_actual_output" />
+                <ScalarProperty Name="shiftly_target" ColumnName="shiftly_target" />
+                <ScalarProperty Name="hourly_target" ColumnName="hourly_target" />
+                <ScalarProperty Name="pn" ColumnName="pn" />
+                <ScalarProperty Name="no_index" ColumnName="no_index" />
+                <ScalarProperty Name="shift_" ColumnName="shift_" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="we_" ColumnName="we_" />
+                <ScalarProperty Name="main_id_dm" ColumnName="main_id_dm" />
+                <ScalarProperty Name="defect_id" ColumnName="defect_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="View_PA_DOWNTIME_">
+            <EntityTypeMapping TypeName="masbroModel2.View_PA_DOWNTIME_">
+              <MappingFragment StoreEntitySet="View_PA_DOWNTIME_">
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="downtime_notes" ColumnName="downtime_notes" />
+                <ScalarProperty Name="DT_TYPE" ColumnName="DT_TYPE" />
+                <ScalarProperty Name="DT_REMARKS" ColumnName="DT_REMARKS" />
+                <ScalarProperty Name="downtime_code" ColumnName="downtime_code" />
+                <ScalarProperty Name="duration_minutes" ColumnName="duration_minutes" />
+                <ScalarProperty Name="dt_finish" ColumnName="dt_finish" />
+                <ScalarProperty Name="dt_start" ColumnName="dt_start" />
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="total_output_pcs" ColumnName="total_output_pcs" />
+                <ScalarProperty Name="pn_stdoutput" ColumnName="pn_stdoutput" />
+                <ScalarProperty Name="shift_" ColumnName="shift_" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="we_" ColumnName="we_" />
+                <ScalarProperty Name="pn" ColumnName="pn" />
+                <ScalarProperty Name="no_index" ColumnName="no_index" />
+                <ScalarProperty Name="main_id_dt" ColumnName="main_id_dt" />
+                <ScalarProperty Name="downtime_id" ColumnName="downtime_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="View_PA_MAIN_CALC">
+            <EntityTypeMapping TypeName="masbroModel2.View_PA_MAIN_CALC">
+              <MappingFragment StoreEntitySet="View_PA_MAIN_CALC">
+                <ScalarProperty Name="total_output_pcs" ColumnName="total_output_pcs" />
+                <ScalarProperty Name="totalDm" ColumnName="totalDm" />
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="pn_operatingtime" ColumnName="pn_operatingtime" />
+                <ScalarProperty Name="total_time" ColumnName="total_time" />
+                <ScalarProperty Name="totalDT" ColumnName="totalDT" />
+                <ScalarProperty Name="totalNotRun" ColumnName="totalNotRun" />
+                <ScalarProperty Name="totalRj" ColumnName="totalRj" />
+                <ScalarProperty Name="total_good_output" ColumnName="total_good_output" />
+                <ScalarProperty Name="pn_stdoutput" ColumnName="pn_stdoutput" />
+                <ScalarProperty Name="total_actual_output" ColumnName="total_actual_output" />
+                <ScalarProperty Name="shiftly_target" ColumnName="shiftly_target" />
+                <ScalarProperty Name="pn" ColumnName="pn" />
+                <ScalarProperty Name="no_index" ColumnName="no_index" />
+                <ScalarProperty Name="shift_" ColumnName="shift_" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="we_" ColumnName="we_" />
+                <ScalarProperty Name="main_id_tc" ColumnName="main_id_tc" />
+                <ScalarProperty Name="totalcalc_id" ColumnName="totalcalc_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="View_PA_REJECT">
+            <EntityTypeMapping TypeName="masbroModel2.View_PA_REJECT">
+              <MappingFragment StoreEntitySet="View_PA_REJECT">
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="reject_notes" ColumnName="reject_notes" />
+                <ScalarProperty Name="RJ_REMARK" ColumnName="RJ_REMARK" />
+                <ScalarProperty Name="reject_code" ColumnName="reject_code" />
+                <ScalarProperty Name="reject_qty" ColumnName="reject_qty" />
+                <ScalarProperty Name="total_actual_output" ColumnName="total_actual_output" />
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="total_output_pcs" ColumnName="total_output_pcs" />
+                <ScalarProperty Name="pn_stdoutput" ColumnName="pn_stdoutput" />
+                <ScalarProperty Name="shift_" ColumnName="shift_" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="we_" ColumnName="we_" />
+                <ScalarProperty Name="pn" ColumnName="pn" />
+                <ScalarProperty Name="no_index" ColumnName="no_index" />
+                <ScalarProperty Name="main_id_rj" ColumnName="main_id_rj" />
+                <ScalarProperty Name="reject_id" ColumnName="reject_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

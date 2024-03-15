@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5e475f2b42694c2eb06af6713f2c29ef" Name="Diagram1" ZoomLevel="74">
+        <EntityTypeShape EntityType="masbroModel2.pa_cd_defectmolded" Width="1.5" PointX="3.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="masbroModel2.pa_cd_downtime" Width="1.5" PointX="3.75" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="masbroModel2.pa_cd_reject" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="masbroModel2.pa_part_number_list" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="masbroModel2.pa_ssc_main" Width="1.5" PointX="0.75" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="masbroModel2.pa_ssc_output" Width="1.5" PointX="3" PointY="10.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="masbroModel2.pa_ssc_output_defectmolded" Width="1.5" PointX="6" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="masbroModel2.pa_ssc_outputcalculated" Width="1.5" PointX="3" PointY="19.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="masbroModel2.pa_ssc_outputdowntime" Width="1.5" PointX="6" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="masbroModel2.pa_ssc_outputreject" Width="1.5" PointX="3" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="masbroModel2.pa_user_kpk" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="masbroModel2.FK_pa_ssc_output_defectmolded" ManuallyRouted="false" />
+        <AssociationConnector Association="masbroModel2.FK_PA_SSC_OUTPUTDOWNTIME_PA_CODE" ManuallyRouted="false" />
+        <AssociationConnector Association="masbroModel2.FK_PA_SSC_OUTPUTREJECT_PA_CODE" ManuallyRouted="false" />
+        <AssociationConnector Association="masbroModel2.FK_pa_ssc_maindefectmolded" ManuallyRouted="false" />
+        <AssociationConnector Association="masbroModel2.FK_PA_SSC_OUTPUT_PA_SSC_MAIN" ManuallyRouted="false" />
+        <AssociationConnector Association="masbroModel2.FK_PA_SSC_OUTPUTCALCULATED_PA_SSC_MAIN" ManuallyRouted="false" />
+        <AssociationConnector Association="masbroModel2.FK_PA_SSC_OUTPUTDOWNTIME_PA_SSC_MAIN" ManuallyRouted="false" />
+        <AssociationConnector Association="masbroModel2.FK_PA_SSC_OUTPUTREJECT_PA_SSC_MAIN" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="masbroModel2.View_PA_DEFECTMOLDED" Width="1.5" PointX="8.375" PointY="0.75" />
+        <EntityTypeShape EntityType="masbroModel2.View_PA_DOWNTIME_" Width="1.5" PointX="8.375" PointY="6.75" />
+        <EntityTypeShape EntityType="masbroModel2.View_PA_MAIN_CALC" Width="1.5" PointX="10.375" PointY="0.75" />
+        <EntityTypeShape EntityType="masbroModel2.View_PA_REJECT" Width="1.5" PointX="10.375" PointY="6.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

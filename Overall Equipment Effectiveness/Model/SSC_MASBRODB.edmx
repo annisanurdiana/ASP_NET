@@ -1,0 +1,1297 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="masbroModelPIM.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="pim_downtime">
+          <Key>
+            <PropertyRef Name="dt_code" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="newid" Type="float" />
+          <Property Name="dt_code" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="dt_remarks" Type="varchar" MaxLength="250" />
+          <Property Name="dt_type" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'masbro.dbo.pim_kpi_performance' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="pim_kpi_performance">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DATE_" Type="date" />
+          <Property Name="WEEKENDING" Type="date" />
+          <Property Name="SHIFT_" Type="int" />
+          <Property Name="AUDIT_5S" Type="float" />
+          <Property Name="COMPLIANCE" Type="float" />
+          <Property Name="EHS_PATROL" Type="float" />
+          <Property Name="LBO_PO_PCS" Type="float" />
+          <Property Name="LBO_PO_PPM" Type="float" />
+          <Property Name="EFF" Type="float" />
+          <Property Name="SCRAP" Type="float" />
+          <Property Name="DSA_ITEM" Type="float" />
+          <Property Name="DSA_VOLUME" Type="float" />
+        </EntityType>
+        <EntityType Name="pim_part_number_list">
+          <Key>
+            <PropertyRef Name="PART" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PART" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="DESC" Type="nvarchar" MaxLength="255" />
+          <Property Name="MOLD" Type="nvarchar" MaxLength="255" />
+          <Property Name="FAMILY" Type="int" />
+          <Property Name="CAVITY" Type="int" />
+          <Property Name="CT" Type="int" />
+          <Property Name="MCHRS" Type="float" />
+          <Property Name="PN_COLORANT" Type="varchar" MaxLength="255" />
+          <Property Name="COLOR" Type="varchar" MaxLength="255" />
+          <Property Name="MATERIAL" Type="varchar" MaxLength="255" />
+          <Property Name="DATE_INPUT" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'masbro.dbo.pim_partnumber_notvalid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="pim_partnumber_notvalid">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="shift" Type="int" />
+          <Property Name="no_machine" Type="varchar" MaxLength="50" />
+          <Property Name="date_input" Type="datetime" />
+          <Property Name="partnumber_not_valid" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="pim_reject">
+          <Key>
+            <PropertyRef Name="rj_code" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rj_code" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="rj_remarks" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_CALCULATION">
+          <Key>
+            <PropertyRef Name="totalcalc_id" />
+          </Key>
+          <Property Name="totalcalc_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="main_id_tc" Type="bigint" />
+          <Property Name="total_output_pcs" Type="int" />
+          <Property Name="total_good_output" Type="int" />
+          <Property Name="pn_stdoutput" Type="int" />
+          <Property Name="totalRJ" Type="int" />
+          <Property Name="totalNotRun" Type="int" />
+          <Property Name="totalDT" Type="int" />
+          <Property Name="total_time" Type="int" />
+          <Property Name="pn_operatingtime" Type="int" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_MAIN">
+          <Key>
+            <PropertyRef Name="main_id" />
+          </Key>
+          <Property Name="main_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="partnumber" Type="nvarchar(max)" />
+          <Property Name="mold" Type="nvarchar(max)" />
+          <Property Name="shift_" Type="int" />
+          <Property Name="date_" Type="date" />
+          <Property Name="we_" Type="nvarchar" MaxLength="50" />
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" />
+          <Property Name="op_name" Type="nvarchar(max)" />
+          <Property Name="no_machine" Type="nvarchar(max)" />
+          <Property Name="mc_area" Type="int" />
+          <Property Name="sch" Type="int" />
+          <Property Name="total_actoutput" Type="int" />
+          <Property Name="pn_ct" Type="int" />
+          <Property Name="pn_cav" Type="int" />
+          <Property Name="pn_set" Type="int" />
+          <Property Name="pengalioutput" Type="int" />
+          <Property Name="pn_notes" Type="nvarchar(max)" />
+          <Property Name="part_pp" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_O_DOWNTIME">
+          <Key>
+            <PropertyRef Name="downtime_id" />
+          </Key>
+          <Property Name="downtime_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="hour_counter" Type="bigint" />
+          <Property Name="main_id_dt" Type="bigint" />
+          <Property Name="dt_start" Type="time" Precision="0" />
+          <Property Name="dt_finish" Type="time" Precision="0" />
+          <Property Name="duration_minutes" Type="int" />
+          <Property Name="downtime_code" Type="varchar" MaxLength="50" />
+          <Property Name="downtime_notes" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_O_REJECT">
+          <Key>
+            <PropertyRef Name="reject_id" />
+          </Key>
+          <Property Name="reject_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="hour_counter" Type="bigint" />
+          <Property Name="main_id_rj" Type="bigint" />
+          <Property Name="reject_qty" Type="int" />
+          <Property Name="reject_code" Type="varchar" MaxLength="50" />
+          <Property Name="reject_notes" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_OUTPUT">
+          <Key>
+            <PropertyRef Name="output_id" />
+          </Key>
+          <Property Name="output_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="main_id_o" Type="bigint" />
+          <Property Name="hour_counter" Type="int" />
+          <Property Name="actoutput" Type="int" />
+          <Property Name="actoutput_pcs" Type="int" />
+        </EntityType>
+        <EntityType Name="pim_user_kpk">
+          <Key>
+            <PropertyRef Name="op_kpk" />
+          </Key>
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="op_name" Type="varchar" MaxLength="250" />
+          <Property Name="em_role" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'masbro.dbo.View_PA_DEFECTMOLDED' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'masbro.dbo.View_PA_MAIN_CALC' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'masbro.dbo.View_PA_REJECT' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'masbro.dbo.VO_DOWNTIME' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VO_DOWNTIME">
+          <Key>
+            <PropertyRef Name="downtime_id" />
+          </Key>
+          <Property Name="downtime_id" Type="bigint" Nullable="false" />
+          <Property Name="main_id_dt" Type="bigint" />
+          <Property Name="mc_area" Type="int" />
+          <Property Name="no_machine" Type="nvarchar(max)" />
+          <Property Name="partnumber" Type="nvarchar(max)" />
+          <Property Name="mold" Type="nvarchar(max)" />
+          <Property Name="we_" Type="nvarchar" MaxLength="50" />
+          <Property Name="date_" Type="date" />
+          <Property Name="shift_" Type="int" />
+          <Property Name="pn_stdoutput" Type="int" />
+          <Property Name="total_output_pcs" Type="int" />
+          <Property Name="hour_counter" Type="bigint" />
+          <Property Name="total_actoutput" Type="int" />
+          <Property Name="dt_start" Type="time" Precision="0" />
+          <Property Name="dt_finish" Type="time" Precision="0" />
+          <Property Name="duration_minutes" Type="int" />
+          <Property Name="downtime_code" Type="varchar" MaxLength="50" />
+          <Property Name="dt_remarks" Type="varchar" MaxLength="250" />
+          <Property Name="dt_type" Type="varchar" MaxLength="250" />
+          <Property Name="downtime_notes" Type="nvarchar(max)" />
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" />
+          <Property Name="op_name" Type="nvarchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'masbro.dbo.VO_MAIN_CALC' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VO_MAIN_CALC">
+          <Key>
+            <PropertyRef Name="totalcalc_id" />
+            <PropertyRef Name="main_id" />
+          </Key>
+          <Property Name="totalcalc_id" Type="bigint" Nullable="false" />
+          <Property Name="main_id" Type="bigint" Nullable="false" />
+          <Property Name="date_" Type="date" />
+          <Property Name="we_" Type="nvarchar" MaxLength="50" />
+          <Property Name="shift_" Type="int" />
+          <Property Name="no_machine" Type="nvarchar(max)" />
+          <Property Name="partnumber" Type="nvarchar(max)" />
+          <Property Name="pn_ct" Type="int" />
+          <Property Name="pn_cav" Type="int" />
+          <Property Name="pn_set" Type="int" />
+          <Property Name="pengalioutput" Type="int" />
+          <Property Name="sch" Type="int" />
+          <Property Name="total_actoutput" Type="int" />
+          <Property Name="total_output_pcs" Type="int" />
+          <Property Name="pn_stdoutput" Type="int" />
+          <Property Name="total_good_output" Type="int" />
+          <Property Name="totalRJ" Type="int" />
+          <Property Name="totalNotRun" Type="int" />
+          <Property Name="totalDT" Type="int" />
+          <Property Name="total_time" Type="int" />
+          <Property Name="pn_operatingtime" Type="int" />
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" />
+          <Property Name="op_name" Type="nvarchar(max)" />
+          <Property Name="mc_area" Type="int" />
+          <Property Name="mold" Type="nvarchar(max)" />
+          <Property Name="pn_notes" Type="nvarchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'masbro.dbo.VO_REJECT' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VO_REJECT">
+          <Key>
+            <PropertyRef Name="reject_id" />
+          </Key>
+          <Property Name="reject_id" Type="bigint" Nullable="false" />
+          <Property Name="main_id_rj" Type="bigint" />
+          <Property Name="mc_area" Type="int" />
+          <Property Name="no_machine" Type="nvarchar(max)" />
+          <Property Name="partnumber" Type="nvarchar(max)" />
+          <Property Name="mold" Type="nvarchar(max)" />
+          <Property Name="we_" Type="nvarchar" MaxLength="50" />
+          <Property Name="date_" Type="date" />
+          <Property Name="shift_" Type="int" />
+          <Property Name="pn_stdoutput" Type="int" />
+          <Property Name="total_output_pcs" Type="int" />
+          <Property Name="hour_counter" Type="bigint" />
+          <Property Name="total_actoutput" Type="int" />
+          <Property Name="reject_qty" Type="int" />
+          <Property Name="reject_code" Type="varchar" MaxLength="50" />
+          <Property Name="rj_remarks" Type="varchar" MaxLength="250" />
+          <Property Name="reject_notes" Type="varchar" MaxLength="50" />
+          <Property Name="pn_ct" Type="int" />
+          <Property Name="pn_cav" Type="int" />
+          <Property Name="pn_set" Type="int" />
+          <Property Name="pengalioutput" Type="int" />
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" />
+          <Property Name="op_name" Type="nvarchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'masbro.dbo.VO_REJECT_PP' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VO_REJECT_PP">
+          <Key>
+            <PropertyRef Name="reject_id" />
+            
+          </Key>
+          <Property Name="reject_id" Type="bigint" Nullable="false" />
+          <Property Name="main_id_rj" Type="bigint" />
+          <Property Name="we_" Type="nvarchar" MaxLength="50" />
+          <Property Name="date_" Type="date" />
+          <Property Name="shift_" Type="int" />
+          <Property Name="hour_counter" Type="bigint" />
+          <Property Name="mc_area" Type="int" />
+          <Property Name="no_machine" Type="nvarchar(max)" />
+          <Property Name="partnumber" Type="nvarchar(max)" />
+          <Property Name="PART" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="DESC" Type="nvarchar" MaxLength="255" />
+          <Property Name="mold" Type="nvarchar(max)" />
+          <Property Name="pn_ct" Type="int" />
+          <Property Name="pn_cav" Type="int" />
+          <Property Name="pn_stdoutput" Type="int" />
+          <Property Name="sch" Type="int" />
+          <Property Name="total_actoutput" Type="int" />
+          <Property Name="total_output_pcs" Type="int" />
+          <Property Name="reject_qty" Type="int" />
+          <Property Name="reject_code" Type="varchar" MaxLength="50" />
+          <Property Name="rj_remarks" Type="varchar" MaxLength="250" />
+          <Property Name="part_pp" Type="varchar" MaxLength="50" />
+          <Property Name="op_kpk" Type="varchar" MaxLength="50" />
+          <Property Name="op_name" Type="nvarchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'masbro.dbo.VO_SCRAP' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VO_SCRAP">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="partnumber" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="shift_" Type="int" />
+          <Property Name="date_" Type="date" />
+          <Property Name="partnumber" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="quantity" Type="int" />
+          <Property Name="area_code" Type="int" />
+          <Property Name="area_name" Type="varchar" MaxLength="250" />
+          <Property Name="scrap_number" Type="int" />
+          <Property Name="scrap_code" Type="varchar" MaxLength="50" />
+          <Property Name="check_" Type="varchar" MaxLength="50" />
+          <Property Name="S_NAME" Type="nvarchar" MaxLength="255" />
+          <Property Name="SCRAP_REMARKS" Type="varchar" MaxLength="250" />
+          <Property Name="Expr1" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <Association Name="FK_PIM_SSC_CALCULATION_PIM_SSC_MAIN">
+          <End Role="PIM_SSC_MAIN" Type="Self.PIM_SSC_MAIN" Multiplicity="0..1" />
+          <End Role="PIM_SSC_CALCULATION" Type="Self.PIM_SSC_CALCULATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PIM_SSC_MAIN">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="PIM_SSC_CALCULATION">
+              <PropertyRef Name="main_id_tc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_O_DOWNTIME_PIM_CODE">
+          <End Role="pim_downtime" Type="Self.pim_downtime" Multiplicity="0..1" />
+          <End Role="PIM_SSC_O_DOWNTIME" Type="Self.PIM_SSC_O_DOWNTIME" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pim_downtime">
+              <PropertyRef Name="dt_code" />
+            </Principal>
+            <Dependent Role="PIM_SSC_O_DOWNTIME">
+              <PropertyRef Name="downtime_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_O_DOWNTIME_PIM_SSC_MAIN">
+          <End Role="PIM_SSC_MAIN" Type="Self.PIM_SSC_MAIN" Multiplicity="0..1" />
+          <End Role="PIM_SSC_O_DOWNTIME" Type="Self.PIM_SSC_O_DOWNTIME" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PIM_SSC_MAIN">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="PIM_SSC_O_DOWNTIME">
+              <PropertyRef Name="main_id_dt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_O_REJECT_PIM_CODE">
+          <End Role="pim_reject" Type="Self.pim_reject" Multiplicity="0..1" />
+          <End Role="PIM_SSC_O_REJECT" Type="Self.PIM_SSC_O_REJECT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pim_reject">
+              <PropertyRef Name="rj_code" />
+            </Principal>
+            <Dependent Role="PIM_SSC_O_REJECT">
+              <PropertyRef Name="reject_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_O_REJECT_PIM_SSC_MAIN">
+          <End Role="PIM_SSC_MAIN" Type="Self.PIM_SSC_MAIN" Multiplicity="0..1" />
+          <End Role="PIM_SSC_O_REJECT" Type="Self.PIM_SSC_O_REJECT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PIM_SSC_MAIN">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="PIM_SSC_O_REJECT">
+              <PropertyRef Name="main_id_rj" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_OUTPUT_PIM_SSC_MAIN">
+          <End Role="PIM_SSC_MAIN" Type="Self.PIM_SSC_MAIN" Multiplicity="0..1" />
+          <End Role="PIM_SSC_OUTPUT" Type="Self.PIM_SSC_OUTPUT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PIM_SSC_MAIN">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="PIM_SSC_OUTPUT">
+              <PropertyRef Name="main_id_o" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="masbroModelPIMStoreContainer">
+          <EntitySet Name="pim_downtime" EntityType="Self.pim_downtime" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pim_part_number_list" EntityType="Self.pim_part_number_list" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pim_reject" EntityType="Self.pim_reject" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PIM_SSC_CALCULATION" EntityType="Self.PIM_SSC_CALCULATION" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PIM_SSC_MAIN" EntityType="Self.PIM_SSC_MAIN" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PIM_SSC_O_DOWNTIME" EntityType="Self.PIM_SSC_O_DOWNTIME" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PIM_SSC_O_REJECT" EntityType="Self.PIM_SSC_O_REJECT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PIM_SSC_OUTPUT" EntityType="Self.PIM_SSC_OUTPUT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pim_user_kpk" EntityType="Self.pim_user_kpk" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pim_kpi_performance" EntityType="Self.pim_kpi_performance" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [pim_kpi_performance].[ID] AS [ID], 
+    [pim_kpi_performance].[DATE_] AS [DATE_], 
+    [pim_kpi_performance].[WEEKENDING] AS [WEEKENDING], 
+    [pim_kpi_performance].[SHIFT_] AS [SHIFT_], 
+    [pim_kpi_performance].[AUDIT_5S] AS [AUDIT_5S], 
+    [pim_kpi_performance].[COMPLIANCE] AS [COMPLIANCE], 
+    [pim_kpi_performance].[EHS_PATROL] AS [EHS_PATROL], 
+    [pim_kpi_performance].[LBO_PO_PCS] AS [LBO_PO_PCS], 
+    [pim_kpi_performance].[LBO_PO_PPM] AS [LBO_PO_PPM], 
+    [pim_kpi_performance].[EFF] AS [EFF], 
+    [pim_kpi_performance].[SCRAP] AS [SCRAP], 
+    [pim_kpi_performance].[DSA_ITEM] AS [DSA_ITEM], 
+    [pim_kpi_performance].[DSA_VOLUME] AS [DSA_VOLUME]
+    FROM [dbo].[pim_kpi_performance] AS [pim_kpi_performance]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="pim_partnumber_notvalid" EntityType="Self.pim_partnumber_notvalid" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [pim_partnumber_notvalid].[ID] AS [ID], 
+    [pim_partnumber_notvalid].[shift] AS [shift], 
+    [pim_partnumber_notvalid].[no_machine] AS [no_machine], 
+    [pim_partnumber_notvalid].[date_input] AS [date_input], 
+    [pim_partnumber_notvalid].[partnumber_not_valid] AS [partnumber_not_valid]
+    FROM [dbo].[pim_partnumber_notvalid] AS [pim_partnumber_notvalid]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VO_DOWNTIME" EntityType="Self.VO_DOWNTIME" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VO_DOWNTIME].[downtime_id] AS [downtime_id], 
+    [VO_DOWNTIME].[main_id_dt] AS [main_id_dt], 
+    [VO_DOWNTIME].[mc_area] AS [mc_area], 
+    [VO_DOWNTIME].[no_machine] AS [no_machine], 
+    [VO_DOWNTIME].[partnumber] AS [partnumber], 
+    [VO_DOWNTIME].[mold] AS [mold], 
+    [VO_DOWNTIME].[we_] AS [we_], 
+    [VO_DOWNTIME].[date_] AS [date_], 
+    [VO_DOWNTIME].[shift_] AS [shift_], 
+    [VO_DOWNTIME].[pn_stdoutput] AS [pn_stdoutput], 
+    [VO_DOWNTIME].[total_output_pcs] AS [total_output_pcs], 
+    [VO_DOWNTIME].[hour_counter] AS [hour_counter], 
+    [VO_DOWNTIME].[total_actoutput] AS [total_actoutput], 
+    [VO_DOWNTIME].[dt_start] AS [dt_start], 
+    [VO_DOWNTIME].[dt_finish] AS [dt_finish], 
+    [VO_DOWNTIME].[duration_minutes] AS [duration_minutes], 
+    [VO_DOWNTIME].[downtime_code] AS [downtime_code], 
+    [VO_DOWNTIME].[dt_remarks] AS [dt_remarks], 
+    [VO_DOWNTIME].[dt_type] AS [dt_type], 
+    [VO_DOWNTIME].[downtime_notes] AS [downtime_notes], 
+    [VO_DOWNTIME].[op_kpk] AS [op_kpk], 
+    [VO_DOWNTIME].[op_name] AS [op_name]
+    FROM [dbo].[VO_DOWNTIME] AS [VO_DOWNTIME]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VO_MAIN_CALC" EntityType="Self.VO_MAIN_CALC" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VO_MAIN_CALC].[totalcalc_id] AS [totalcalc_id], 
+    [VO_MAIN_CALC].[main_id] AS [main_id], 
+    [VO_MAIN_CALC].[date_] AS [date_], 
+    [VO_MAIN_CALC].[we_] AS [we_], 
+    [VO_MAIN_CALC].[shift_] AS [shift_], 
+    [VO_MAIN_CALC].[no_machine] AS [no_machine], 
+    [VO_MAIN_CALC].[partnumber] AS [partnumber], 
+    [VO_MAIN_CALC].[pn_ct] AS [pn_ct], 
+    [VO_MAIN_CALC].[pn_cav] AS [pn_cav], 
+    [VO_MAIN_CALC].[pn_set] AS [pn_set], 
+    [VO_MAIN_CALC].[pengalioutput] AS [pengalioutput], 
+    [VO_MAIN_CALC].[sch] AS [sch], 
+    [VO_MAIN_CALC].[total_actoutput] AS [total_actoutput], 
+    [VO_MAIN_CALC].[total_output_pcs] AS [total_output_pcs], 
+    [VO_MAIN_CALC].[pn_stdoutput] AS [pn_stdoutput], 
+    [VO_MAIN_CALC].[total_good_output] AS [total_good_output], 
+    [VO_MAIN_CALC].[totalRJ] AS [totalRJ], 
+    [VO_MAIN_CALC].[totalNotRun] AS [totalNotRun], 
+    [VO_MAIN_CALC].[totalDT] AS [totalDT], 
+    [VO_MAIN_CALC].[total_time] AS [total_time], 
+    [VO_MAIN_CALC].[pn_operatingtime] AS [pn_operatingtime], 
+    [VO_MAIN_CALC].[op_kpk] AS [op_kpk], 
+    [VO_MAIN_CALC].[op_name] AS [op_name], 
+    [VO_MAIN_CALC].[mc_area] AS [mc_area], 
+    [VO_MAIN_CALC].[mold] AS [mold], 
+    [VO_MAIN_CALC].[pn_notes] AS [pn_notes]
+    FROM [dbo].[VO_MAIN_CALC] AS [VO_MAIN_CALC]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VO_REJECT" EntityType="Self.VO_REJECT" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VO_REJECT].[reject_id] AS [reject_id], 
+    [VO_REJECT].[main_id_rj] AS [main_id_rj], 
+    [VO_REJECT].[mc_area] AS [mc_area], 
+    [VO_REJECT].[no_machine] AS [no_machine], 
+    [VO_REJECT].[partnumber] AS [partnumber], 
+    [VO_REJECT].[mold] AS [mold], 
+    [VO_REJECT].[we_] AS [we_], 
+    [VO_REJECT].[date_] AS [date_], 
+    [VO_REJECT].[shift_] AS [shift_], 
+    [VO_REJECT].[pn_stdoutput] AS [pn_stdoutput], 
+    [VO_REJECT].[total_output_pcs] AS [total_output_pcs], 
+    [VO_REJECT].[hour_counter] AS [hour_counter], 
+    [VO_REJECT].[total_actoutput] AS [total_actoutput], 
+    [VO_REJECT].[reject_qty] AS [reject_qty], 
+    [VO_REJECT].[reject_code] AS [reject_code], 
+    [VO_REJECT].[rj_remarks] AS [rj_remarks], 
+    [VO_REJECT].[reject_notes] AS [reject_notes], 
+    [VO_REJECT].[pn_ct] AS [pn_ct], 
+    [VO_REJECT].[pn_cav] AS [pn_cav], 
+    [VO_REJECT].[pn_set] AS [pn_set], 
+    [VO_REJECT].[pengalioutput] AS [pengalioutput], 
+    [VO_REJECT].[op_kpk] AS [op_kpk], 
+    [VO_REJECT].[op_name] AS [op_name]
+    FROM [dbo].[VO_REJECT] AS [VO_REJECT]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VO_REJECT_PP" EntityType="Self.VO_REJECT_PP" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VO_REJECT_PP].[reject_id] AS [reject_id], 
+    [VO_REJECT_PP].[main_id_rj] AS [main_id_rj], 
+    [VO_REJECT_PP].[we_] AS [we_], 
+    [VO_REJECT_PP].[date_] AS [date_], 
+    [VO_REJECT_PP].[shift_] AS [shift_], 
+    [VO_REJECT_PP].[hour_counter] AS [hour_counter], 
+    [VO_REJECT_PP].[mc_area] AS [mc_area], 
+    [VO_REJECT_PP].[no_machine] AS [no_machine], 
+    [VO_REJECT_PP].[partnumber] AS [partnumber], 
+    [VO_REJECT_PP].[PART] AS [PART], 
+    [VO_REJECT_PP].[DESC] AS [DESC], 
+    [VO_REJECT_PP].[mold] AS [mold], 
+    [VO_REJECT_PP].[pn_ct] AS [pn_ct], 
+    [VO_REJECT_PP].[pn_cav] AS [pn_cav], 
+    [VO_REJECT_PP].[pn_stdoutput] AS [pn_stdoutput], 
+    [VO_REJECT_PP].[sch] AS [sch], 
+    [VO_REJECT_PP].[total_actoutput] AS [total_actoutput], 
+    [VO_REJECT_PP].[total_output_pcs] AS [total_output_pcs], 
+    [VO_REJECT_PP].[reject_qty] AS [reject_qty], 
+    [VO_REJECT_PP].[reject_code] AS [reject_code], 
+    [VO_REJECT_PP].[rj_remarks] AS [rj_remarks], 
+    [VO_REJECT_PP].[part_pp] AS [part_pp], 
+    [VO_REJECT_PP].[op_kpk] AS [op_kpk], 
+    [VO_REJECT_PP].[op_name] AS [op_name]
+    FROM [dbo].[VO_REJECT_PP] AS [VO_REJECT_PP]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VO_SCRAP" EntityType="Self.VO_SCRAP" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VO_SCRAP].[id] AS [id], 
+    [VO_SCRAP].[shift_] AS [shift_], 
+    [VO_SCRAP].[date_] AS [date_], 
+    [VO_SCRAP].[partnumber] AS [partnumber], 
+    [VO_SCRAP].[quantity] AS [quantity], 
+    [VO_SCRAP].[area_code] AS [area_code], 
+    [VO_SCRAP].[area_name] AS [area_name], 
+    [VO_SCRAP].[scrap_number] AS [scrap_number], 
+    [VO_SCRAP].[scrap_code] AS [scrap_code], 
+    [VO_SCRAP].[check_] AS [check_], 
+    [VO_SCRAP].[S_NAME] AS [S_NAME], 
+    [VO_SCRAP].[SCRAP_REMARKS] AS [SCRAP_REMARKS], 
+    [VO_SCRAP].[Expr1] AS [Expr1]
+    FROM [dbo].[VO_SCRAP] AS [VO_SCRAP]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_PIM_SSC_CALCULATION_PIM_SSC_MAIN" Association="Self.FK_PIM_SSC_CALCULATION_PIM_SSC_MAIN">
+            <End Role="PIM_SSC_MAIN" EntitySet="PIM_SSC_MAIN" />
+            <End Role="PIM_SSC_CALCULATION" EntitySet="PIM_SSC_CALCULATION" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_O_DOWNTIME_PIM_CODE" Association="Self.FK_PIM_SSC_O_DOWNTIME_PIM_CODE">
+            <End Role="pim_downtime" EntitySet="pim_downtime" />
+            <End Role="PIM_SSC_O_DOWNTIME" EntitySet="PIM_SSC_O_DOWNTIME" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_O_DOWNTIME_PIM_SSC_MAIN" Association="Self.FK_PIM_SSC_O_DOWNTIME_PIM_SSC_MAIN">
+            <End Role="PIM_SSC_MAIN" EntitySet="PIM_SSC_MAIN" />
+            <End Role="PIM_SSC_O_DOWNTIME" EntitySet="PIM_SSC_O_DOWNTIME" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_O_REJECT_PIM_CODE" Association="Self.FK_PIM_SSC_O_REJECT_PIM_CODE">
+            <End Role="pim_reject" EntitySet="pim_reject" />
+            <End Role="PIM_SSC_O_REJECT" EntitySet="PIM_SSC_O_REJECT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_O_REJECT_PIM_SSC_MAIN" Association="Self.FK_PIM_SSC_O_REJECT_PIM_SSC_MAIN">
+            <End Role="PIM_SSC_MAIN" EntitySet="PIM_SSC_MAIN" />
+            <End Role="PIM_SSC_O_REJECT" EntitySet="PIM_SSC_O_REJECT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_OUTPUT_PIM_SSC_MAIN" Association="Self.FK_PIM_SSC_OUTPUT_PIM_SSC_MAIN">
+            <End Role="PIM_SSC_MAIN" EntitySet="PIM_SSC_MAIN" />
+            <End Role="PIM_SSC_OUTPUT" EntitySet="PIM_SSC_OUTPUT" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="masbroModelPIM" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="pim_downtime">
+          <Key>
+            <PropertyRef Name="dt_code" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="newid" Type="Double" />
+          <Property Name="dt_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="dt_remarks" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="dt_type" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PIM_SSC_O_DOWNTIME" Relationship="Self.FK_PIM_SSC_O_DOWNTIME_PIM_CODE" FromRole="pim_downtime" ToRole="PIM_SSC_O_DOWNTIME" />
+        </EntityType>
+        <EntityType Name="pim_reject">
+          <Key>
+            <PropertyRef Name="rj_code" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rj_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="rj_remarks" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PIM_SSC_O_REJECT" Relationship="Self.FK_PIM_SSC_O_REJECT_PIM_CODE" FromRole="pim_reject" ToRole="PIM_SSC_O_REJECT" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_CALCULATION">
+          <Key>
+            <PropertyRef Name="totalcalc_id" />
+          </Key>
+          <Property Name="totalcalc_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="main_id_tc" Type="Int64" />
+          <Property Name="total_output_pcs" Type="Int32" />
+          <Property Name="total_good_output" Type="Int32" />
+          <Property Name="pn_stdoutput" Type="Int32" />
+          <Property Name="totalRJ" Type="Int32" />
+          <Property Name="totalNotRun" Type="Int32" />
+          <Property Name="totalDT" Type="Int32" />
+          <Property Name="total_time" Type="Int32" />
+          <Property Name="pn_operatingtime" Type="Int32" />
+          <NavigationProperty Name="PIM_SSC_MAIN" Relationship="Self.FK_PIM_SSC_CALCULATION_PIM_SSC_MAIN" FromRole="PIM_SSC_CALCULATION" ToRole="PIM_SSC_MAIN" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_MAIN">
+          <Key>
+            <PropertyRef Name="main_id" />
+          </Key>
+          <Property Name="main_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="partnumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="mold" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="shift_" Type="Int32" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="we_" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="op_kpk" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="op_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="no_machine" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="mc_area" Type="Int32" />
+          <Property Name="sch" Type="Int32" />
+          <Property Name="total_actoutput" Type="Int32" />
+          <Property Name="pn_ct" Type="Int32" />
+          <Property Name="pn_cav" Type="Int32" />
+          <Property Name="pn_set" Type="Int32" />
+          <Property Name="pengalioutput" Type="Int32" />
+          <Property Name="pn_notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PIM_SSC_CALCULATION" Relationship="Self.FK_PIM_SSC_CALCULATION_PIM_SSC_MAIN" FromRole="PIM_SSC_MAIN" ToRole="PIM_SSC_CALCULATION" />
+          <NavigationProperty Name="PIM_SSC_O_DOWNTIME" Relationship="Self.FK_PIM_SSC_O_DOWNTIME_PIM_SSC_MAIN" FromRole="PIM_SSC_MAIN" ToRole="PIM_SSC_O_DOWNTIME" />
+          <NavigationProperty Name="PIM_SSC_O_REJECT" Relationship="Self.FK_PIM_SSC_O_REJECT_PIM_SSC_MAIN" FromRole="PIM_SSC_MAIN" ToRole="PIM_SSC_O_REJECT" />
+          <NavigationProperty Name="PIM_SSC_OUTPUT" Relationship="Self.FK_PIM_SSC_OUTPUT_PIM_SSC_MAIN" FromRole="PIM_SSC_MAIN" ToRole="PIM_SSC_OUTPUT" />
+          <Property Name="part_pp" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_O_DOWNTIME">
+          <Key>
+            <PropertyRef Name="downtime_id" />
+          </Key>
+          <Property Name="downtime_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="hour_counter" Type="Int64" />
+          <Property Name="main_id_dt" Type="Int64" />
+          <Property Name="dt_start" Type="Time" Precision="0" />
+          <Property Name="dt_finish" Type="Time" Precision="0" />
+          <Property Name="duration_minutes" Type="Int32" />
+          <Property Name="downtime_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="downtime_notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="pim_downtime" Relationship="Self.FK_PIM_SSC_O_DOWNTIME_PIM_CODE" FromRole="PIM_SSC_O_DOWNTIME" ToRole="pim_downtime" />
+          <NavigationProperty Name="PIM_SSC_MAIN" Relationship="Self.FK_PIM_SSC_O_DOWNTIME_PIM_SSC_MAIN" FromRole="PIM_SSC_O_DOWNTIME" ToRole="PIM_SSC_MAIN" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_O_REJECT">
+          <Key>
+            <PropertyRef Name="reject_id" />
+          </Key>
+          <Property Name="reject_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="hour_counter" Type="Int64" />
+          <Property Name="main_id_rj" Type="Int64" />
+          <Property Name="reject_qty" Type="Int32" />
+          <Property Name="reject_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="reject_notes" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="pim_reject" Relationship="Self.FK_PIM_SSC_O_REJECT_PIM_CODE" FromRole="PIM_SSC_O_REJECT" ToRole="pim_reject" />
+          <NavigationProperty Name="PIM_SSC_MAIN" Relationship="Self.FK_PIM_SSC_O_REJECT_PIM_SSC_MAIN" FromRole="PIM_SSC_O_REJECT" ToRole="PIM_SSC_MAIN" />
+        </EntityType>
+        <EntityType Name="PIM_SSC_OUTPUT">
+          <Key>
+            <PropertyRef Name="output_id" />
+          </Key>
+          <Property Name="output_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="main_id_o" Type="Int64" />
+          <Property Name="hour_counter" Type="Int32" />
+          <Property Name="actoutput" Type="Int32" />
+          <Property Name="actoutput_pcs" Type="Int32" />
+          <NavigationProperty Name="PIM_SSC_MAIN" Relationship="Self.FK_PIM_SSC_OUTPUT_PIM_SSC_MAIN" FromRole="PIM_SSC_OUTPUT" ToRole="PIM_SSC_MAIN" />
+        </EntityType>
+        <EntityType Name="pim_user_kpk">
+          <Key>
+            <PropertyRef Name="op_kpk" />
+          </Key>
+          <Property Name="op_kpk" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="op_name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="em_role" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="pim_kpi_performance">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DATE_" Type="DateTime" Precision="0" />
+          <Property Name="WEEKENDING" Type="DateTime" Precision="0" />
+          <Property Name="SHIFT_" Type="Int32" />
+          <Property Name="AUDIT_5S" Type="Double" />
+          <Property Name="COMPLIANCE" Type="Double" />
+          <Property Name="EHS_PATROL" Type="Double" />
+          <Property Name="LBO_PO_PCS" Type="Double" />
+          <Property Name="LBO_PO_PPM" Type="Double" />
+          <Property Name="EFF" Type="Double" />
+          <Property Name="SCRAP" Type="Double" />
+          <Property Name="DSA_ITEM" Type="Double" />
+          <Property Name="DSA_VOLUME" Type="Double" />
+        </EntityType>
+        <EntityType Name="pim_partnumber_notvalid">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="shift" Type="Int32" />
+          <Property Name="no_machine" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="date_input" Type="DateTime" Precision="3" />
+          <Property Name="partnumber_not_valid" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="VO_DOWNTIME">
+          <Key>
+            <PropertyRef Name="downtime_id" />
+          </Key>
+          <Property Name="downtime_id" Type="Int64" Nullable="false" />
+          <Property Name="main_id_dt" Type="Int64" />
+          <Property Name="mc_area" Type="Int32" />
+          <Property Name="no_machine" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="partnumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="mold" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="we_" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="shift_" Type="Int32" />
+          <Property Name="pn_stdoutput" Type="Int32" />
+          <Property Name="total_output_pcs" Type="Int32" />
+          <Property Name="hour_counter" Type="Int64" />
+          <Property Name="total_actoutput" Type="Int32" />
+          <Property Name="dt_start" Type="Time" Precision="0" />
+          <Property Name="dt_finish" Type="Time" Precision="0" />
+          <Property Name="duration_minutes" Type="Int32" />
+          <Property Name="downtime_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="dt_remarks" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="dt_type" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="downtime_notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="op_kpk" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="op_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VO_MAIN_CALC">
+          <Key>
+            <PropertyRef Name="totalcalc_id" />
+            <PropertyRef Name="main_id" />
+          </Key>
+          <Property Name="totalcalc_id" Type="Int64" Nullable="false" />
+          <Property Name="main_id" Type="Int64" Nullable="false" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="we_" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="shift_" Type="Int32" />
+          <Property Name="no_machine" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="partnumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="pn_ct" Type="Int32" />
+          <Property Name="pn_cav" Type="Int32" />
+          <Property Name="pn_set" Type="Int32" />
+          <Property Name="pengalioutput" Type="Int32" />
+          <Property Name="sch" Type="Int32" />
+          <Property Name="total_actoutput" Type="Int32" />
+          <Property Name="total_output_pcs" Type="Int32" />
+          <Property Name="pn_stdoutput" Type="Int32" />
+          <Property Name="total_good_output" Type="Int32" />
+          <Property Name="totalRJ" Type="Int32" />
+          <Property Name="totalNotRun" Type="Int32" />
+          <Property Name="totalDT" Type="Int32" />
+          <Property Name="total_time" Type="Int32" />
+          <Property Name="pn_operatingtime" Type="Int32" />
+          <Property Name="op_kpk" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="op_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="mc_area" Type="Int32" />
+          <Property Name="mold" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="pn_notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_PIM_SSC_O_DOWNTIME_PIM_CODE">
+          <End Role="pim_downtime" Type="Self.pim_downtime" Multiplicity="0..1" />
+          <End Role="PIM_SSC_O_DOWNTIME" Type="Self.PIM_SSC_O_DOWNTIME" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pim_downtime">
+              <PropertyRef Name="dt_code" />
+            </Principal>
+            <Dependent Role="PIM_SSC_O_DOWNTIME">
+              <PropertyRef Name="downtime_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_O_REJECT_PIM_CODE">
+          <End Role="pim_reject" Type="Self.pim_reject" Multiplicity="0..1" />
+          <End Role="PIM_SSC_O_REJECT" Type="Self.PIM_SSC_O_REJECT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pim_reject">
+              <PropertyRef Name="rj_code" />
+            </Principal>
+            <Dependent Role="PIM_SSC_O_REJECT">
+              <PropertyRef Name="reject_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_CALCULATION_PIM_SSC_MAIN">
+          <End Role="PIM_SSC_MAIN" Type="Self.PIM_SSC_MAIN" Multiplicity="0..1" />
+          <End Role="PIM_SSC_CALCULATION" Type="Self.PIM_SSC_CALCULATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PIM_SSC_MAIN">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="PIM_SSC_CALCULATION">
+              <PropertyRef Name="main_id_tc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_O_DOWNTIME_PIM_SSC_MAIN">
+          <End Role="PIM_SSC_MAIN" Type="Self.PIM_SSC_MAIN" Multiplicity="0..1" />
+          <End Role="PIM_SSC_O_DOWNTIME" Type="Self.PIM_SSC_O_DOWNTIME" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PIM_SSC_MAIN">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="PIM_SSC_O_DOWNTIME">
+              <PropertyRef Name="main_id_dt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_O_REJECT_PIM_SSC_MAIN">
+          <End Role="PIM_SSC_MAIN" Type="Self.PIM_SSC_MAIN" Multiplicity="0..1" />
+          <End Role="PIM_SSC_O_REJECT" Type="Self.PIM_SSC_O_REJECT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PIM_SSC_MAIN">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="PIM_SSC_O_REJECT">
+              <PropertyRef Name="main_id_rj" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PIM_SSC_OUTPUT_PIM_SSC_MAIN">
+          <End Role="PIM_SSC_MAIN" Type="Self.PIM_SSC_MAIN" Multiplicity="0..1" />
+          <End Role="PIM_SSC_OUTPUT" Type="Self.PIM_SSC_OUTPUT" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PIM_SSC_MAIN">
+              <PropertyRef Name="main_id" />
+            </Principal>
+            <Dependent Role="PIM_SSC_OUTPUT">
+              <PropertyRef Name="main_id_o" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="masbroEntitiesPIM" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="pim_downtime" EntityType="Self.pim_downtime" />
+          <EntitySet Name="pim_reject" EntityType="Self.pim_reject" />
+          <EntitySet Name="PIM_SSC_CALCULATION" EntityType="Self.PIM_SSC_CALCULATION" />
+          <EntitySet Name="PIM_SSC_MAIN" EntityType="Self.PIM_SSC_MAIN" />
+          <EntitySet Name="PIM_SSC_O_DOWNTIME" EntityType="Self.PIM_SSC_O_DOWNTIME" />
+          <EntitySet Name="PIM_SSC_O_REJECT" EntityType="Self.PIM_SSC_O_REJECT" />
+          <EntitySet Name="PIM_SSC_OUTPUT" EntityType="Self.PIM_SSC_OUTPUT" />
+          <EntitySet Name="pim_user_kpk" EntityType="Self.pim_user_kpk" />
+          <EntitySet Name="pim_kpi_performance" EntityType="Self.pim_kpi_performance" />
+          <EntitySet Name="pim_partnumber_notvalid" EntityType="Self.pim_partnumber_notvalid" />
+          <EntitySet Name="VO_DOWNTIME" EntityType="Self.VO_DOWNTIME" />
+          <EntitySet Name="VO_MAIN_CALC" EntityType="Self.VO_MAIN_CALC" />
+          <AssociationSet Name="FK_PIM_SSC_O_DOWNTIME_PIM_CODE" Association="Self.FK_PIM_SSC_O_DOWNTIME_PIM_CODE">
+            <End Role="pim_downtime" EntitySet="pim_downtime" />
+            <End Role="PIM_SSC_O_DOWNTIME" EntitySet="PIM_SSC_O_DOWNTIME" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_O_REJECT_PIM_CODE" Association="Self.FK_PIM_SSC_O_REJECT_PIM_CODE">
+            <End Role="pim_reject" EntitySet="pim_reject" />
+            <End Role="PIM_SSC_O_REJECT" EntitySet="PIM_SSC_O_REJECT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_CALCULATION_PIM_SSC_MAIN" Association="Self.FK_PIM_SSC_CALCULATION_PIM_SSC_MAIN">
+            <End Role="PIM_SSC_MAIN" EntitySet="PIM_SSC_MAIN" />
+            <End Role="PIM_SSC_CALCULATION" EntitySet="PIM_SSC_CALCULATION" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_O_DOWNTIME_PIM_SSC_MAIN" Association="Self.FK_PIM_SSC_O_DOWNTIME_PIM_SSC_MAIN">
+            <End Role="PIM_SSC_MAIN" EntitySet="PIM_SSC_MAIN" />
+            <End Role="PIM_SSC_O_DOWNTIME" EntitySet="PIM_SSC_O_DOWNTIME" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_O_REJECT_PIM_SSC_MAIN" Association="Self.FK_PIM_SSC_O_REJECT_PIM_SSC_MAIN">
+            <End Role="PIM_SSC_MAIN" EntitySet="PIM_SSC_MAIN" />
+            <End Role="PIM_SSC_O_REJECT" EntitySet="PIM_SSC_O_REJECT" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PIM_SSC_OUTPUT_PIM_SSC_MAIN" Association="Self.FK_PIM_SSC_OUTPUT_PIM_SSC_MAIN">
+            <End Role="PIM_SSC_MAIN" EntitySet="PIM_SSC_MAIN" />
+            <End Role="PIM_SSC_OUTPUT" EntitySet="PIM_SSC_OUTPUT" />
+          </AssociationSet>
+          <EntitySet Name="VO_REJECT_PP" EntityType="masbroModelPIM.VO_REJECT_PP" />
+          <EntitySet Name="VO_REJECT" EntityType="masbroModelPIM.VO_REJECT" />
+          <EntitySet Name="VO_SCRAP" EntityType="masbroModelPIM.VO_SCRAP" />
+          <EntitySet Name="pim_part_number_list" EntityType="masbroModelPIM.pim_part_number_list" />
+        </EntityContainer>
+        <EntityType Name="VO_REJECT_PP">
+          <Key>
+            <PropertyRef Name="reject_id" />
+          </Key>
+          <Property Name="reject_id" Type="Int64" Nullable="false" />
+          <Property Name="main_id_rj" Type="Int64" />
+          <Property Name="we_" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="shift_" Type="Int32" />
+          <Property Name="hour_counter" Type="Int64" />
+          <Property Name="mc_area" Type="Int32" />
+          <Property Name="no_machine" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="partnumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PART" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DESC" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="mold" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="pn_ct" Type="Int32" />
+          <Property Name="pn_stdoutput" Type="Int32" />
+          <Property Name="sch" Type="Int32" />
+          <Property Name="total_output_pcs" Type="Int32" />
+          <Property Name="reject_qty" Type="Int32" />
+          <Property Name="reject_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="rj_remarks" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="part_pp" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="pn_cav" Type="Int32" />
+          <Property Name="total_actoutput" Type="Int32" />
+          <Property Name="op_kpk" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="op_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VO_REJECT">
+          <Key>
+            <PropertyRef Name="reject_id" />
+          </Key>
+          <Property Name="reject_id" Type="Int64" Nullable="false" />
+          <Property Name="main_id_rj" Type="Int64" />
+          <Property Name="mc_area" Type="Int32" />
+          <Property Name="no_machine" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="partnumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="mold" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="we_" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="shift_" Type="Int32" />
+          <Property Name="pn_stdoutput" Type="Int32" />
+          <Property Name="total_output_pcs" Type="Int32" />
+          <Property Name="hour_counter" Type="Int64" />
+          <Property Name="total_actoutput" Type="Int32" />
+          <Property Name="reject_qty" Type="Int32" />
+          <Property Name="reject_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="rj_remarks" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="reject_notes" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="pn_ct" Type="Int32" />
+          <Property Name="pn_cav" Type="Int32" />
+          <Property Name="pn_set" Type="Int32" />
+          <Property Name="pengalioutput" Type="Int32" />
+          <Property Name="op_kpk" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="op_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VO_SCRAP">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="partnumber" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" />
+          <Property Name="shift_" Type="Int32" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="partnumber" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="quantity" Type="Int32" />
+          <Property Name="area_code" Type="Int32" />
+          <Property Name="area_name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="scrap_number" Type="Int32" />
+          <Property Name="scrap_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="check_" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="S_NAME" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="SCRAP_REMARKS" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Expr1" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="pim_part_number_list">
+          <Key>
+            <PropertyRef Name="PART" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PART" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DESC" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="MOLD" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="FAMILY" Type="Int32" />
+          <Property Name="CAVITY" Type="Int32" />
+          <Property Name="CT" Type="Int32" />
+          <Property Name="MCHRS" Type="Double" />
+          <Property Name="PN_COLORANT" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="COLOR" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="MATERIAL" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="DATE_INPUT" Type="DateTime" Precision="3" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="masbroModelPIMStoreContainer" CdmEntityContainer="masbroEntitiesPIM">
+          <EntitySetMapping Name="pim_downtime">
+            <EntityTypeMapping TypeName="masbroModelPIM.pim_downtime">
+              <MappingFragment StoreEntitySet="pim_downtime">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="newid" ColumnName="newid" />
+                <ScalarProperty Name="dt_code" ColumnName="dt_code" />
+                <ScalarProperty Name="dt_remarks" ColumnName="dt_remarks" />
+                <ScalarProperty Name="dt_type" ColumnName="dt_type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pim_reject">
+            <EntityTypeMapping TypeName="masbroModelPIM.pim_reject">
+              <MappingFragment StoreEntitySet="pim_reject">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="rj_code" ColumnName="rj_code" />
+                <ScalarProperty Name="rj_remarks" ColumnName="rj_remarks" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PIM_SSC_CALCULATION">
+            <EntityTypeMapping TypeName="masbroModelPIM.PIM_SSC_CALCULATION">
+              <MappingFragment StoreEntitySet="PIM_SSC_CALCULATION">
+                <ScalarProperty Name="totalcalc_id" ColumnName="totalcalc_id" />
+                <ScalarProperty Name="main_id_tc" ColumnName="main_id_tc" />
+                <ScalarProperty Name="total_output_pcs" ColumnName="total_output_pcs" />
+                <ScalarProperty Name="total_good_output" ColumnName="total_good_output" />
+                <ScalarProperty Name="pn_stdoutput" ColumnName="pn_stdoutput" />
+                <ScalarProperty Name="totalRJ" ColumnName="totalRJ" />
+                <ScalarProperty Name="totalNotRun" ColumnName="totalNotRun" />
+                <ScalarProperty Name="totalDT" ColumnName="totalDT" />
+                <ScalarProperty Name="total_time" ColumnName="total_time" />
+                <ScalarProperty Name="pn_operatingtime" ColumnName="pn_operatingtime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PIM_SSC_MAIN">
+            <EntityTypeMapping TypeName="masbroModelPIM.PIM_SSC_MAIN">
+              <MappingFragment StoreEntitySet="PIM_SSC_MAIN">
+                <ScalarProperty Name="part_pp" ColumnName="part_pp" />
+                <ScalarProperty Name="main_id" ColumnName="main_id" />
+                <ScalarProperty Name="partnumber" ColumnName="partnumber" />
+                <ScalarProperty Name="mold" ColumnName="mold" />
+                <ScalarProperty Name="shift_" ColumnName="shift_" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="we_" ColumnName="we_" />
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="no_machine" ColumnName="no_machine" />
+                <ScalarProperty Name="mc_area" ColumnName="mc_area" />
+                <ScalarProperty Name="sch" ColumnName="sch" />
+                <ScalarProperty Name="total_actoutput" ColumnName="total_actoutput" />
+                <ScalarProperty Name="pn_ct" ColumnName="pn_ct" />
+                <ScalarProperty Name="pn_cav" ColumnName="pn_cav" />
+                <ScalarProperty Name="pn_set" ColumnName="pn_set" />
+                <ScalarProperty Name="pengalioutput" ColumnName="pengalioutput" />
+                <ScalarProperty Name="pn_notes" ColumnName="pn_notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PIM_SSC_O_DOWNTIME">
+            <EntityTypeMapping TypeName="masbroModelPIM.PIM_SSC_O_DOWNTIME">
+              <MappingFragment StoreEntitySet="PIM_SSC_O_DOWNTIME">
+                <ScalarProperty Name="downtime_id" ColumnName="downtime_id" />
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="main_id_dt" ColumnName="main_id_dt" />
+                <ScalarProperty Name="dt_start" ColumnName="dt_start" />
+                <ScalarProperty Name="dt_finish" ColumnName="dt_finish" />
+                <ScalarProperty Name="duration_minutes" ColumnName="duration_minutes" />
+                <ScalarProperty Name="downtime_code" ColumnName="downtime_code" />
+                <ScalarProperty Name="downtime_notes" ColumnName="downtime_notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PIM_SSC_O_REJECT">
+            <EntityTypeMapping TypeName="masbroModelPIM.PIM_SSC_O_REJECT">
+              <MappingFragment StoreEntitySet="PIM_SSC_O_REJECT">
+                <ScalarProperty Name="reject_id" ColumnName="reject_id" />
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="main_id_rj" ColumnName="main_id_rj" />
+                <ScalarProperty Name="reject_qty" ColumnName="reject_qty" />
+                <ScalarProperty Name="reject_code" ColumnName="reject_code" />
+                <ScalarProperty Name="reject_notes" ColumnName="reject_notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PIM_SSC_OUTPUT">
+            <EntityTypeMapping TypeName="masbroModelPIM.PIM_SSC_OUTPUT">
+              <MappingFragment StoreEntitySet="PIM_SSC_OUTPUT">
+                <ScalarProperty Name="output_id" ColumnName="output_id" />
+                <ScalarProperty Name="main_id_o" ColumnName="main_id_o" />
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="actoutput" ColumnName="actoutput" />
+                <ScalarProperty Name="actoutput_pcs" ColumnName="actoutput_pcs" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pim_user_kpk">
+            <EntityTypeMapping TypeName="masbroModelPIM.pim_user_kpk">
+              <MappingFragment StoreEntitySet="pim_user_kpk">
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="em_role" ColumnName="em_role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pim_kpi_performance">
+            <EntityTypeMapping TypeName="masbroModelPIM.pim_kpi_performance">
+              <MappingFragment StoreEntitySet="pim_kpi_performance">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DATE_" ColumnName="DATE_" />
+                <ScalarProperty Name="WEEKENDING" ColumnName="WEEKENDING" />
+                <ScalarProperty Name="SHIFT_" ColumnName="SHIFT_" />
+                <ScalarProperty Name="AUDIT_5S" ColumnName="AUDIT_5S" />
+                <ScalarProperty Name="COMPLIANCE" ColumnName="COMPLIANCE" />
+                <ScalarProperty Name="EHS_PATROL" ColumnName="EHS_PATROL" />
+                <ScalarProperty Name="LBO_PO_PCS" ColumnName="LBO_PO_PCS" />
+                <ScalarProperty Name="LBO_PO_PPM" ColumnName="LBO_PO_PPM" />
+                <ScalarProperty Name="EFF" ColumnName="EFF" />
+                <ScalarProperty Name="SCRAP" ColumnName="SCRAP" />
+                <ScalarProperty Name="DSA_ITEM" ColumnName="DSA_ITEM" />
+                <ScalarProperty Name="DSA_VOLUME" ColumnName="DSA_VOLUME" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pim_partnumber_notvalid">
+            <EntityTypeMapping TypeName="masbroModelPIM.pim_partnumber_notvalid">
+              <MappingFragment StoreEntitySet="pim_partnumber_notvalid">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="shift" ColumnName="shift" />
+                <ScalarProperty Name="no_machine" ColumnName="no_machine" />
+                <ScalarProperty Name="date_input" ColumnName="date_input" />
+                <ScalarProperty Name="partnumber_not_valid" ColumnName="partnumber_not_valid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VO_DOWNTIME">
+            <EntityTypeMapping TypeName="masbroModelPIM.VO_DOWNTIME">
+              <MappingFragment StoreEntitySet="VO_DOWNTIME">
+                <ScalarProperty Name="downtime_id" ColumnName="downtime_id" />
+                <ScalarProperty Name="main_id_dt" ColumnName="main_id_dt" />
+                <ScalarProperty Name="mc_area" ColumnName="mc_area" />
+                <ScalarProperty Name="no_machine" ColumnName="no_machine" />
+                <ScalarProperty Name="partnumber" ColumnName="partnumber" />
+                <ScalarProperty Name="mold" ColumnName="mold" />
+                <ScalarProperty Name="we_" ColumnName="we_" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="shift_" ColumnName="shift_" />
+                <ScalarProperty Name="pn_stdoutput" ColumnName="pn_stdoutput" />
+                <ScalarProperty Name="total_output_pcs" ColumnName="total_output_pcs" />
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="total_actoutput" ColumnName="total_actoutput" />
+                <ScalarProperty Name="dt_start" ColumnName="dt_start" />
+                <ScalarProperty Name="dt_finish" ColumnName="dt_finish" />
+                <ScalarProperty Name="duration_minutes" ColumnName="duration_minutes" />
+                <ScalarProperty Name="downtime_code" ColumnName="downtime_code" />
+                <ScalarProperty Name="dt_remarks" ColumnName="dt_remarks" />
+                <ScalarProperty Name="dt_type" ColumnName="dt_type" />
+                <ScalarProperty Name="downtime_notes" ColumnName="downtime_notes" />
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VO_MAIN_CALC">
+            <EntityTypeMapping TypeName="masbroModelPIM.VO_MAIN_CALC">
+              <MappingFragment StoreEntitySet="VO_MAIN_CALC">
+                <ScalarProperty Name="totalcalc_id" ColumnName="totalcalc_id" />
+                <ScalarProperty Name="main_id" ColumnName="main_id" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="we_" ColumnName="we_" />
+                <ScalarProperty Name="shift_" ColumnName="shift_" />
+                <ScalarProperty Name="no_machine" ColumnName="no_machine" />
+                <ScalarProperty Name="partnumber" ColumnName="partnumber" />
+                <ScalarProperty Name="pn_ct" ColumnName="pn_ct" />
+                <ScalarProperty Name="pn_cav" ColumnName="pn_cav" />
+                <ScalarProperty Name="pn_set" ColumnName="pn_set" />
+                <ScalarProperty Name="pengalioutput" ColumnName="pengalioutput" />
+                <ScalarProperty Name="sch" ColumnName="sch" />
+                <ScalarProperty Name="total_actoutput" ColumnName="total_actoutput" />
+                <ScalarProperty Name="total_output_pcs" ColumnName="total_output_pcs" />
+                <ScalarProperty Name="pn_stdoutput" ColumnName="pn_stdoutput" />
+                <ScalarProperty Name="total_good_output" ColumnName="total_good_output" />
+                <ScalarProperty Name="totalRJ" ColumnName="totalRJ" />
+                <ScalarProperty Name="totalNotRun" ColumnName="totalNotRun" />
+                <ScalarProperty Name="totalDT" ColumnName="totalDT" />
+                <ScalarProperty Name="total_time" ColumnName="total_time" />
+                <ScalarProperty Name="pn_operatingtime" ColumnName="pn_operatingtime" />
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="mc_area" ColumnName="mc_area" />
+                <ScalarProperty Name="mold" ColumnName="mold" />
+                <ScalarProperty Name="pn_notes" ColumnName="pn_notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VO_REJECT_PP">
+            <EntityTypeMapping TypeName="masbroModelPIM.VO_REJECT_PP">
+              <MappingFragment StoreEntitySet="VO_REJECT_PP">
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="total_actoutput" ColumnName="total_actoutput" />
+                <ScalarProperty Name="pn_cav" ColumnName="pn_cav" />
+                <ScalarProperty Name="part_pp" ColumnName="part_pp" />
+                <ScalarProperty Name="rj_remarks" ColumnName="rj_remarks" />
+                <ScalarProperty Name="reject_code" ColumnName="reject_code" />
+                <ScalarProperty Name="reject_qty" ColumnName="reject_qty" />
+                <ScalarProperty Name="total_output_pcs" ColumnName="total_output_pcs" />
+                <ScalarProperty Name="sch" ColumnName="sch" />
+                <ScalarProperty Name="pn_stdoutput" ColumnName="pn_stdoutput" />
+                <ScalarProperty Name="pn_ct" ColumnName="pn_ct" />
+                <ScalarProperty Name="mold" ColumnName="mold" />
+                <ScalarProperty Name="DESC" ColumnName="DESC" />
+                <ScalarProperty Name="PART" ColumnName="PART" />
+                <ScalarProperty Name="partnumber" ColumnName="partnumber" />
+                <ScalarProperty Name="no_machine" ColumnName="no_machine" />
+                <ScalarProperty Name="mc_area" ColumnName="mc_area" />
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="shift_" ColumnName="shift_" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="we_" ColumnName="we_" />
+                <ScalarProperty Name="main_id_rj" ColumnName="main_id_rj" />
+                <ScalarProperty Name="reject_id" ColumnName="reject_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VO_REJECT">
+            <EntityTypeMapping TypeName="masbroModelPIM.VO_REJECT">
+              <MappingFragment StoreEntitySet="VO_REJECT">
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="pengalioutput" ColumnName="pengalioutput" />
+                <ScalarProperty Name="pn_set" ColumnName="pn_set" />
+                <ScalarProperty Name="pn_cav" ColumnName="pn_cav" />
+                <ScalarProperty Name="pn_ct" ColumnName="pn_ct" />
+                <ScalarProperty Name="reject_notes" ColumnName="reject_notes" />
+                <ScalarProperty Name="rj_remarks" ColumnName="rj_remarks" />
+                <ScalarProperty Name="reject_code" ColumnName="reject_code" />
+                <ScalarProperty Name="reject_qty" ColumnName="reject_qty" />
+                <ScalarProperty Name="total_actoutput" ColumnName="total_actoutput" />
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="total_output_pcs" ColumnName="total_output_pcs" />
+                <ScalarProperty Name="pn_stdoutput" ColumnName="pn_stdoutput" />
+                <ScalarProperty Name="shift_" ColumnName="shift_" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="we_" ColumnName="we_" />
+                <ScalarProperty Name="mold" ColumnName="mold" />
+                <ScalarProperty Name="partnumber" ColumnName="partnumber" />
+                <ScalarProperty Name="no_machine" ColumnName="no_machine" />
+                <ScalarProperty Name="mc_area" ColumnName="mc_area" />
+                <ScalarProperty Name="main_id_rj" ColumnName="main_id_rj" />
+                <ScalarProperty Name="reject_id" ColumnName="reject_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VO_SCRAP">
+            <EntityTypeMapping TypeName="masbroModelPIM.VO_SCRAP">
+              <MappingFragment StoreEntitySet="VO_SCRAP">
+                <ScalarProperty Name="Expr1" ColumnName="Expr1" />
+                <ScalarProperty Name="SCRAP_REMARKS" ColumnName="SCRAP_REMARKS" />
+                <ScalarProperty Name="S_NAME" ColumnName="S_NAME" />
+                <ScalarProperty Name="check_" ColumnName="check_" />
+                <ScalarProperty Name="scrap_code" ColumnName="scrap_code" />
+                <ScalarProperty Name="scrap_number" ColumnName="scrap_number" />
+                <ScalarProperty Name="area_name" ColumnName="area_name" />
+                <ScalarProperty Name="area_code" ColumnName="area_code" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="partnumber" ColumnName="partnumber" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="shift_" ColumnName="shift_" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pim_part_number_list">
+            <EntityTypeMapping TypeName="masbroModelPIM.pim_part_number_list">
+              <MappingFragment StoreEntitySet="pim_part_number_list">
+                <ScalarProperty Name="DATE_INPUT" ColumnName="DATE_INPUT" />
+                <ScalarProperty Name="MATERIAL" ColumnName="MATERIAL" />
+                <ScalarProperty Name="COLOR" ColumnName="COLOR" />
+                <ScalarProperty Name="PN_COLORANT" ColumnName="PN_COLORANT" />
+                <ScalarProperty Name="MCHRS" ColumnName="MCHRS" />
+                <ScalarProperty Name="CT" ColumnName="CT" />
+                <ScalarProperty Name="CAVITY" ColumnName="CAVITY" />
+                <ScalarProperty Name="FAMILY" ColumnName="FAMILY" />
+                <ScalarProperty Name="MOLD" ColumnName="MOLD" />
+                <ScalarProperty Name="DESC" ColumnName="DESC" />
+                <ScalarProperty Name="PART" ColumnName="PART" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="masbroModelPA.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="pa_cd_defect_molded">
+          <Key>
+            <PropertyRef Name="CODE" />
+          </Key>
+          <Property Name="CODE" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DETAILS" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="pa_cd_downtime">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DT_CODE" Type="varchar" MaxLength="50" />
+          <Property Name="DT_REMARKS" Type="varchar" MaxLength="250" />
+          <Property Name="DT_TYPE" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="pa_cd_reject">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RJ_CODE" Type="varchar" MaxLength="50" />
+          <Property Name="RJ_REMARK" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="pa_ssc_identity">
+          <Key>
+            <PropertyRef Name="identity_id" />
+          </Key>
+          <Property Name="identity_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="pn" Type="varchar" MaxLength="50" />
+          <Property Name="shift_" Type="int" />
+          <Property Name="date_" Type="date" />
+          <Property Name="we_" Type="date" />
+          <Property Name="op_kpk" Type="int" />
+          <Property Name="op_name" Type="varchar" MaxLength="250" />
+          <Property Name="no_index" Type="varchar" MaxLength="50" />
+          <Property Name="idx_area" Type="varchar" MaxLength="50" />
+          <Property Name="sch" Type="int" />
+          <Property Name="total_actoutput" Type="int" />
+          <Property Name="pn_notes" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="pa_ssc_output">
+          <Key>
+            <PropertyRef Name="output_id" />
+          </Key>
+          <Property Name="output_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="identity_id_o" Type="bigint" />
+          <Property Name="hour_counter" Type="int" />
+          <Property Name="actual_output" Type="int" />
+        </EntityType>
+        <EntityType Name="pa_ssc_outputreject">
+          <Key>
+            <PropertyRef Name="reject_id" />
+          </Key>
+          <Property Name="reject_id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="identity_id_rj" Type="bigint" />
+          <Property Name="hour_counter" Type="int" />
+          <Property Name="reject_qty" Type="int" />
+          <Property Name="reject_code" Type="varchar" MaxLength="50" />
+          <Property Name="reject_notes" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityContainer Name="masbroModelPAStoreContainer">
+          <EntitySet Name="pa_cd_defect_molded" EntityType="Self.pa_cd_defect_molded" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pa_cd_downtime" EntityType="Self.pa_cd_downtime" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pa_cd_reject" EntityType="Self.pa_cd_reject" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pa_ssc_identity" EntityType="Self.pa_ssc_identity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pa_ssc_output" EntityType="Self.pa_ssc_output" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pa_ssc_outputreject" EntityType="Self.pa_ssc_outputreject" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="masbroModelPA" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="pa_cd_defect_molded">
+          <Key>
+            <PropertyRef Name="CODE" />
+          </Key>
+          <Property Name="CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DETAILS" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="pa_cd_downtime">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DT_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DT_REMARKS" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="DT_TYPE" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="pa_cd_reject">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RJ_CODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RJ_REMARK" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="pa_ssc_identity">
+          <Key>
+            <PropertyRef Name="identity_id" />
+          </Key>
+          <Property Name="identity_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="pn" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="shift_" Type="Int32" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="we_" Type="DateTime" Precision="0" />
+          <Property Name="op_kpk" Type="Int32" />
+          <Property Name="op_name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="no_index" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="idx_area" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="sch" Type="Int32" />
+          <Property Name="total_actoutput" Type="Int32" />
+          <Property Name="pn_notes" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="pa_ssc_output">
+          <Key>
+            <PropertyRef Name="output_id" />
+          </Key>
+          <Property Name="output_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="identity_id_o" Type="Int64" />
+          <Property Name="hour_counter" Type="Int32" />
+          <Property Name="actual_output" Type="Int32" />
+        </EntityType>
+        <EntityType Name="pa_ssc_outputreject">
+          <Key>
+            <PropertyRef Name="reject_id" />
+          </Key>
+          <Property Name="reject_id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="identity_id_rj" Type="Int64" />
+          <Property Name="hour_counter" Type="Int32" />
+          <Property Name="reject_qty" Type="Int32" />
+          <Property Name="reject_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="reject_notes" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityContainer Name="masbroEntities_PA" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="pa_cd_defect_molded" EntityType="Self.pa_cd_defect_molded" />
+          <EntitySet Name="pa_cd_downtime" EntityType="Self.pa_cd_downtime" />
+          <EntitySet Name="pa_cd_reject" EntityType="Self.pa_cd_reject" />
+          <EntitySet Name="pa_ssc_identity" EntityType="Self.pa_ssc_identity" />
+          <EntitySet Name="pa_ssc_output" EntityType="Self.pa_ssc_output" />
+          <EntitySet Name="pa_ssc_outputreject" EntityType="Self.pa_ssc_outputreject" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="masbroModelPAStoreContainer" CdmEntityContainer="masbroEntities_PA">
+          <EntitySetMapping Name="pa_cd_defect_molded">
+            <EntityTypeMapping TypeName="masbroModelPA.pa_cd_defect_molded">
+              <MappingFragment StoreEntitySet="pa_cd_defect_molded">
+                <ScalarProperty Name="CODE" ColumnName="CODE" />
+                <ScalarProperty Name="DETAILS" ColumnName="DETAILS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pa_cd_downtime">
+            <EntityTypeMapping TypeName="masbroModelPA.pa_cd_downtime">
+              <MappingFragment StoreEntitySet="pa_cd_downtime">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DT_CODE" ColumnName="DT_CODE" />
+                <ScalarProperty Name="DT_REMARKS" ColumnName="DT_REMARKS" />
+                <ScalarProperty Name="DT_TYPE" ColumnName="DT_TYPE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pa_cd_reject">
+            <EntityTypeMapping TypeName="masbroModelPA.pa_cd_reject">
+              <MappingFragment StoreEntitySet="pa_cd_reject">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="RJ_CODE" ColumnName="RJ_CODE" />
+                <ScalarProperty Name="RJ_REMARK" ColumnName="RJ_REMARK" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pa_ssc_identity">
+            <EntityTypeMapping TypeName="masbroModelPA.pa_ssc_identity">
+              <MappingFragment StoreEntitySet="pa_ssc_identity">
+                <ScalarProperty Name="identity_id" ColumnName="identity_id" />
+                <ScalarProperty Name="pn" ColumnName="pn" />
+                <ScalarProperty Name="shift_" ColumnName="shift_" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="we_" ColumnName="we_" />
+                <ScalarProperty Name="op_kpk" ColumnName="op_kpk" />
+                <ScalarProperty Name="op_name" ColumnName="op_name" />
+                <ScalarProperty Name="no_index" ColumnName="no_index" />
+                <ScalarProperty Name="idx_area" ColumnName="idx_area" />
+                <ScalarProperty Name="sch" ColumnName="sch" />
+                <ScalarProperty Name="total_actoutput" ColumnName="total_actoutput" />
+                <ScalarProperty Name="pn_notes" ColumnName="pn_notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pa_ssc_output">
+            <EntityTypeMapping TypeName="masbroModelPA.pa_ssc_output">
+              <MappingFragment StoreEntitySet="pa_ssc_output">
+                <ScalarProperty Name="output_id" ColumnName="output_id" />
+                <ScalarProperty Name="identity_id_o" ColumnName="identity_id_o" />
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="actual_output" ColumnName="actual_output" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pa_ssc_outputreject">
+            <EntityTypeMapping TypeName="masbroModelPA.pa_ssc_outputreject">
+              <MappingFragment StoreEntitySet="pa_ssc_outputreject">
+                <ScalarProperty Name="reject_id" ColumnName="reject_id" />
+                <ScalarProperty Name="identity_id_rj" ColumnName="identity_id_rj" />
+                <ScalarProperty Name="hour_counter" ColumnName="hour_counter" />
+                <ScalarProperty Name="reject_qty" ColumnName="reject_qty" />
+                <ScalarProperty Name="reject_code" ColumnName="reject_code" />
+                <ScalarProperty Name="reject_notes" ColumnName="reject_notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
