@@ -1,0 +1,182 @@
+﻿@model OEE_SSC.Models.pim_scrap
+
+@{
+    ViewBag.Title = "editScrap";
+}
+
+<h2>Edit Scrap </h2>
+
+<section class="section" style="padding: 85px 55px 40px 55px;">
+    <div class="row justify-content-center">
+
+
+        <div class="col-md-9 pt-lg-5">
+
+            @* VALIDATION (PART NUMBER AND NO MACHINE) *@
+            @if (TempData["Message"] != null)
+            {
+                <div id="alert_submit2" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-octagon me-1"></i>
+                    @TempData["Message"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <div class="card col-lg-12">
+                <div class="card-body">
+
+                    <!-- General Form Elements -->
+                    <form id="edit_scrap_form" method="post" action="@Url.Action("editScrap", "Scrap")">
+
+                        <h1></h1>
+                        <h5 class="card-title"> EDIT DATA SCRAP </h5>
+                        <hr /><br />
+
+
+                        @Html.AntiForgeryToken()
+                        <!-- Add fields for editing data -->
+                        <input type="hidden" name="id" value="@ViewBag.id" />
+                        <input type="hidden" id="inputDate" name="date_" value="@ViewBag.date_" readonly>
+                        <input type="hidden" id="inputDate" name="shift_" value="@ViewBag.shift_" readonly>
+
+                        <div class="row mb-3">
+                            <label for="partnumber" class="col-sm-3 col-form-label">Part Number:</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="inputPartNumber" onkeyup="this.value = this.value.toUpperCase()" name="partnumber" class="form-control" value="@ViewBag.partnumber" placeholder="Enter part number" required>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="quantity" class="col-sm-3 col-form-label">Quantity:</label>
+                            <div class="col-sm-8">
+                                <input type="number" id="inputQuantity " name="quantity" class="form-control" value="@ViewBag.quantity" placeholder="Enter quantity" required>
+                            </div>
+                        </div>
+
+                        <!-- Area -->
+                        <div class="row mb-3">
+                            <label for="area_code" class="col-sm-3 col-form-label">Area:</label>
+                            <div class="col-sm-8">
+                                <select name="area_code" class="form-select" required>
+                                    <option selected disabled value="">--Select Area--</option>
+                                    <option value="1" @(Model.area_code == 1 ? "selected" : "")>1F - A,B,C,D,M3</option>
+                                    <option value="2" @(Model.area_code == 2 ? "selected" : "")>1F - E,F,G,H</option>
+                                    <option value="3" @(Model.area_code == 3 ? "selected" : "")>1F - J,K,L</option>
+                                    <option value="4" @(Model.area_code == 4 ? "selected" : "")>1F - M,N,P</option>
+                                    <option value="5" @(Model.area_code == 5 ? "selected" : "")>GF - A,B,C,D,E,F</option>
+                                    <option value="6" @(Model.area_code == 6 ? "selected" : "")>GF - G,H,J,K,L,M</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <!-- Area -->
+                        <div class="row mb-3">
+                            <label for="area_code" class="col-sm-3 col-form-label">Area, U/M:</label>
+                            <div class="col-sm-4">
+                                <select name="area_code" class="form-select" required>
+                                    <option selected disabled value="">--Select Area--</option>
+                                    <option value="1" @(Model.area_code == 1 ? "selected" : "")>1F - A,B,C,D,M3</option>
+                                    <option value="2" @(Model.area_code == 2 ? "selected" : "")>1F - E,F,G,H</option>
+                                    <option value="3" @(Model.area_code == 3 ? "selected" : "")>1F - J,K,L</option>
+                                    <option value="4" @(Model.area_code == 4 ? "selected" : "")>1F - M,N,P</option>
+                                    <option value="5" @(Model.area_code == 5 ? "selected" : "")>GF - A,B,C,D,E,F</option>
+                                    <option value="6" @(Model.area_code == 6 ? "selected" : "")>GF - G,H,J,K,L,M</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <select name="um" class="form-select" required>
+                                    <option selected disabled value="">--Select U/M--</option>
+                                    <option value="GR" @(Model.um == "GR" ? "selected" : "")>GR</option>
+                                    <option value="KG" @(Model.um == "KG" ? "selected" : "")>KG</option>
+                                    <option value="EA" @(Model.um == "EA" ? "selected" : "")>EA</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <!-- Code -->
+                        <div class="row mb-4">
+                            <label for="scrap_number" class="col-sm-3 col-form-label">Scrap Code:</label>
+                            <div class="col-sm-4">
+                                <select class="form-select" id="scrap_number" name="scrap_number" aria-label="Default select example" required>
+                                    <option selected disabled value="">-- Select Code Number --</option>
+                                    <option value="1" @(Model.scrap_number == 1 ? "selected" : "")> 1 (NETTY)</option>
+                                    <option value="2" @(Model.scrap_number == 2 ? "selected" : "")> 2 (PARMAN)</option>
+                                    <option value="3" @(Model.scrap_number == 3 ? "selected" : "")> 3 (SLAMET)</option>
+                                    <option value="4" @(Model.scrap_number == 4 ? "selected" : "")> 4 (MULATSIH)</option>
+                                    <option value="5" @(Model.scrap_number == 5 ? "selected" : "")> 5 (KOSIM)</option>
+                                    <option value="6" @(Model.scrap_number == 6 ? "selected" : "")> 6 (YUNI)</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <select class="form-select" id="scrap_code" name="scrap_code" aria-label="Default select example" required>
+                                    <option selected disabled value="">-- Select Code Alphabet --</option>
+                                    <option value="B" @(Model.scrap_code == "B" ? "selected" : "")> B. BLACK SPOT MOLDED PART </option>
+                                    <option value="C" @(Model.scrap_code == "C" ? "selected" : "")> C. CONTAMINATION </option>
+                                    <option value="E" @(Model.scrap_code == "E" ? "selected" : "")> E. EXCESS REGRIND / RUNNER </option>
+                                    <option value="F" @(Model.scrap_code == "F" ? "selected" : "")> F. FUNCTION  </option>
+                                    <option value="L" @(Model.scrap_code == "L" ? "selected" : "")> L. BUBBLE </option>
+                                    <option value="M" @(Model.scrap_code == "M" ? "selected" : "")> M. WRONG COLOR MATERIAL </option>
+                                    <option value="O" @(Model.scrap_code == "O" ? "selected" : "")> O. OTHERS </option>
+                                    <option value="P" @(Model.scrap_code == "P" ? "selected" : "")> P. PURGING </option>
+                                    <option value="R" @(Model.scrap_code == "R" ? "selected" : "")> R. EXCESS REWORK </option>
+                                    <option value="V" @(Model.scrap_code == "V" ? "selected" : "")> V. VACUUM / SAPUAN </option>
+                                    <option value="W" @(Model.scrap_code == "W" ? "selected" : "")> W. WRONG COLOR CHANGE OVER </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <label for="quantity" class="col-sm-3 col-form-label">Status:</label>
+                            <div class="col-sm-4">
+                                <input class="form-check-input" type="radio" name="check_" value="key in" checked>
+                                <label class="form-check-label">
+                                    Key In
+                                </label>
+                            </div>
+                            <div class="col-sm-4">
+                                <input class="form-check-input" type="radio" name="check_" value="do not key in">
+                                <label class="form-check-label">
+                                    Don't Key In
+                                </label>
+                            </div>
+                        </div>
+
+                        <hr />
+                        <!-- Add other fields for editing data -->
+
+
+                        <div class="row mb-3 pt-3">
+                            <div class="col-sm-12">
+                                <a type="button" class="btn btn-secondary" href="@Url.Action("inputScrap", "scrap", new { shift_ = Session["scrapShift"], date_ = Session["scrapDate"] })"> Cancel </a>
+                                <button type="submit" class="btn btn-success">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- End Edit Modal Form Elements -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- JavaScript function -->
+<script>
+    function updateFormAction() {
+        var code1Value = $('#code1Select').val();
+        var code2Value = $('#code2Select').val();
+
+        var newAction = '@Url.Action("newScrap", "Scrap")' + '?code_1=' + code1Value + '&code_2=' + code2Value;
+
+        $('#edit_scrap_form').attr('action', newAction);
+    }
+
+    $(document).ready(function () {
+        $('#code1Select, #code2Select').change(function () {
+            updateFormAction();
+        });
+    });
+</script>

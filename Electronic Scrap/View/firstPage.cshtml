@@ -1,0 +1,128 @@
+﻿@model IEnumerable<OEE_SSC.Models.pimScrabData>
+
+@{
+    ViewBag.Title = "PIM SCRAB";
+    Layout = null;
+}
+
+<title>PIM Application </title>
+
+<!-- Vendor CSS Files -->
+<link href="~/Content/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/quill/quill.snow.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+<!-- Template Main CSS File -->
+<link href="~/Content/assets/css/style.css" rel="stylesheet" />
+<link href="~/Content/assets/css/newstyle.css" rel="stylesheet" />
+
+<!-- Title Logo -->
+<link rel="icon" href="~/Content/assets/img/mattel.png" type="image/x-icon">
+
+<main class="background">
+
+    <div class="container" style="background-image: url(/Content/assets/img/earth_save_bg.png); background-size: cover; background-repeat: no-repeat; min-width: 100%; background-color: white; background-blend-mode: multiply; opacity: 2; ">
+
+        <section class="section min-vh-100 d-flex flex-column align-items-center justify-content-center py-1">
+            <div class="container">
+                <div class="row justify-content-lg-end justify-content-md-start">
+
+                    @*<div class="d-flex justify-content-lg-end" style="margin-bottom: 40px; padding-top: 30px; color: white; letter-spacing: 4px; ">
+                            <div class="d-flex align-items-center w-auto" data-aos="zoom-in-up" data-aos-duration="950">
+                                <h2 class="d-lg-block">
+                                    <b style="font-size: 49px;">P</b>LASTIC
+                                    <b style="font-size: 49px;">I</b>NJECTION
+                                    <b style="font-size: 49px;">M</b>OLDING
+                                </h2>
+                            </div>
+                        </div>*@
+
+                    <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center" style="margin-top:10px; margin-bottom:20px;">
+
+                        <!-- End Logo -->
+                        @* FORM INPUT USER *@
+                        @using (Html.BeginForm("firstPage", "Scrap", FormMethod.Get))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="mb-3" style="width:125%; margin-left:-10%; position:relative;">
+
+                                <div class="card-body">
+                                    <div class="pt-1 pb-1">
+                                        <h3 class="card-title text-md-start text-lg-center pb-0 fs-2" style="color:steelblue; letter-spacing: 1px; "><b>SCRAP FORM</b></h3>
+                                        <div class="d-flex justify-content-lg-center pt-3 pb-2">
+                                            <h5 class="d-lg-block" style="color: steelblue; font-size: 18px;">Hello, <span id="greeting"></span>!</h5>
+                                        </div>
+                                    </div>
+
+                                    @*<h1>@ViewBag.prevDate</h1>*@
+
+                                    @* ----------------------------------------------------------------- *@
+                                    <form class="row g-3">
+                                        <div class="col-12">
+                                            @* INPUT SHIFT *@
+                                            <label for="inputShift" class="form-label pt-2">Shift</label>
+                                            <select id="inputShift" name="shift_" class="form-control text-center" style="color:black;background-color: lightsteelblue" required>
+                                                <option value="">--Select Shift--</option>
+                                                <option value="1" required>1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                            </select>
+                                            @* AUTO SEARCH DATE *@
+                                            <div>
+                                                <label class="control-label col-md-2 pt-2">Date:</label>
+                                                @* Manual input date for testing *@
+                                                <input class="form-control text-center" style="background-color: lightsteelblue" type="date" name="date_" value="@DateTime.Now.ToString("yyyy-MM-dd")" required>
+                                            </div>
+                                            <br />
+                                        </div>
+                                        @* --BUTTON SUBMIT-- *@
+                                        <div class="col-12">
+                                            <button class="btn btn-primary w-100" type="submit" style="color:white;"><b style="font-size:17px;">Submit</b></button>
+                                        </div>
+                                        @* ----------------------------------------------------------------- *@
+                                        <div class="col-12">
+                                            <br /><p class="small mb-0">Data scrab tidak ada? <a href="#" style="color: steelblue;">Hubungi Admin</a></p>
+                                        </div>
+
+
+                                    </form>
+
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</main>
+
+<!-- End #main -->
+
+<script>
+    const time = new Date().getHours();
+
+    let greeting;
+
+    if (time < 10) {
+        greeting = "good morning";
+    }
+    else if (time < 14) {
+        greeting = "good day";
+    }
+    else if (time < 19) {
+        greeting = "good afternoon";
+    }
+    else {
+        greeting = "good evening";
+    }
+
+    document.getElementById("greeting").innerHTML = greeting;
+</script>
+
+

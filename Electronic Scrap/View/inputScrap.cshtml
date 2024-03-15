@@ -1,0 +1,312 @@
+﻿@*@model OEE_SSC.Models.pim_scrap*@
+@model IEnumerable<OEE_SSC.Models.pim_scrap>
+
+@{
+    ViewBag.Title = "inputScrap";
+}
+
+<h2>inputScrap</h2>
+
+<main id="" class="main" style="min-height: 800px; padding: 85px 35px 40px 35px;">
+    <section class="section">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+
+                @if (TempData["Error_scrap"] != null)
+                {
+                    <div id="alert_submit2" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @TempData["Error_scrap"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                @if (TempData["Message"] != null)
+                {
+                    <div id="alert_submit2" class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["Message"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                @* VALIDATION (PART NUMBER) *@
+                @if (TempData["Error_add"] != null)
+                {
+                    <div id="alert_submit2" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-octagon me-1"></i>
+                        @TempData["Error_add"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                <div class="card col-lg-12 pt-lg-3 p-lg-5">
+                    <div class="card-body pt-lg-2">
+
+
+                        <h2 class="card-title text-center" style="font-size:x-large">
+                            Scrap Data List
+                        </h2>
+
+
+                        <!--ADD NEW DATA SCRAP-->
+                        <a type="button" class="btn btn-info me-1" href="@Url.Action("newScrap", "Scrap")"><i class="bi bi-pencil-square me-1"></i>New Scrap</a>
+
+                        <!--IMPORT DATA FROM EXCEL-->
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#importscrapquery">Import Query</button>
+
+                        <!--Download DATA EXCEL-->
+                        <!-- Add the button for downloading scrap data -->
+                        <a class="btn btn-warning me-1" href="@Url.Action("DownloadScrapExcel", "Scrap", new { shift_ = Session["scrapShift"], date_ = Session["scrapDate"] })">Download Price</a>
+
+                        <!--EXPORT DATA PRICE-->
+                        <!-- Add the button for downloading scrap data -->
+                        <a class="btn btn-success me-1" href="@Url.Action("exportScrapExcel", "Scrap", new { shift_ = Session["scrapShift"], date_ = Session["scrapDate"] })">Scrap Notice</a>
+                        
+                        <!--EXPORT DATA AUDIT-->
+                        <!-- Add the button for downloading scrap data -->
+                        <a class="btn btn-outline-info me-1" href="@Url.Action("exportScrapAudit", "Scrap", new { shift_ = Session["scrapShift"], date_ = Session["scrapDate"] })">Audit</a>
+
+                        <!--EXPORT SCRAP-->
+                        <!-- Add the button for downloading scrap data -->
+                        <a class="btn btn-outline-success me-1" style="float: right" title="Download Current Data" data-bs-toggle="modal" data-bs-target="#exportCurrentScrap" href="@Url.Action("exportCurrentScrap", "Scrap", new { shift_ = Session["scrapShift"], date_ = Session["scrapDate"] })">
+                            <i class="bi bi-cloud-download"></i>
+                        </a>
+
+                        <!-- Modal untuk export scrap data -->
+                        <div class="modal fade" id="exportCurrentScrap" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Download Scrap  (.xlsx) </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <!-- FILTER DATA - MODAL START -->
+                                    @using (Html.BeginForm("exportCurrentScrap", "scrap", FormMethod.Get, new { id = "importForm" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        <div class="modal-body">
+                                            <!-- Filter by Machine FORM -->
+                                            <div class="card">
+                                                <!-- General Form Elements -->
+                                                <form class="needs-validation" novalidate>
+
+                                                    <div class="row mb-3">
+
+                                                        <!-- SHIFT -->
+                                                        <label for="shift_" class="col-sm-4 col-form-label">Shift:</label>
+                                                        <div class="col-sm-8 mb-3">
+                                                            <select id="inputState" class="form-select" name="shift_">
+                                                                <option name="shift_" selected disabled>-- Select Shift --</option>
+                                                                <option name="shift_" value="1" required>1</option>
+                                                                <option name="shift_" value="2">2</option>
+                                                                <option name="shift_" value="3">3</option>
+                                                                <option name="shift_" value="">All</option>
+                                                                @*<option name="shift_" value="4">Audit</option>*@
+                                                            </select>
+                                                        </div>
+
+                                                        <!-- DATE -->
+                                                        <label for="date" class="col-sm-4 col-form-label">Date Start</label>
+                                                        <div class="col-sm-8 mb-2">
+                                                            <input class="form-control" name="dateStart" type="date" value="" required>
+                                                        </div>
+
+                                                        <label for="date" class="col-sm-4 col-form-label">Date End</label>
+                                                        <div class="col-sm-8 mt-2">
+                                                            <input class="form-control" name="dateEnd" type="date" value="" required>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <div class="row mb-3 pt-3">
+                                                        <div class="col-sm-12">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                            <button type="submit" class="btn btn-success" id="exportButton">Download</button>
+                                                        </div>
+                                                    </div>
+
+                                                </form><!-- End General Form Elements -->
+
+                                            </div>
+                                        </div>
+                                        <!-- END Filter by Machine FORM -->
+                                        <!-- Filter by Machine MODAL END -->
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <!-- Modal untuk import data -->
+                        <div class="modal fade" id="importscrapquery" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Import Scrap Query (.xlsx) </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    @using (Html.BeginForm("importScrapQuery", "scrap", FormMethod.Post, new { enctype = "multipart/form-data", id = "importForm" }))
+                                    {
+                                        <div class="modal-body">
+                                            <!-- Filter by Machine FORM -->
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <!-- Tampilkan loading ketika proses impor sedang berlangsung -->
+                                                    <div id="loading" class="justify-content-center" style="display: none;">
+                                                        <img src="~/Content/assets/img/data_wallp.gif" style="width: 99%;" />
+                                                    </div>
+
+                                                    <!-- General Form Elements -->
+                                                    <form class="needs-validation" novalidate>
+
+                                                        <div class="form-group mb-3 pt-3">
+                                                            <label for="file">Excel File:</label>
+                                                            <input type="file" name="file" id="file" class="form-control" />
+                                                        </div>
+
+                                                        <div class="row mb-3 pt-3">
+                                                            <div class="col-sm-12">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                <button type="button" class="btn btn-danger" id="importButton">Update Query</button>
+                                                            </div>
+                                                        </div>
+
+                                                    </form><!-- End General Form Elements -->
+
+                                                </div>
+                                            </div>
+                                            <!-- END Filter by Machine FORM -->
+                                        </div>
+                                        <!-- Filter by Machine MODAL END -->
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (ViewBag.Message != null)
+                        {
+                            <p class="text-success">@ViewBag.Message</p>
+                        }
+
+                        @if (ViewBag.Error != null)
+                        {
+                            <p class="text-danger">@ViewBag.Error</p>
+                        }
+
+                        <br />  @* ---------------------------------------------------------------------------------------------- *@ <br />
+
+                        <!--FETCH DATABASE SCRAP-->
+                        <!-- Menampilkan SCRAP Output -->
+                        <table class="table datatable table-striped" style="font-size:small;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Area</th>
+                                    <th scope="col">Shift</th>
+                                    <th scope="col">Part Number</th>
+                                    <th scope="col">QTY</th>
+                                    <th scope="col">Code</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col" class="col-3">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int count_b = 0;
+                                }
+                                @if (Model != null)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        <tr id="@item.id" style="max-width:100%;">
+                                            <td>@(count_b+1)</td>
+                                            <td>@(item.date_?.ToShortDateString() ?? "N/A")</td>
+                                            <td>@item.area_name</td>
+                                            <td>@item.shift_</td>
+                                            <td>@item.partnumber</td>
+                                            <td>@item.quantity</td>
+                                            <td>@item.scrap_code</td>
+                                            <td>@item.check_</td>
+                                            <td>
+                                                <!-- Add Edit button -->
+                                                <a type="button" class="btn btn-primary me-1" href="@Url.Action("editScrap", "scrap", new { id=item.id })" style="font-size:small;"><i class="bi bi-pencil-square me-1"></i>Edit</a>
+
+                                                @* Delete Data *@
+                                                <button type="button" class="btn btn-danger ms-1" onclick="confirmDelete(@item.id)"><i class="bi bi-trash"></i>  </button>
+
+
+                                                <script>
+                                                function confirmDelete(id) {
+                                                    if (confirm('Apakah yakin ingin menghapus data scrap PN \"@item.partnumber\" ?')) {
+                                                        window.location.href = '@Url.Action("deleteScrap", "scrap", new { id = "__id__" })'.replace('__id__', id);
+                                                    }
+                                                }
+                                                </script>
+                                            </td>
+                                        </tr>
+                                        count_b++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="10">No data available</td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                        <!-- End Table with stripped rows -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+</main>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        // Event listener ketika tombol "Update Query" di klik
+        $("#importButton").click(function () {
+            // Tampilkan loading saat proses impor berlangsung
+            showLoading();
+
+            // Kirim data form secara asynchronous menggunakan AJAX
+            $.ajax({
+                type: "POST",
+                url: $("#importForm").attr("action"),
+                data: new FormData($("#importForm")[0]),
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    // Sembunyikan loading setelah impor selesai
+                    hideLoading();
+                    // Refresh halaman untuk menampilkan pesan sukses atau error
+                    location.reload();
+                },
+                error: function (error) {
+                    // Sembunyikan loading jika terjadi kesalahan
+                    hideLoading();
+                    // Tampilkan pesan error
+                    console.log(error);
+                    alert("Error occurred while importing data. Please try again.");
+                }
+            });
+        });
+
+        // Function untuk menampilkan loading
+        function showLoading() {
+            $("#loading").show();
+        }
+
+        // Function untuk menyembunyikan loading
+        function hideLoading() {
+            $("#loading").hide();
+        }
+    });
+</script>

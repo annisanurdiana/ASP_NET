@@ -1,0 +1,27 @@
+﻿@model IEnumerable<OEE_SSC.Models.pim_scrap_query>
+
+@{
+    ViewBag.Title = "importScrapQuery";
+}
+<br />
+<br />
+<br />
+<h2>importScrapQuery</h2>
+
+
+@if (TempData["Error_scrap"] != null)
+{
+
+    <div id="alert_submit2" class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Error_scrap"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["Message"] != null)
+{
+
+    <div id="alert_submit2" class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
