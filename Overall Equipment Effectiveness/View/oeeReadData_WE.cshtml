@@ -1,0 +1,1819 @@
+﻿@model OEE_SSC.Models.pimListData
+@{
+    //DateTime filterDate = ViewBag.FilterDate;
+    //DateTime dateNow = ViewBag.DateNow.Date;
+
+    if (ViewBag.inputShift == 0)
+    {
+        ViewBag.inputShift = "All Shift";
+    }
+    if (ViewBag.inputArea == null)
+    {
+        ViewBag.inputArea = "All";
+    }
+
+    ViewBag.Title = "PIM SSC";
+    Layout = null;
+}
+
+
+<!-- Vendor CSS Files -->
+<link href="~/Content/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/quill/quill.snow.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+<link href="~/Content/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+<!-- Template Main CSS File -->
+<link href="~/Content/assets/css/style.css" rel="stylesheet" />
+<link href="~/Content/assets/css/newstyle.css" rel="stylesheet" />
+
+<!-- Title Logo -->
+<link rel="icon" href="~/Content/assets/img/mattel.png" type="image/x-icon">
+
+<!-- APEX CHART -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<!-- E CHART -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
+<!--SS-->
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+<!-- Loading Style -->
+<link href="~/Content/assets/css/loading.css" rel="stylesheet" />
+
+<style>
+    #blink {
+        font-weight: bold;
+        color: #2d38be;
+        transition: 0.5s;
+    }
+
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+        border-style: solid;
+        border-color: #242424;
+        border-width: 2px;
+    }
+
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+
+    .container {
+        padding: 0;
+        margin: 0;
+        text-align: center;
+        background-color: #484848;
+        border-style: solid;
+        border-color: #242424;
+        border-width: 1px 1px 0.1px 1px; /* top, right, bottom, left */
+    }
+
+    .custom-table {
+        color: white;
+        font-size: 11px;
+    }
+
+        .custom-table thead tr th {
+            border-bottom: 2px solid #DDDDDD;
+            font-weight: 700;
+        }
+
+        .custom-table tbody tr th,
+        .custom-table tbody tr td {
+            border-bottom: 1px solid #505050;
+            font-weight: 100;
+        }
+
+    .pagination {
+        display: inline-block;
+        font-size: 11px;
+    }
+
+        .pagination a {
+            color: white;
+            float: left;
+            padding: 3px 8px;
+            text-decoration: none;
+            transition: background-color .5s;
+        }
+
+            .pagination a.active {
+                background-color: #FA6A00;
+                color: white;
+            }
+
+            .pagination a:hover:not(.active) {
+                background-color: #ddd;
+                color: #333333;
+            }
+</style>
+
+<main style="background-color:#333333; color: white;">
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-md navbar-dark justify-content-center" style="background-color: #222222;">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="col-md-11">
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo01" style="margin-left:3%;">
+                <a class="navbar-brand" href="#">
+                    <img src="~/Content/assets/img/barbie-removebg.png" width="auto" height="30" class="d-inline-block align-top" alt="" title="barbie logo">
+                </a>
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0" style="margin-right:15%">
+                    <li class="nav-item active" style="font-size: small;">
+                        <a class="nav-link" href=""> <span class="sr-only">SHIFTLY</span></a>
+                    </li>
+                    <li class="nav-item " style="font-size: small;">
+                        <a class="nav-link" href="@Url.Action("oeeFilterData", "view_oee",  new { inputShift = 0, dateFilter = 0 })" target="_blank"> <span class="sr-only">DAILY</span></a>
+                    </li>
+                    <li class="nav-item " style="font-size: small;">
+                        <a class="nav-link" href="@Url.Action("oeeReadData_WE", "view_oee")"> <span class="sr-only">WEEKLY</span></a>
+                    </li>
+                    <li class="nav-item" style="font-size: small; cursor: not-allowed;">
+                        <a class="nav-link disabled" href="#">MOLD</a>
+                    </li>
+                    <li class="nav-item" style="font-size: small; cursor: not-allowed;">
+                        <a class="nav-link disabled" href="#">LAYOUT</a>
+                    </li>
+                    <li class="nav-item" style="font-size: small; cursor: not-allowed;">
+                        <a class="nav-link disabled" href="#">
+                            EPOWER
+                            <i class="bi bi-caret-down-fill" style="font-size: 9px;"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item" style="font-size: small; cursor: not-allowed;">
+                        <a class="nav-link disabled" href="#">
+                            DETAILS
+                            <i class="bi bi-caret-down-fill" style="font-size: 9px;"></i>
+                        </a>
+                    </li>
+
+                </ul>
+
+                <ul class="navbar-nav ml-auto" style="align-items:end; justify-content:center; margin-left:13%">
+
+                    <!-- FILTER DATA BUTTON -->
+                    <li class="nav-item" style="font-size: small;">
+                        <a href="#" class="nav-link text-center" title="OEE Weekly Filter" data-bs-toggle="modal" data-bs-target="#filter_by_we">
+                            FILTER by WE
+                            <i class="bi bi-filter" style="font-size: 12px;"></i>
+                        </a>
+                    </li>
+
+                    <!-- SCREENSHOT -->
+                    <li id="blink" class="nav-item" style="font-size: small;">
+                        <blink>
+                            <a href="#" id="captureOEE" class="nav-link blinking-text" title="Download the entire webpage as an image with higher quality">
+                                &nbsp;DOWNLOAD REPORT&nbsp;
+                                <i class="bi bi-download" style="font-size: 15px; font-weight:800"></i>
+                            </a>
+                        </blink>
+                    </li>
+
+                    @*  *@
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Second Navbar -->
+    <div class="row col-md-12 ms-auto me-auto justify-content-center">
+        <div class="navbar-expand navbar-collapse col-md-12">
+            <div class="navbar-collapse col-md-12 justify-content-center" style="font-size:small;">
+                <div class="text-center ps-4 pe-2 p-1 text-bg-light" href="#">
+                    RESOURCE TOTAL
+                    <span class="badge text-bg-info">320</span>
+                </div>
+                <div class="text-center ps-2 pe-2 p-1" href="#" style="background-color: #777777;">
+                    No Schedule
+                    <span class="badge text-bg-light">0</span>
+                </div>
+                <div class="text-center ps-2 pe-2 p-1 text-black" href="#" style="background-color: #00FF00;">
+                    Running
+                    <span class="badge text-bg-light">0</span>
+                </div>
+                <div class="text-center ps-2 pe-2 p-1" href="#" style="background-color: #FF0000;">
+                    Down
+                    <span class="badge text-bg-light">0</span>
+                </div>
+                <div class="text-center ps-2 pe-2 p-1" href="#" style="background-color: #0000FF;">
+                    Setup
+                    <span class="badge text-bg-light">0</span>
+                </div>
+                <div class="text-center ps-2 pe-2 p-1" href="#" style="background-color: #8B0000;">
+                    Inspecting
+                    <span class="badge text-bg-light">0</span>
+                </div>
+                <div class="text-center ps-2 pe-2 p-1 text-danger" href="#" style="background-color: #FFFF00;">
+                    OutOfCycle
+                    <span class="badge text-bg-danger">0</span>
+                </div>
+                <div class="text-center ps-2 pe-2 p-1" href="#" style="background-color: #FFA500;">
+                    Testing
+                    <span class="badge text-bg-light">0</span>
+                </div>
+                <div class="text-center ps-2 pe-2 p-1" href="#" style="background-color: #FFC0CB;">
+                    PlanDown
+                    <span class="badge text-bg-light">0</span>
+                </div>
+                <div class="text-center ps-2 pe-2 p-1" href="#" style="background-color: #87CEEB;">
+                    Maintaining
+                    <span class="badge text-bg-light">0</span>
+                </div>
+                <div class="text-center ps-2 pe-2 p-1" href="#" style="background-color: #CA9E44;">ChangeOver <span class="badge text-bg-light">0</span></div>
+                <div class="text-center ps-2 pe-2 p-1" href="#" style="background-color: #FF0FBB;">Unknown <span class="badge text-bg-light">0</span></div>
+
+            </div>
+        </div>
+    </div>
+
+    @* FILTER DATA - OEE WEEKLY *@
+    <!-- Start Filter by WE Modal Form centered Modal-->
+    <div class="modal fade" id="filter_by_we" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-light" style="background-color: #333333b8;">
+                <div class="modal-header">
+                    <h5 class="modal-title">OEE Data Filtering by Week Ending</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- FILTER BY AREA - MODAL START -->
+                @using (Html.BeginForm("oeeFilterData_WE", "view_oee", FormMethod.Get, new { id = "importForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="modal-body">
+                        <!-- Filter by Machine FORM -->
+                        <div class="card" style="background-color: #333333a1;">
+                            <div class="card-body">
+                                <!-- General Form Elements -->
+                                <form class="needs-validation" novalidate>
+
+                                    @* ----- Input Readonly ---- *@
+
+                                    <div class="row mt-4 justify-content-center text-start ">
+                                        <div class="col-sm-10">
+                                            <div class="row mt-2">
+
+                                                <!-- Tampilkan loading ketika proses impor sedang berlangsung -->
+                                                <div id="loading" class="justify-content-center  mb-3" style="display: none;">
+                                                    <p>Please Wait.. Data is being processed...</p>
+                                                    <div class="Loading">
+                                                        <div class="Loading-progress"></div>
+                                                    </div>
+                                                </div>
+
+
+                                                <!-- Floor -->
+                                                <label for="pimFloor" class="col-sm-4 col-form-label">Floor:</label>
+                                                <div class="col-sm-8 mb-3 mt-2">
+                                                    <select id="pimFloor" name="pimFloor" class="form-control text-left" required style="background-color: #d3d3d3de; ">
+                                                        <option value="">--Select Floor--</option>
+                                                        <option value=" ">*All Floor</option>
+                                                        <option value="GF" required>GF (Ground Floor)</option>
+                                                        <option value="1F">1F (First Floor)</option>
+                                                    </select>
+                                                </div>
+
+                                                <!-- Area -->
+                                                <label for="inputArea" class="col-sm-4 col-form-label">Area:</label>
+                                                <div class="col-sm-8 mb-3 mt-2">
+                                                    <select id="inputArea" name="inputArea" class="form-control text-left" style="background-color: #d3d3d3de; ">
+                                                        <option value="">--Select Area--</option>
+                                                        <option value="0">*All Area</option>
+                                                        <option value="1">1 (1F - A,B,C,D,M3)</option>
+                                                        <option value="2">2 (1F - E,F,G,H)</option>
+                                                        <option value="3">3 (1F - J,K,L)</option>
+                                                        <option value="4">4 (1F - M,N,P)</option>
+                                                        <option value="5">5 (GF - A,B,C,D,E,F)</option>
+                                                        <option value="6">6 (GF - G,H,J,K,L,M)</option>
+                                                    </select>
+                                                </div>
+
+
+                                                <!-- WEEK ENDING -->
+                                                <label for="weFilter" class="col-sm-4 col-form-label">Week Ending</label>
+                                                <div class="col-sm-8 mb-3 mt-2">
+                                                    <select id="weFilter" name="weFilter" class="form-control text-left" style="background-color: #d3d3d3de;" required>
+                                                        <option selected disabled value="">--Select Week Ending--</option>
+                                                        @foreach (var we_ in Model.PIM_SSC_MAINs_WE)
+                                                        {
+                                                            <option value="@we_.ToString("M/d/yyyy")"> @we_.ToString("dd MMMM yyyy")</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-1 pt-4">
+                                        <div class="col-sm-12">
+                                            <button type="reset" class="btn btn-secondary">Reset</button>
+                                            <button id="importButton" type="submit" class="btn btn-success">Filter by WE</button>
+                                        </div>
+                                    </div>
+
+                                </form><!-- End General Form Elements -->
+                            </div>
+                        </div>
+                        <!-- END Filter by Machine FORM -->
+                    </div>
+                    <!-- Filter by Machine MODAL END -->
+                }
+
+            </div>
+        </div>
+    </div>
+    <!-- End Filter by AREA Modal Form centered Modal-->
+
+
+    <section class="pe-4 ps-4 pt-2 pb-3" style="min-height: 100vh;">
+        <div style="text-align: center; justify-content: center;">
+
+            <div class="copyright text-white-50" style="font-size:13px; margin-top:10px; margin-bottom:-20px;">
+                <p>
+                    OEE Dashboard Weekly Report on WE: <b>@ViewBag.weFilter </b> - Area: <b>@ViewBag.inputArea </b> - at <b>@ViewBag.pimFloor </b>
+                    @*Auto refresh:
+                        <span class="text-warning" id="countdown" style="font-weight:600"></span> s*@
+                </p>
+            </div>
+
+            @* TESTING WE LIST *@
+
+            @*<h2>WeList:</h2>
+                <ul>
+                    @foreach (var weekEnding in ViewBag.WeList)
+                    {
+                        <li>@weekEnding</li>
+                    }
+                </ul>*@
+
+            @if (ViewBag.AvgAVAILABILITY_SCORE == null && ViewBag.AvgPERFORMAMCE_SCORE == null && ViewBag.AvgQUALITY_SCORE == null && ViewBag.AvgOEE_SCORE == null)
+            {
+                <p class="mt-0 text-center d-md-block text-white p-5"><i>"... DATA OUTPUT on <b style="color:deepskyblue">@ViewBag.weFilter </b> - <span style="color:yellow">Shift: @ViewBag.inputShift </span> - <span style="color:orange;">Area: @ViewBag.inputArea </span> - <span style="color:lawngreen">at @ViewBag.pimFloor </span> - NO DATA AVAILABLE ..."</i></p>
+            }
+            else if (ViewBag.AvgAVAILABILITY_SCORE == 0 && ViewBag.AvgPERFORMAMCE_SCORE == 0 && ViewBag.AvgQUALITY_SCORE == 0 && ViewBag.AvgOEE_SCORE == 0)
+            {
+                <p class="mt-0 text-center d-md-block text-white p-5"><i>"... DATA OUTPUT on <b style="color:deepskyblue">@ViewBag.weFilter </b> - <span style="color:yellow">Shift: @ViewBag.inputShift </span> - <span style="color:orange;">Area: @ViewBag.inputArea </span> - <span style="color:lawngreen">at @ViewBag.pimFloor </span> - NO DATA AVAILABLE ..."</i></p>
+            }
+            else
+            {
+                <!-- OEE CHART -->
+                <div class="row col-md-12 ms-0 me-0 text-white">
+                    <div class="col-lg-3 col-md-6 pt-md-1" style="text-align:center; position: relative; justify-content: center;">
+                        <div id="AvgOEE_SCORE" style="width: 266px; height: 240px; margin-left: auto; margin-right: auto;"></div>
+                        <div style="margin-bottom:15px; font-size:13px;">OEE TARGET 85</div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 pt-md-1 ">
+                        <div id="AvgAVAILABILITY_SCORE"></div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 pt-md-1 ">
+                        <div id="AvgPERFORMAMCE_SCORE"></div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 pt-md-1 ">
+                        <div id="AvgQUALITY_SCORE"></div>
+                    </div>
+                </div>
+            }
+            <!-- BOX BAR CHART TEST -->
+            <div class="row col-lg-11 col-md-12 ps-1 pe-1 ms-auto me-auto  text-white">
+                <!-- OEE 7 TREND  -->
+                @*<div class="col-lg-4 col-md-11 text-white mb-3" style="background-color: #333333;">
+                        <div class="container pt-md-2 mt-md-2 pt-2 pb-1 ps-2 text-start" style="background-color: #333333; font-size: small;">
+                            <i class="bi bi-exclamation-circle-fill" style="color: #FA6A00;"></i> OEE IN THE PAST 4 WEEKS
+                        </div>
+
+                        <div class="container justify-content-center pb-4" style="border-width: 0px 1px 1px 1px;">
+                            <div id="lineOEETrend" style="width:100%; height:200px;"></div>
+                            @if (Model.pim_User_Outputs.Count() > 0)
+                                {
+                                    <div id="lineOEETrend" style="width:100%; height:200px;"></div>
+                                }
+                                else
+                                {
+                                    <p class="mt-0 text-center d-md-block text-white pt-5" style="height:185px;"><i>"...NOT FOUND..."</i></p>
+                                }
+                        </div>
+                    </div>*@
+                <!-- DOWNTIMES  -->
+                <div class="col-lg-6 col-md-11 text-white mb-3" style="background-color: #333333;">
+                    <div class="container pt-md-2 mt-md-2 pt-2 pb-1 ps-2 text-start" style="background-color: #333333; font-size: small;">
+                        <i class="bi bi-exclamation-circle-fill" style="color: #FA6A00;"></i>
+                        <a class="text-white" href="#" data-bs-toggle="modal" data-bs-target="#downtime_top">
+                            TOP <span style="color:#E9F603;"><b>5</b></span> DOWN TIME REASONS (Hours)
+                        </a>
+                    </div>
+                    <!-- TOP 5 DOWN TIME TABLE-->
+                    <div class="modal fade" id="downtime_top" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content text-light" style="background-color: #333333b8;">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">TOP <span style="color:#E9F603;"><b>5</b></span> DOWN TIME REASONS </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                @using (Html.BeginForm("oeeFilterData_WE", "view_oee", FormMethod.Get))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <div class="modal-body m-2">
+                                        <div class="m-2">
+                                            <!-- Down Times tables -->
+                                            <table class="table table-sm custom-table" style="font-size: 12px;">
+                                                @if (Model.VO_DOWNTIME_TOPs != null && Model.VO_DOWNTIME_TOPs.Count() > 0)
+                                                {
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">#</th>
+                                                            <th class="text-start ps-2" scope="col">MACHINE</th>
+                                                            <th class="text-start ps-2" scope="col">PART NUMBER</th>
+                                                            <th class="text-center" scope="col">DURATION (HRS)</th>
+                                                            <th class="text-center" scope="col">CODE</th>
+                                                            <th class="text-start" scope="col">REMARKS</th>
+                                                            <th class="text-start" scope="col">TYPE</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            var groupedData = Model.VO_DOWNTIME_TOPs
+                                                                .GroupBy(x => x.dt_remarks)
+                                                                .Select(g => new { dt_remarks = g.Key, topRecords = g.OrderByDescending(x => x.duration_minutes).Take(5) });
+
+                                                            int count_a = 0;
+                                                        }
+                                                        @foreach (var group in groupedData)
+                                                        {
+                                                            foreach (var item in group.topRecords)
+                                                            {
+                                                                <tr>
+                                                                    <td>@(count_a+1)</td>
+                                                                    <td class="text-start ps-2">@item.no_machine</td>
+                                                                    <td class="text-start ps-2">@item.partnumber</td>
+                                                                    @if (item.duration_minutes == null)
+                                                                    {
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        decimal dt_hrs = Math.Round(((decimal)item.duration_minutes / 60), 2);
+
+                                                                        if (item.duration_minutes >= 2500)
+                                                                        {
+                                                                            <td class="text-center" style="color: #FF0000;">@dt_hrs</td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td class="text-center">@dt_hrs</td>
+                                                                        }
+                                                                    }
+                                                                    <td class="text-center ps-2">@item.downtime_code</td>
+                                                                    <td class="text-start">@item.dt_remarks</td>
+                                                                    <td class="text-start">@item.dt_type</td>
+                                                                </tr>
+                                                                count_a++;
+                                                            }
+                                                        }
+                                                    </tbody>
+
+                                                }
+                                                else
+                                                {
+                                                    <p class="mt-0 text-center d-md-block text-white"><i>"... DOWN TIME DATA NOT FOUND..."</i></p>
+                                                }
+                                            </table>
+                                            <!-- End Down Times tables -->
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container justify-content-center" style="border-width: 0px 1px 1px 1px;">
+                        <!-- TOP 5 DOWN TIME CHART-->
+                        <div id="barChartDowntime" style="width:100%; height:200px;"></div>
+                        <br>
+                    </div>
+                </div>
+                <!-- REJECTS -->
+                <div class="col-lg-6 col-md-11 text-white mb-3" style="background-color: #333333;">
+                    <div class="container pt-md-2 mt-md-2 pt-2 pb-1 ps-2 text-start" style="background-color: #333333; font-size: small;">
+                        <i class="bi bi-exclamation-circle-fill" style="color: #FA6A00;"></i>
+
+                        <a class="text-white" href="#" data-bs-toggle="modal" data-bs-target="#defect_top">
+                            TOP <span style="">5</span> DEFECT REASONS (Pcs)
+                        </a>
+                    </div>
+                    <!-- TOP 5 DEFECT REASON TABLE-->
+                    <div class="modal fade" id="defect_top" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content text-light" style="background-color: #333333b8;">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">TOP <span style="">5</span> DEFECT REASONS </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                @using (Html.BeginForm("oeeFilterData_WE", "view_oee", FormMethod.Get))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <div class="modal-body m-2">
+                                        <!-- Reject Times tables -->
+                                        <table class="table table-sm custom-table">
+                                            <!-- QUALITY tables -->
+                                            @if (Model.VO_REJECT_TOPs != null && Model.VO_REJECT_TOPs.Count() > 0)
+                                            {
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">#</th>
+                                                        <th class="text-start ps-2" scope="col">MACHINE</th>
+                                                        <th class="text-start" scope="col">PART NUMBER</th>
+                                                        <th class="text-center" scope="col">QTY (PCS)</th>
+                                                        <th class="text-center" scope="col">CODE</th>
+                                                        <th class="text-start me-1" scope="col">DETAIL</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        var groupedData = Model.VO_REJECT_TOPs
+                                                            .GroupBy(x => x.rj_remarks)
+                                                            .Select(g => new { rj_remarks = g.Key, topRecords = g.OrderByDescending(x => x.reject_qty).Take(5) });
+
+                                                        int count_b = 0;
+                                                    }
+                                                    @foreach (var group in groupedData)
+                                                    {
+                                                        foreach (var item in group.topRecords)
+                                                        {
+                                                            <tr>
+                                                                <td scope="row">@(count_b+1)</td>
+                                                                <td class="text-start ps-2">@item.no_machine</td>
+                                                                <td class="text-start">@item.partnumber</td>
+                                                                <td class="text-center">@item.reject_qty</td>
+                                                                <td class="text-center">@item.reject_code</td>
+                                                                <td class="text-start">@item.rj_remarks</td>
+                                                            </tr>
+                                                            count_b++;
+                                                        }
+                                                    }
+                                                </tbody>
+
+                                            }
+                                            else
+                                            {
+                                                <p class="mt-0 text-center d-md-block text-white"><i>"... REJECT DATA NOT FOUND..."</i></p>
+                                            }
+
+                                        </table>
+                                        <!-- End Reject Times tables -->
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container ps-2 text-start" style="border-width: 0px 1px 1px 1px;">
+                        <!-- TOP 5 DEFECT REASON CHART-->
+                        <div id="barChartReject" style="width:100%; height:200px;"></div>
+
+                        <br>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TABLE LIST DOWNTIME -->
+            <div class="row col-lg-11 col-md-12 ps-1 pe-1 ms-auto me-auto  text-white">
+                <!-- DT BY MACHINE  -->
+                <div class="col-lg-4 col-md-11 text-white" style="background-color: #333333;">
+                    <div class="container pt-md-2 mt-md-2 pt-2 pb-1 ps-2 text-start" style="background-color: #333333; font-size: small;">
+                        <i class="bi bi-exclamation-circle-fill" style="color: #FA6A00;"></i>
+                        TOP <span style="color:#E9F603;"><b>20</b></span> DOWN BY MACHINE
+                    </div>
+                    <div class="container pb-4 pt-1" style="border-width: 0px 1px 1px 1px; height: 200px;">
+                        <div class="m-2">
+                            <!-- Down Times tables -->
+                            <table class="table table-sm custom-table" id="table1">
+                                @if (Model.TOP5_VO_DOWNTIMEs_MC != null && Model.TOP5_VO_DOWNTIMEs_MC.Count() > 0)
+                                {
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th class="text-start ps-2" scope="col">MACHINE</th>
+                                            <th class="text-start" scope="col">DOWN REASON</th>
+                                            <th class="text-start" scope="col">HRS</th>
+                                            <th class="text-end me-1" scope="col">LOSS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int count_a = 0;
+                                        }
+                                        @foreach (var item in Model.TOP5_VO_DOWNTIMEs_MC.GroupBy(x => new { x.no_machine, x.dt_remarks }).Take(20))
+                                        {
+                                            <tr>
+                                                <td>@(count_a+1)</td>
+                                                <td class="text-start ps-2">@item.First().no_machine</td>
+                                                <td class="text-start">@item.First().dt_remarks</td>
+                                                @if (item.First().duration_minutes == null)
+                                                {
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                }
+                                                else
+                                                {
+                                                    decimal dt_hrs = Math.Round(((decimal)item.First().duration_minutes / 60), 2);
+
+                                                    if ((item.First().duration_minutes >= 21000))
+                                                    {
+                                                        <td class="text-start" style="color: #FF0000;">@dt_hrs</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-start">@dt_hrs</td>
+                                                    }
+                                                    <td class="text-end me-1">- %</td>
+                                                }
+                                            </tr>
+                                            count_a++;
+                                        }
+                                    </tbody>
+                                }
+                                else
+                                {
+                                    <p class="mt-0 text-center d-md-block text-white"><i>"... DOWN TIME MC NOT FOUND..."</i></p>
+                                }
+                            </table>
+                            <!-- End Down Times tables -->
+                            <div class="pagination" id="pagination1"></div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DT BY PART NUMBER  -->
+                <div class="col-lg-4 col-md-11 text-white" style="background-color: #333333;">
+                    <div class="container pt-md-2 mt-md-2 pt-2 pb-1 ps-2 text-start" style="background-color: #333333; font-size: small;">
+                        <i class="bi bi-exclamation-circle-fill" style="color: #FA6A00;"></i>
+                        TOP <span style="color:#E9F603;"><b>20</b></span> DOWN BY PART NUMNER
+                    </div>
+                    <div class="container pb-4 pt-1" style="border-width: 0px 1px 1px 1px; height: 200px;">
+                        <div class="m-2">
+                            <!-- Down Times tables -->
+                            <table class="table table-sm custom-table" id="table2">
+                                @if (Model.TOP5_VO_DOWNTIMEs_PN != null && Model.TOP5_VO_DOWNTIMEs_PN.Count() > 0)
+                                {
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th class="text-start ps-2" scope="col">PART NUMBER</th>
+                                            <th class="text-start" scope="col">DOWN REASON</th>
+                                            <th class="text-start" scope="col">HRS</th>
+                                            <th class="text-end me-1" scope="col">LOSS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int count_a = 0;
+                                        }
+                                        @foreach (var item in Model.TOP5_VO_DOWNTIMEs_PN.GroupBy(x => new { x.partnumber, x.dt_remarks }).Take(20))
+                                        {
+                                            <tr>
+                                                <td>@(count_a+1)</td>
+                                                <td class="text-start ps-2">@item.First().partnumber</td>
+                                                <td class="text-start">@item.First().dt_remarks</td>
+                                                @if (item.First().duration_minutes == null)
+                                                {
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                }
+                                                else
+                                                {
+                                                    decimal dt_hrs = Math.Round(((decimal)item.First().duration_minutes / 60), 2);
+
+                                                    if ((item.First().duration_minutes >= 21000))
+                                                    {
+                                                        <td class="text-start" style="color: #FF0000;">@dt_hrs</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-start">@dt_hrs</td>
+                                                    }
+                                                    <td class="text-end me-1">- %</td>
+                                                }
+                                            </tr>
+                                            count_a++;
+                                        }
+                                    </tbody>
+                                }
+                                else
+                                {
+                                    <p class="mt-0 text-center d-md-block text-white"><i>"... DOWN TIME MC NOT FOUND..."</i></p>
+                                }
+                            </table>
+                            <!-- End Down Times tables -->
+                            <div class="pagination" id="pagination2"></div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DT BY MOLD -->
+                <div class="col-lg-4 col-md-11 text-white" style="background-color: #333333;">
+                    <div class="container pt-md-2 mt-md-2 pt-2 ps-2 pb-1 text-start" style="background-color: #333333; font-size: small;">
+                        <i class="bi bi-exclamation-circle-fill" style="color: #FA6A00;"></i>
+                        TOP <span style="color:#E9F603;"><b>20</b></span> DOWN BY MOLD
+                    </div>
+
+                    <div class="container pb-4 pt-1" style="border-width: 0px 1px 1px 1px; height: 200px;">
+                        <div class="m-2">
+                            <!-- Down Times tables -->
+                            <table class="table table-sm custom-table" id="table3">
+                                @if (Model.TOP5_VO_DOWNTIMEs_MN != null && Model.TOP5_VO_DOWNTIMEs_MN.Count() > 0)
+                                {
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th class="text-start ps-2" scope="col">MOLD</th>
+                                            <th class="text-start" scope="col">DOWN REASON</th>
+                                            <th class="text-start" scope="col">HRS</th>
+                                            <th class="text-end me-1" scope="col">LOSS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int count_a = 0;
+                                        }
+                                        @foreach (var item in Model.TOP5_VO_DOWNTIMEs_MN.GroupBy(x => new { x.mold, x.dt_remarks }).Take(20))
+                                        {
+                                            <tr>
+                                                <td>@(count_a+1)</td>
+                                                <td class="text-start ps-2">@item.First().mold</td>
+                                                <td class="text-start">@item.First().dt_remarks</td>
+                                                @if (item.First().duration_minutes == null)
+                                                {
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                }
+                                                else
+                                                {
+                                                    decimal dt_hrs = Math.Round(((decimal)item.First().duration_minutes / 60), 2);
+
+                                                    if ((item.First().duration_minutes >= 21000))
+                                                    {
+                                                        <td class="text-start" style="color: #FF0000;">@dt_hrs</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-start">@dt_hrs</td>
+                                                    }
+                                                    <td class="text-end me-1">- %</td>
+                                                }
+                                            </tr>
+                                            count_a++;
+                                        }
+                                    </tbody>
+                                }
+                                else
+                                {
+                                    <p class="mt-0 text-center d-md-block text-white"><i>"... DOWN TIME MOLD NOT FOUND..."</i></p>
+                                }
+                            </table>
+                            <!-- End Down Times tables -->
+                            <div class="pagination" id="pagination3"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABLE LIST DEFECT -->
+            <div class="row col-lg-11 col-md-12 pt-3 ps-1 pe-1 ms-auto me-auto text-white">
+                <!-- RJ BY MACHINE  -->
+                <div class="col-lg-4 col-md-11 text-white" style="background-color: #333333;">
+                    <div class="container pt-md-2 mt-md-2 pt-2 pb-1 ps-2 text-start" style="background-color: #333333; font-size: small;">
+                        <i class="bi bi-exclamation-circle-fill" style="color: #FA6A00;"></i>
+                        TOP <span style="color:#E9F603;"><b>20</b></span> LOW QUALITY BY MACHINE
+                    </div>
+
+
+                    <div class="container pb-4 pt-1" style="border-width: 0px 1px 1px 1px; height: 200px;">
+                        <div class="m-2">
+                            <!-- Reject Times tables -->
+                            <table class="table table-sm custom-table" id="table4">
+                                <!-- QUALITY tables -->
+                                @if (Model.TOP5_VO_REJECTs_MC.Count() > 0)
+                                {
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th class="text-start ps-2" scope="col">MACHINE</th>
+                                            <th class="text-start" scope="col">REASON</th>
+                                            <th class="text-end me-1" scope="col">RATE (PPM)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @{
+                                            int count_b = 0;
+                                            decimal rj_rate2 = 0;
+                                        }
+                                        @foreach (var item in Model.TOP5_VO_REJECTs_MC.GroupBy(x => new { x.no_machine, x.rj_remarks }).Take(20))
+                                        {
+                                            //System.InvalidOperationException: 'Nullable object must have a value.'
+                                            rj_rate2 = Math.Round(((decimal)item.First().reject_qty.Value / (decimal)item.First().total_actoutput.Value) * 100, 2);
+
+                                            //---------------------------------------//
+                                            <tr>
+                                                <td scope="row">@(count_b+1)</td>
+                                                <td class="text-start ps-2">@item.First().no_machine</td>
+                                                <td class="text-start">@item.First().rj_remarks</td>
+                                                <td class="text-end me-1">
+                                                    @if (rj_rate2 > 1000)
+                                                    {
+                                                        <!-- #,##0 digunakan untuk memisahkan ribuan dengan koma.-->
+                                                        <p style="margin-bottom: 0; color: #FF0000;">@string.Format("{0:#,##0}", rj_rate2 * 10000)</p>
+                                                    }
+                                                    else if (rj_rate2 >= 900)
+                                                    {
+                                                        <!-- #,##0 digunakan untuk memisahkan ribuan dengan koma.-->
+                                                        <p style="margin-bottom: 0; color:red;">@string.Format("{0:#,##0}", rj_rate2 * 10000)</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <!-- #,##0 digunakan untuk memisahkan ribuan dengan koma.-->
+                                                        <p style="margin-bottom: 0;">@string.Format("{0:#,##0}", rj_rate2 * 10000)</p>
+                                                    }
+                                                </td>
+                                            </tr>
+                                            count_b++;
+                                        }
+                                    </tbody>
+                                }
+                                else
+                                {
+                                    <p class="mt-0 text-center d-md-block text-white"><i>"... REJECT BY MACHINE NOT FOUND..."</i></p>
+                                }
+
+                            </table>
+                            <!-- End Reject Times tables -->
+                            <div class="pagination" id="pagination4"></div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RJ BY PART NUMBER  -->
+                <div class="col-lg-4 col-md-11 text-white" style="background-color: #333333;">
+                    <div class="container pt-md-2 mt-md-2 pt-2 pb-1 ps-2 text-start" style="background-color: #333333; font-size: small;">
+                        <i class="bi bi-exclamation-circle-fill" style="color: #FA6A00;"></i>
+                        TOP <span style="color:#E9F603;"><b>20</b></span> LOW QUALITY BY PART NUMNER
+                    </div>
+
+
+                    <div class="container pb-4 pt-1" style="border-width: 0px 1px 1px 1px; height: 200px;">
+                        <div class="m-2">
+                            <!-- Down Times tables -->
+                            <table class="table table-sm custom-table" id="table5">
+                                <!-- QUALITY tables -->
+                                @if (Model.TOP5_VO_REJECTs_PN.Count() > 0)
+                                {
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th class="text-start ps-2" scope="col">PART NUMBER</th>
+                                            <th class="text-start" scope="col">REASON</th>
+                                            <th class="text-end me-1" scope="col">RATE (PPM)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @{
+                                            int count_b = 0;
+                                            decimal rj_rate2 = 0;
+                                        }
+                                        @foreach (var item in Model.TOP5_VO_REJECTs_PN.GroupBy(x => new { x.partnumber, x.rj_remarks }).Take(20))
+                                        {
+                                            //System.InvalidOperationException: 'Nullable object must have a value.'
+                                            rj_rate2 = Math.Round(((decimal)item.First().reject_qty.Value / (decimal)item.First().total_actoutput.Value) * 100, 2);
+
+                                            //---------------------------------------//
+                                            <tr>
+                                                <td scope="row">@(count_b+1)</td>
+                                                <td class="text-start ps-2">@item.First().partnumber</td>
+                                                <td class="text-start">@item.First().rj_remarks</td>
+                                                <td class="text-end me-1">
+                                                    @if (rj_rate2 > 1000)
+                                                    {
+                                                        <!-- #,##0 digunakan untuk memisahkan ribuan dengan koma.-->
+                                                        <p style="margin-bottom: 0; color: #FF0000;">@string.Format("{0:#,##0}", rj_rate2 * 10000)</p>
+                                                    }
+                                                    else if (rj_rate2 >= 900)
+                                                    {
+                                                        <!-- #,##0 digunakan untuk memisahkan ribuan dengan koma.-->
+                                                        <p style="margin-bottom: 0; color:red;">@string.Format("{0:#,##0}", rj_rate2 * 10000)</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <!-- #,##0 digunakan untuk memisahkan ribuan dengan koma.-->
+                                                        <p style="margin-bottom: 0;">@string.Format("{0:#,##0}", rj_rate2 * 10000)</p>
+                                                    }
+                                                </td>
+                                            </tr>
+                                            count_b++;
+                                        }
+                                    </tbody>
+                                }
+                                else
+                                {
+                                    <p class="mt-0 text-center d-md-block text-white"><i>"... REJECT BY PART NUMBER NOT FOUND..."</i></p>
+                                }
+
+                            </table>
+                            <!-- End Down Times tables -->
+                            <div class="pagination" id="pagination5"></div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RJ BY MOLD -->
+                <div class="col-lg-4 col-md-11 text-white" style="background-color: #333333;">
+                    <div class="container pt-md-2 mt-md-2 pt-2 ps-2 pb-1 text-start" style="background-color: #333333; font-size: small;">
+                        <i class="bi bi-exclamation-circle-fill" style="color: #FA6A00;"></i>
+                        TOP <span style="color:#E9F603;"><b>20</b></span> LOW QUALITY BY MOLD
+                    </div>
+
+                    <div class="container pb-4 pt-1" style="border-width: 0px 1px 1px 1px; height: 200px;">
+                        <div class="m-2">
+                            <!-- Down Times tables -->
+                            <table class="table table-sm custom-table" id="table6">
+                                <!-- QUALITY tables -->
+                                @if (Model.TOP5_VO_REJECTs_MN.Count() > 0)
+                                {
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th class="text-start ps-2" scope="col">MOLD</th>
+                                            <th class="text-start" scope="col">REASON</th>
+                                            <th class="text-end me-1" scope="col">RATE (PPM)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @{
+                                            int count_b = 0;
+                                            decimal rj_rate2 = 0;
+                                        }
+                                        @foreach (var item in Model.TOP5_VO_REJECTs_MN.GroupBy(x => new { x.mold, x.rj_remarks }).Take(20))
+                                        {
+                                            //System.InvalidOperationException: 'Nullable object must have a value.'
+                                            rj_rate2 = Math.Round(((decimal)item.First().reject_qty.Value / (decimal)item.First().total_actoutput.Value) * 100, 2);
+
+                                            //---------------------------------------//
+                                            <tr>
+                                                <td scope="row">@(count_b+1)</td>
+                                                <td class="text-start ps-2">@item.First().mold</td>
+                                                <td class="text-start">@item.First().rj_remarks</td>
+                                                <td class="text-end me-1">
+                                                    @if (rj_rate2 > 1000)
+                                                    {
+                                                        <!-- #,##0 digunakan untuk memisahkan ribuan dengan koma.-->
+                                                        <p style="margin-bottom: 0; color: #FF0000;">@string.Format("{0:#,##0}", rj_rate2 * 10000)</p>
+                                                    }
+                                                    else if (rj_rate2 >= 900)
+                                                    {
+                                                        <!-- #,##0 digunakan untuk memisahkan ribuan dengan koma.-->
+                                                        <p style="margin-bottom: 0; color:red;">@string.Format("{0:#,##0}", rj_rate2 * 10000)</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <!-- #,##0 digunakan untuk memisahkan ribuan dengan koma.-->
+                                                        <p style="margin-bottom: 0;">@string.Format("{0:#,##0}", rj_rate2 * 10000)</p>
+                                                    }
+                                                </td>
+                                            </tr>
+                                            count_b++;
+                                        }
+                                    </tbody>
+                                }
+                                else
+                                {
+                                    <p class="mt-0 text-center d-md-block text-white"><i>"... REJECT BY MOLD NOT FOUND..."</i></p>
+                                }
+
+                            </table>
+                            <!-- End Down Times tables -->
+                            <div class="pagination" id="pagination6"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ======= Footer ======= -->
+    <footer class="justify-content-center text-center mt-5 pb-4">
+        <div class="copyright text-white-50" style="font-size:11px;">
+
+            @*<p>
+                    OEE Dashboard Report on <b>@ViewBag.FilterDate.ToShortDateString() </b> - Shift <b>@ViewBag.inputShift </b>
+                </p>*@
+
+            <p>
+                <i style="font-size:13px; margin-top:5px;">
+                    Mattel Confidential Information – May Contain Trade Secrets – Do Not Distribute.
+                </i>
+            </p>
+            &copy; 2023
+            <a target="_blank" href="https://about.mattel.com/">
+                <strong><span class=" text-white-50">Mattel, Inc.</span></strong>
+            </a> All Rights Reserved - managed by
+            <strong><a class=" text-white-50" href="mailto:Annisa.Nurdiana@Mattel.com">Software Developer</a></strong>
+            PIM Ind.
+
+        </div>
+    </footer>
+    <!-- ======= End Footer =======  -->
+</main>
+
+
+<script src="~/Content/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- E CHART -->
+<script type="text/javascript">
+
+    function barChartDowntime() {
+      // Initialize the echarts instance based on the prepared dom
+      var barChartDowntime = echarts.init(document.getElementById('barChartDowntime'));
+
+      // Get the chart data from ViewBag
+      var chartData = JSON.parse('@Html.Raw(ViewBag.ChartData)');
+
+      // Create an array of objects with data and labels
+      var dataWithLabels = chartData.xAxis.data.map(function (value, index) {
+        return {
+          data: chartData.series[0].data[index],
+          label: value
+        };
+      });
+
+      // Sort the array based on data values in descending order
+       dataWithLabels.sort(function (max_value, min_value) {
+           return max_value.data - min_value.data;
+      });
+
+      // Separate the sorted data and labels
+      var sortedData = dataWithLabels.map(function (item) {
+        return item.data;
+      });
+      var sortedLabels = dataWithLabels.map(function (item) {
+        return item.label;
+      });
+
+      // Specify the configuration items and data for the chart
+      var option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {},
+        grid: {
+          top: '9%',
+          left: '5%',
+          right: '9%',
+          bottom: '2%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'value',
+          axisLabel: {
+            textStyle: {
+              color: 'white'
+            }
+          }
+        },
+        yAxis: {
+          type: 'category',
+          data: sortedLabels,
+          axisLabel: {
+            textStyle: {
+              color: 'white',
+              fontSize: 9
+            }
+          }
+        },
+        series: [
+          {
+            type: 'bar',
+            stack: 'total',
+            label: {
+              show: true,
+              textStyle: {
+                  fontWeight: 'bold',
+                  fontSize: 12
+              }
+            },
+            emphasis: {
+              focus: 'series'
+            },
+            itemStyle: {
+              normal: {
+                color: '#0066CC'
+              }
+            },
+            data: sortedData
+          }
+        ]
+      };
+
+      // Display the chart using the configuration items and data
+      barChartDowntime.setOption(option);
+    }
+    // Call the function to render the chart
+    barChartDowntime();
+
+    function barChartReject() {
+      // Initialize the echarts instance based on the prepared dom
+      var barChartReject = echarts.init(document.getElementById('barChartReject'));
+
+      // Get the chart data from ViewBag
+      var chartData = JSON.parse('@Html.Raw(ViewBag.ChartData2)');
+
+      // Create an array of objects with data and labels
+      var dataWithLabels = chartData.xAxis.data.map(function (value, index) {
+        return {
+          data: chartData.series[0].data[index],
+          label: value
+        };
+      });
+
+      // Sort the array based on data values in descending order
+        dataWithLabels.sort(function (max_value, min_value) {
+           return max_value.data - min_value.data;
+      });
+
+      // Separate the sorted data and labels
+      var sortedData = dataWithLabels.map(function (item) {
+        return item.data;
+      });
+      var sortedLabels = dataWithLabels.map(function (item) {
+        return item.label;
+      });
+
+      // Specify the configuration items and data for the chart
+      var option = {
+        animation: true,
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {},
+        grid: {
+          top: '9%',
+          left: '5%',
+          right: '9%',
+          bottom: '2%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'value',
+          scale: false,
+          axisLabel: {
+            textStyle: {
+              color: 'white'
+            },
+            formatter: '{value}',
+            interval: 9
+          },
+          axisPointer: {
+            snap: false
+          }
+        },
+        yAxis: {
+          type: 'category',
+          data: sortedLabels,
+          axisLabel: {
+            textStyle: {
+              color: 'white',
+              fontSize: 9
+            }
+          }
+        },
+        series: [
+          {
+            type: 'bar',
+            stack: 'total',
+            label: {
+              show: true,
+              textStyle: {
+                  fontWeight: 'bold',
+                  fontSize: 12
+              }
+            },
+            emphasis: {
+              focus: 'series'
+            },
+            itemStyle: {
+              normal: {
+                color: '#FF00FF'
+              }
+            },
+            data: sortedData
+          }
+        ]
+      };
+
+      // Display the chart using the configuration items and data
+      barChartReject.setOption(option);
+    }
+    // Call the function to render the chart
+    barChartReject();
+
+    function oeeGaugeChart() {
+        // Menginisialisasi grafik
+        var myChart = echarts.init(document.getElementById('AvgOEE_SCORE'));
+
+        // Konfigurasi grafik
+        var option = {
+            series: [
+                {
+                    type: 'gauge',
+                    axisLine: {
+                        lineStyle: {
+                            width: 17,
+                            color: [
+                                [0.40, '#FF0000'],
+                                [0.69, '#FFFF00'],
+                                [1, '#00FF00']
+                            ]
+                        }
+                    },
+                    axisLabel: {
+                        show: false // Menghilangkan angka pada chart
+                    },
+                    startAngle: -90,
+                    endAngle: 270,
+                    pointer: {
+                        itemStyle: {
+                            color: 'inherit'
+                        },
+                        length: '79%' // Mengatur panjang jarum (misalnya 80% dari radius)
+                    },
+                    axisTick: {
+                        show: false // Menghilangkan tick pada chart
+                    },
+                    splitLine: {
+                        show: false // Menghilangkan splitline pada chart
+                    },
+                    detail: {
+                        valueAnimation: true,
+                        formatter: '{value}',
+                        textStyle: {
+                            fontSize: 22 // Atur ukuran font sesuai kebutuhan
+                        },
+                        color: 'inherit'
+                    },
+                    data: [
+                        {
+                            value: @ViewBag.OEE_SCORE2,
+                            //name: 'OEE'
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // Memperbarui data grafik setiap 2 detik
+        setInterval(function () {
+            myChart.setOption({
+                series: [
+                    {
+                        data: [
+                            {
+                                //name: 'OEE',
+                                value: +( @ViewBag.OEE_SCORE2).toFixed(2)
+                            }
+                        ]
+                    }
+                ]
+            });
+        }, 2000);
+
+        // Menampilkan grafik
+        myChart.setOption(option);
+    }
+    // Call the function to render the gauge chart
+    oeeGaugeChart();
+
+
+
+    // Panggil fungsi untuk menampilkan grafik
+    AvgAVAILABILITY_SCORE();
+    AvgPERFORMAMCE_SCORE();
+    AvgQUALITY_SCORE();
+    //AvgOEE_SCORE();
+
+    function AvgAVAILABILITY_SCORE() {
+        var options = {
+            series: [@ViewBag.availability_SCORE],
+            chart: {
+                height: 264,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    startAngle: -180,
+                    endAngle: 180,
+                    hollow: {
+                        margin: 0,
+                        size: '55%',
+                        background: '#333333',
+                        image: undefined,
+                        imageOffsetX: 0,
+                        imageOffsetY: 0,
+                        position: 'front',
+                        dropShadow: {
+                            enabled: true,
+                            top: 3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.24
+                        }
+                    },
+                    track: {
+                        background: '#333333',
+                        strokeWidth: '50%',
+                        margin: 0,
+                        dropShadow: {
+                            enabled: true,
+                            top: -3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.35
+                        }
+                    },
+
+                    dataLabels: {
+                        show: true,
+                        value: {
+                            formatter: function (val) {
+                                return val.toFixed(2); // Menampilkan angka dengan dua angka desimal
+                            },
+                            offsetY: -12,
+                            color: '#FA8923',
+                            fontSize: '36px',
+                            show: true,
+                        },
+                        name: {
+                            offsetY: 25,
+                            show: true,
+                            color: '#FA8923',
+                            fontSize: '11px'
+                        }
+                    }
+                }
+            },
+            fill: {
+                type: 'solid',
+                colors: ['rgb(250,137,35)']
+            },
+            stroke: {
+                lineCap: 'straight'
+            },
+            labels: ['AVAILABILITY'],
+        };
+
+        var AvgAVAILABILITY_SCORE = new ApexCharts(document.querySelector("#AvgAVAILABILITY_SCORE"), options);
+        AvgAVAILABILITY_SCORE.render();
+    }
+
+    function AvgPERFORMAMCE_SCORE() {
+        var options = {
+            series: [@ViewBag.performance_SCORE],
+            chart: {
+                height: 264,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    startAngle: -180,
+                    endAngle: 180,
+                    hollow: {
+                        margin: 0,
+                        size: '55%',
+                        background: '#333333',
+                        image: undefined,
+                        imageOffsetX: 0,
+                        imageOffsetY: 0,
+                        position: 'front',
+                        dropShadow: {
+                            enabled: true,
+                            top: 3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.24
+                        }
+                    },
+                    track: {
+                        background: '#333333',
+                        strokeWidth: '50%',
+                        margin: 0,
+                        dropShadow: {
+                            enabled: true,
+                            top: -3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.35
+                        }
+                    },
+
+                    dataLabels: {
+                        show: true,
+                        value: {
+                            formatter: function (val) {
+                                return val.toFixed(2); // Menampilkan angka dengan dua angka desimal
+                            },
+                            offsetY: -12,
+                            color: '#04BAFE',
+                            fontSize: '36px',
+                            show: true,
+                        },
+                        name: {
+                            offsetY: 25,
+                            show: true,
+                            color: '#04BAFE',
+                            fontSize: '11px'
+                        }
+                    }
+                }
+            },
+            fill: {
+                type: 'solid',
+                colors: ['rgb(4,186,254)']
+            },
+            stroke: {
+                lineCap: 'straight'
+            },
+            labels: ['PERFORMANCE'],
+        };
+
+        var AvgPERFORMAMCE_SCORE = new ApexCharts(document.querySelector("#AvgPERFORMAMCE_SCORE"), options);
+        AvgPERFORMAMCE_SCORE.render();
+    }
+
+    function AvgQUALITY_SCORE() {
+        var options = {
+            series: [@ViewBag.quality_SCORE],
+            chart: {
+                height: 264,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    startAngle: -180,
+                    endAngle: 180,
+                    hollow: {
+                        margin: 0,
+                        size: '55%',
+                        background: '#333333',
+                        image: undefined,
+                        imageOffsetX: 0,
+                        imageOffsetY: 0,
+                        position: 'front',
+                        dropShadow: {
+                            enabled: true,
+                            top: 3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.24
+                        }
+                    },
+                    track: {
+                        background: '#333333',
+                        strokeWidth: '50%',
+                        margin: 0,
+                        dropShadow: {
+                            enabled: true,
+                            top: -3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.35
+                        }
+                    },
+
+                    dataLabels: {
+                        show: true,
+                        value: {
+                            formatter: function (val) {
+                                return val.toFixed(2); // Menampilkan angka dengan dua angka desimal
+                            },
+                            offsetY: -12,
+                            color: '#ABE738',
+                            fontSize: '36px',
+                            show: true,
+                        },
+                        name: {
+                            offsetY: 25,
+                            show: true,
+                            color: '#ABE738',
+                            fontSize: '11px'
+                        }
+                    }
+                }
+            },
+            fill: {
+                type: 'solid',
+                colors: ['rgb(171,231,56)']
+            },
+            stroke: {
+                lineCap: 'straight'
+            },
+            labels: ['QUALITY'],
+        };
+
+        var AvgQUALITY_SCORE = new ApexCharts(document.querySelector("#AvgQUALITY_SCORE"), options);
+        AvgQUALITY_SCORE.render();
+    }
+
+    function AvgOEE_SCORE() {
+
+        var options = {
+            series: [90.12],
+            chart: {
+                height: 200,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    startAngle: -180,
+                    endAngle: 180,
+                    hollow: {
+                        margin: 0,
+                        size: '50%',
+                        background: '#333333',
+                        image: undefined,
+                        imageOffsetX: 0,
+                        imageOffsetY: 0,
+                        position: 'front',
+                        dropShadow: {
+                            enabled: true,
+                            top: 3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.24
+                        }
+                    },
+                    track: {
+                        background: '#333333',
+                        strokeWidth: '50%',
+                        margin: 0,
+                        dropShadow: {
+                            enabled: true,
+                            top: -3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.35
+                        }
+                    },
+
+                    dataLabels: {
+                        show: true,
+                        value: {
+                            formatter: function (val) {
+                                return parseInt(val);
+                            },
+                            offsetY: -12,
+                            color: '#00FF00',
+                            fontSize: '36px',
+                            show: true,
+                        },
+                        name: {
+                            offsetY: 25,
+                            show: true,
+                            color: '#00FF00',
+                            fontSize: '9px'
+                        }
+                    }
+                }
+            },
+            fill: {
+                type: 'solid',
+                colors: [87 >= 85 ? '#00FF00' : '#FF0000']
+            },
+            stroke: {
+                lineCap: 'straight'
+            },
+            labels: ['OWW'],
+        };
+
+        var AvgOEE_SCORE = new ApexCharts(document.querySelector("#AvgOEE_SCORE"), options);
+        AvgOEE_SCORE.render();
+    }
+
+    //SCREESHOT
+    function captureOEEScreenshot() {
+        html2canvas(document.body, { scale: 3 }).then(function (canvas) {
+            var screenshotUrl = canvas.toDataURL("image/jpeg", 0.9);
+
+            // Create a temporary download link
+            var link = document.createElement("a");
+            link.href = screenshotUrl;
+            link.download = "OEE Report Dashboard.png";
+            link.click();
+        });
+    }
+
+    var captureOEE = document.getElementById("captureOEE");
+    captureOEE.addEventListener("click", captureOEEScreenshot);
+</script>
+
+@* BLINK EFFECT *@
+<script type="text/javascript">
+    var blink = document.getElementById('blink');
+    var opacity = 1;
+    var fadingOut = true;
+
+    setInterval(function () {
+        if (fadingOut) {
+            opacity -= 0.03; // Adjust the decrement value to control the fading speed
+            if (opacity <= 0.3) {
+                fadingOut = false;
+            }
+        } else {
+            opacity += 0.03; // Adjust the increment value to control the fading speed
+            if (opacity >= 1) {
+                fadingOut = true;
+            }
+        }
+        blink.style.opacity = opacity;
+    }, 60);
+</script>
+@* COUNT DOWN *@
+<script>
+    var timeLeft = 1800; // Waktu dalam detik (300 detik = 5 menit, start from 299)
+    var countdown = setInterval(function () {
+        // Menghitung menit
+        var minutes = Math.floor(timeLeft / 60);
+        // Menghitung detik
+        var seconds = timeLeft % 60;
+        // Menggabungkan menit dan detik
+        var countdownStr = minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
+        // Menampilkan countdown
+        document.getElementById("countdown").innerHTML = countdownStr;
+        if (timeLeft == 0) {
+            location.reload();
+        }
+        timeLeft--;
+    }, 1000);
+
+    setTimeout(function () {
+        var dateNow = new Date(); // tanggal sekarang
+        var inputShift = "@ViewBag.inputShift"; // shift saat ini
+        var inputShiftNow = "@ViewBag.inputShiftNow"; // shift saat ini
+
+        if (inputShift >= inputShiftNow) {
+            location.reload();
+        } else {
+            setTimeout(arguments.callee, 1800000); // coba lagi setelah 5 menit
+        }
+    }, 1800000);
+
+    // select all checkboxes when "select all" checkbox is clicked
+    $('#selectAll').click(function () {
+        $('input[name="areaLine"]').prop('checked', this.checked);
+    });
+</script>
+
+@* PAGINATION *@
+<script>
+    var currentPage1 = 1;
+    var rowsPerPage1 = 5;
+
+    var currentPage2 = 1;
+    var rowsPerPage2 = 5;
+
+    var currentPage3 = 1;
+    var rowsPerPage3 = 5;
+
+    var currentPage4 = 1;
+    var rowsPerPage4 = 5;
+
+    var currentPage5 = 1;
+    var rowsPerPage5 = 5;
+
+    var currentPage6 = 1;
+    var rowsPerPage6 = 5;
+
+    function displayTableData(tableId, currentPage, rowsPerPage) {
+        var table = document.getElementById(tableId);
+        var tbody = table.getElementsByTagName('tbody')[0];
+        var rows = tbody.getElementsByTagName('tr');
+        var totalPages = Math.ceil(rows.length / rowsPerPage);
+
+        for (var i = 0; i < rows.length; i++) {
+            if (i < (currentPage - 1) * rowsPerPage || i >= currentPage * rowsPerPage) {
+                rows[i].style.display = 'none';
+            } else {
+                rows[i].style.display = 'table-row';
+            }
+        }
+
+        var pagination = document.getElementById('pagination' + tableId.slice(-1));
+        pagination.innerHTML = '';
+
+        for (var i = 1; i <= totalPages; i++) {
+            var link = document.createElement('a');
+            link.href = '#';
+            link.innerHTML = i;
+
+            link.addEventListener('click', function (event) {
+                //  This will prevent the default behavior
+                event.preventDefault(); // Prevent page scroll to top
+                currentPage = parseInt(event.target.innerHTML);
+                displayTableData(tableId, currentPage, rowsPerPage);
+
+                //var currentActiveLink = pagination.querySelector('.active');
+                //if (currentActiveLink) {
+                //    currentActiveLink.classList.remove('active');
+                //}
+                event.target.classList.add('active');
+            });
+
+            pagination.appendChild(link);
+        }
+
+        //var currentActiveLink = pagination.querySelector('.active');
+        //if (currentActiveLink) {
+        //    currentActiveLink.classList.remove('active');
+        //}
+        var newActiveLink = pagination.getElementsByTagName('a')[currentPage - 1];
+        newActiveLink.classList.add('active');
+    }
+
+    displayTableData('table1', currentPage1, rowsPerPage1);
+    displayTableData('table2', currentPage2, rowsPerPage2);
+    displayTableData('table3', currentPage3, rowsPerPage3);
+
+    displayTableData('table4', currentPage4, rowsPerPage4);
+    displayTableData('table5', currentPage5, rowsPerPage5);
+    displayTableData('table6', currentPage6, rowsPerPage6);
+
+</script>
+
+@* LOADING DATA PROCESSING *@
+<script>
+    $(document).ready(function () {
+        // Event listener ketika tombol "Update Query" di klik
+        $("#importButton").click(function () {
+            // Tampilkan loading saat proses impor berlangsung
+            showLoading();
+
+            // Kirim data form secara asynchronous menggunakan AJAX
+            $.ajax({
+                type: "POST",
+                url: $("#importForm").attr("action"),
+                data: new FormData($("#importForm")[0]),
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    // Sembunyikan loading setelah impor selesai
+                    hideLoading();
+                    // Refresh halaman untuk menampilkan pesan sukses atau error
+                    //location.reload();
+                },
+                error: function (error) {
+                    // Sembunyikan loading jika terjadi kesalahan
+                    hideLoading();
+                    // Tampilkan pesan error
+                    console.log(error);
+                    //alert("Error occurred while importing data. Please try again.");
+                }
+            });
+        });
+
+        // Function untuk menampilkan loading
+        function showLoading() {
+            $("#loading").show();
+        }
+
+        // Function untuk menyembunyikan loading
+        function hideLoading() {
+            $("#loading").hide();
+        }
+    });
+</script>
+
+

@@ -1,0 +1,231 @@
+﻿@model IEnumerable<OEE_SSC.Models.pim_oee>
+
+@{
+    ViewBag.Title = "data_oee";
+}
+
+<h2>data_oee</h2>
+
+<main id="" class="main" style="padding: 85px 35px 40px 35px;">
+    <section class="section">
+
+        <p class="mt-0 text-center d-md-block">
+            <b>OEE MONITORING - </b>Auto refresh:
+            <span class="text-primary" id="countdown" style="font-weight:700"></span> s
+        </p>
+
+        @if (ViewBag.oee_availability == null && ViewBag.oee_performance == null && ViewBag.oee_quality == null && ViewBag.oee_db_value == null)
+        {
+
+            <p class="mt-0 text-center d-md-block">
+                Availability: 0% &nbsp;
+                Performance:0%  &nbsp;
+                Quality: 0%  &nbsp;
+                <br /> <br />
+                <b>OEE: 0% </b>
+            </p>
+        }
+        @*else if (ViewBag.oee_availability == 0 && ViewBag.oee_performance == 0 && ViewBag.oee_quality == 0 && ViewBag.oee_db_value == 0)
+        {
+
+            <p class="mt-0 text-center d-md-block">
+                Availability: 0% &nbsp;
+                Performance:0%  &nbsp;
+                Quality: 0%  &nbsp;
+                <br /> <br />
+                <b>OEE: 0% </b>
+            </p>
+        }*@
+        else
+        {
+
+            <p class="mt-0 text-center d-md-block">
+                @*@ViewBag.oee_availability*@
+                Availability: @ViewBag.oee_availability &nbsp;
+                Performance: @ViewBag.oee_performance &nbsp;
+                Quality: @ViewBag.oee_quality &nbsp;
+                <br /> <br />
+                <b>OEE: @ViewBag.oee_db </b>
+            </p>
+        }
+
+
+        <div class="row justify-content-center">
+            <div class="col-lg-11 pt-lg-2">
+                <div class="card col-lg-12 mt-4 pt-4">
+                    <div class="card-body">
+
+                        <table class="table table-borderless table-hover datatable mt-1" style="overflow-x: auto;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Main ID</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">WE</th>
+                                    <th scope="col">Machine</th>
+                                    <th scope="col">Shift</th>
+                                    <th scope="col">availability</th>
+                                    <th scope="col">performance</th>
+                                    <th scope="col">quality</th>
+                                    <th scope="col">oee</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr scope="row">
+                                        <td>
+                                            @if (item.main_id == null)
+                                            {
+                                                <p></p>
+                                            }
+                                            else
+                                            {
+                                                @item.main_id
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.date_ == null)
+                                            {
+                                                <p></p>
+                                            }
+                                            else
+                                            {
+                                                @item.date_
+                                            }
+                                        </td>
+
+                                        <td>
+                                            @if (item.we == null)
+                                            {
+                                                <p></p>
+                                            }
+                                            else
+                                            {
+                                                @item.we
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.machine == null)
+                                            {
+                                                <p></p>
+                                            }
+                                            else
+                                            {
+                                                @item.machine
+                                            }
+                                        </td>
+
+                                        <td>
+                                            @if (item.shift == null)
+                                            {
+                                                <p></p>
+                                            }
+                                            else
+                                            {
+                                                @item.shift
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.availability == null)
+                                            {
+                                                <p>-</p>
+                                            }
+                                            else if (item.availability < 0)
+                                            {
+                                                <p>0%</p>
+                                            }
+                                            else
+                                            {
+                                                @(string.Format("{0:P0}", item.availability))
+                                                @*@item.availability*@
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.performance == null)
+                                            {
+                                                <p>-</p>
+                                            }
+                                            else if (item.performance < 0)
+                                            {
+                                                <p>0%</p>
+                                            }
+                                            else
+                                            {
+                                                @(string.Format("{0:P0}", item.performance))
+                                                @*@item.performance*@
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.quality == null)
+                                            {
+                                                <p>-</p>
+                                            }
+                                            else if (item.quality < 0)
+                                            {
+                                                <p>0%</p>
+                                            }
+                                            else
+                                            {
+                                                @(string.Format("{0:P0}", item.quality))
+                                                @*@item.quality*@
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.oee == null)
+                                            {
+                                                <p></p>
+                                            }
+                                            else if (item.oee < 0)
+                                            {
+                                                <p>0%</p>
+                                            }
+                                            else
+                                            {
+                                                @(string.Format("{0:P0}", item.oee))
+                                                @*@item.oee*@
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+
+    var timeLeft = 60; // Waktu dalam detik (60 detik = 1 menit, start from 59)
+    var countdown = setInterval(function () {
+        // Menghitung menit
+        var minutes = Math.floor(timeLeft / 60);
+        // Menghitung detik
+        var seconds = timeLeft % 60;
+        // Menggabungkan menit dan detik
+        var countdownStr = minutes + ":" + seconds;
+        // Menambahkan 0 di depan detik jika kurang dari 10
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        // Menampilkan countdown
+        timeLeft--;
+        document.getElementById("countdown").innerHTML = countdownStr;
+        if (timeLeft == 0) {
+            location.reload();
+        }
+    }, 1000);
+
+    setTimeout(function () {
+        location.reload();
+    }, 60000); //900000ms = 15 menit, 1 menit
+
+
+
+    // select all checkboxes when "select all" checkbox is clicked
+    $('#selectAll').click(function () {
+        $('input[name="areaLine"]').prop('checked', this.checked);
+    });
+</script>

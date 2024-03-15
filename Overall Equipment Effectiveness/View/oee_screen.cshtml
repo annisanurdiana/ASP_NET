@@ -1,0 +1,1239 @@
+﻿@model OEE_SSC.Models.pimListData
+@{
+    DateTime filterDate = ViewBag.FilterDate;
+    DateTime dateNow = ViewBag.DateNow.Date;
+
+}
+<h2>OEE Data</h2>
+
+
+<!-- Load plotly.js into the DOM -->
+@*<script src="~/Content/assets/js/plotly-2.20.0.min.js" charset="utf-8"></script>*@
+<script src="https://cdn.plot.ly/plotly-2.20.0.min.js" charset="utf-8"></script>
+
+<title>OEE PIM Application</title>
+
+<style>
+
+    .floating-button-container {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        z-index: 2;
+        color: white;
+    }
+
+        .floating-button-container button {
+            border-radius: 50px;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 6px 10px;
+            transition: all 0.2s ease;
+        }
+
+            .floating-button-container button:hover {
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+                transform: translateY(-2px);
+            }
+</style>
+
+<main id="" class="main" style="padding: 35px 35px 10px 35px;">
+    <section class="section">
+
+        <!-- Auto Refresh pada id="countdown" akan dimatikan jika data sudah selesai diperoleh, sdh ganti hari -->
+        @if (filterDate >= dateNow && ViewBag.inputShift >= ViewBag.inputShiftNow)
+        {
+            <div class="mt-0 text-center d-md-block">
+                <p class="mt-1 text-center d-md-block">
+                    <b>PIM OEE MONITORING - </b>
+
+                    Auto refresh:
+                    <span class="text-primary" id="countdown" style="font-weight:700"></span> s
+                    <b> Date: @ViewBag.FilterDate.ToShortDateString(), Shift: @ViewBag.inputShift &nbsp;</b>
+                </p>
+            </div>
+        }
+        else
+        {
+            <div class="mt-0 text-center d-md-block">
+                <p class="mt-1 text-center d-md-block">
+                    <b>PIM OEE MONITORING - </b>
+                    <b> Date: @ViewBag.FilterDate.ToShortDateString(), Shift: @ViewBag.inputShift &nbsp;</b>
+                </p>
+            </div>
+        }
+
+
+        <!-- Website Traffic -->
+        <div class="card mt-lg-4">
+            <div class="filter">
+            </div>
+
+            <div class="card-body pb-0">
+                <h5 class="card-title">OEE Traffic <span>| Today</span></h5>
+                <div class="row justify-content-center mt-0 text-center">
+
+
+                    @if (ViewBag.AvgAVAILABILITY_SCORE == null && ViewBag.AvgPERFORMAMCE_SCORE == null && ViewBag.AvgQUALITY_SCORE == null && ViewBag.AvgOEE_SCORE == null)
+                    {
+
+                        <div class="row justify-content-center mt-0 text-center">
+                            <!-- RESPONSIVE - OEE TABLE-->
+                            <div class="col-lg-3 col-md-6 pt-md-1 mt-md-1 ms-0 me-0">
+                                <div class="col-lg-3 col-md-6 pt-md-1 mt-md-1 ms-0 me-0">
+                                    <div id="oeeScoreNull"> @*Plotly chart will be drawn inside this DIV*@ </div>
+                                </div>
+                            </div>
+
+
+                            <!-- RESPONSIVE - A TABLE-->
+                            <div class="col-lg-3 col-md-6 pt-md-1 mt-md-1 ms-0 me-0">
+                                <div id="oeeAvailabilityNull"> @*Plotly chart will be drawn inside this DIV*@ </div>
+                            </div>
+
+                            <!-- RESPONSIVE - P TABLE-->
+                            <div class="col-lg-3 col-md-6 pt-md-1 mt-md-1 ms-0 me-0">
+                                <div id="oeePerformanceNull"> @*Plotly chart will be drawn inside this DIV*@ </div>
+                            </div>
+
+                            <!-- RESPONSIVE - Q TABLE-->
+                            <div class="col-lg-3 col-md-6 pt-md-1 mt-md-1 ms-0 me-0">
+                                <div id="oeeQualityNull"> @*Plotly chart will be drawn inside this DIV*@ </div>
+                            </div>
+                        </div>
+
+                    }
+
+                    else
+                    {
+
+                        <div class="row justify-content-center mt-0 text-center">
+
+                            @*#9d0208 #e85d04 #38b000*@
+
+                            <!-- RESPONSIVE - OEE TABLE-->
+                            @if (ViewBag.AvgOEE_SCORE < 70)
+                            {
+                                <div id="oeeScore" class="col-xl-3 col-md-6 pt-md-1 mt-md-1 ms-0 me-0">
+                                </div>
+                            }
+                            else if (ViewBag.AvgOEE_SCORE >= 70 && ViewBag.AvgOEE_SCORE <= 85)
+                            {
+                                <div id="oeeScore" class="col-xl-3 col-md-6 pt-md-1 mt-md-1 ms-0 me-0">
+                                </div>
+                            }
+                            else
+                            {
+                                <div id="oeeScore" class="col-xl-3 col-md-6 pt-md-1 mt-md-1 ms-0 me-0">
+                                </div>
+                            }
+
+                            <!-- RESPONSIVE - A TABLE-->
+                            <div id="oeeAvailability" class="col-xl-3 col-md-6 pt-md-1 mt-md-1 ms-0 me-0">
+                            </div>
+
+                            <!-- RESPONSIVE - P TABLE-->
+                            <div id="oeePerformance" class="col-xl-3 col-md-6 pt-md-1 mt-md-1 ms-0 me-0">
+
+                            </div>
+
+                            <!-- RESPONSIVE - Q TABLE-->
+                            <div id="oeeQuality" class="col-xl-3 col-md-6 pt-md-1 mt-md-1 ms-0 me-0">
+
+                            </div>
+
+
+                        </div>
+
+                    }
+
+                </div>
+            </div>
+        </div>
+        <!-- End Website Traffic -->
+
+
+
+
+        <div class="row justify-content-center mt-0">
+
+            <div class="text-center pb-1 mt-0">
+                @* FILTER DATA *@
+                <div class="floating-button-container">
+                    <button type="button" class="btn btn_btn_rainbow text-light" title="Filter Data" data-bs-toggle="modal" data-bs-target="#filter_by_group">
+                        <i class="bi bi-filter"></i>
+                    </button>
+                </div>
+
+                @* FILTER DATA *@
+                <!-- Start Filter by AREA Modal Form centered Modal-->
+                <div class="modal fade" id="filter_by_group" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Filter Data </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <!-- FILTER BY AREA - MODAL START -->
+                            @using (Html.BeginForm("filterData", "view_oee", FormMethod.Get))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="modal-body">
+                                    <!-- Filter by Machine FORM -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <!-- General Form Elements -->
+                                            <form class="needs-validation" novalidate>
+
+                                                @* ----- Input Readonly ---- *@
+
+                                                <div class="row mb-1 mt-2 justify-content-center text-start">
+
+                                                    <div class="col-sm-10 mb-1">
+
+                                                        <div class="row mb-3">
+
+                                                            <!-- SHIFT -->
+                                                            <label for="inputShift" class="col-sm-4 col-form-label">Shift:</label>
+                                                            <div class="col-sm-8 mb-3">
+                                                                <select id="inputShift" name="inputShift" class="form-control text-center" required>
+                                                                    <option value="">--Select Shift--</option>
+                                                                    <option value="1" required>1</option>
+                                                                    <option value="2">2</option>
+                                                                    <option value="3">3</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <!-- DATE -->
+                                                            <label for="date" class="col-sm-4 col-form-label">Date:</label>
+                                                            <div class="col-sm-8">
+                                                                <input class="form-control" name="dateFilter" type="date" value="@ViewBag.FilterDate.ToString("yyyy-MM-dd")">
+                                                                @*<input type="hidden" class="form-control" name="dateFilter" value="@DateTime.Now.ToString("yyyy-MM-dd")" required>*@
+
+                                                            </div>
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row mb-1 pt-4">
+                                                    <div class="col-sm-12">
+                                                        <button type="button" class="btn btn-secondary">Cancel</button>
+                                                        <button type="submit" class="btn btn-primary">Filter</button>
+                                                    </div>
+                                                </div>
+
+                                            </form><!-- End General Form Elements -->
+
+                                        </div>
+                                    </div>
+                                    <!-- END Filter by Machine FORM -->
+                                </div>
+                                <!-- Filter by Machine MODAL END -->
+                            }
+                        </div>
+                    </div>
+                </div>
+                <!-- End Filter by AREA Modal Form centered Modal-->
+            </div>
+
+
+
+            <!-- RESPONSIVE - DOWNTIMES TABLE-->
+            <div class="col-lg-4 col-md-12 pt-md-0 mt-md-0 ms-0 me-0" style="font-size:small;">
+                <div class="card col-md-12">
+                    <div class="card-body">
+                        <h3 class="card-title mt-2 text-center d-md-block" style="font-size: 25px; color: #f26825;">
+                            <b style="font-size: 27px;">T</b>op
+                            <span style="font-size: 27px; color: #f26825;">10</span>
+                            <b style="font-size: 27px;">D</b>owntimes
+                        </h3>
+                        @* ---------------------------------------------------------------------------------------------- *@
+                        <br />
+
+                        <!-- RESPONSIVE TABLE-->
+                        <div class="table-responsive">
+                            <!-- Table with hoverable rows -->
+                            <table class="table table-borderless table-responsive table-hover table-fixed">
+                                @if (Model.view_Pim_Output_Downtime.Count() > 0)
+                                {
+                                    <thead>
+                                        <tr style="text-align: center;">
+                                            <th scope="col">MC</th>
+                                            <th scope="col">Part Number</th>
+                                            <th scope="col">Durations (min)</th>
+                                            <th scope="col">Remarks</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                        @* GroupBy untuk mengelompokkan data berdasarkan kriteria *@
+                                        <!-- Melakukan operasi agregat seperti Count dan Sum pada setiap kelompok data untuk menampilkan informasi yang diinginkan.-->
+                                        @foreach (var item in Model.view_Pim_Output_Downtime.GroupBy(x => new { x.no_machine, x.partnumber, x.dt_remarks, x.date, x.shift }))
+                                        {
+                                            <tr style="text-align: center;">
+                                                <th scope="row">
+                                                    <p style="margin-bottom: 0;">@item.First().no_machine</p>
+                                                </th>
+                                                <td>
+                                                    <p style="margin-bottom: 0;">@item.First().partnumber</p>
+                                                </td>
+                                                <td>
+                                                    @if (item.First().dt_duration_minutes >= 240)
+                                                    {
+                                                        <!-- #,##0 digunakan untuk memisahkan ribuan dengan koma.-->
+                                                        <p class="text-center text-danger" style="margin-bottom: 0;">@string.Format("{0:#,##0}", item.First().dt_duration_minutes) </p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <!-- #,##0 digunakan untuk memisahkan ribuan dengan koma.-->
+                                                        <p class="text-center" style="margin-bottom: 0;">@string.Format("{0:#,##0}", item.First().dt_duration_minutes) </p>
+                                                    }
+
+                                                </td>
+                                                <td>
+                                                    <p style="margin-bottom: 0;">@item.First().dt_remarks</p>
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    </tbody>
+                                }
+                                else
+                                {
+                                    <p class="mt-0 text-center d-md-block text-danger"> <i>"..DOWNTIME DATA NOT FOUND..."</i></p>
+                                }
+                            </table>
+                        </div>
+                        <!-- End Table with hoverable rows -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESPONSIVE - LOWEST PERFORMANCES TABLE-->
+            <div class="col-lg-3 col-md-12 pt-md-0 mt-md-0 ms-0 me-0" style="font-size:small;">
+                <div class="card col-md-12">
+                    <div class="card-body">
+                        <h3 class="card-title mt-2 text-center d-md-block" style="font-size: 25px; padding-left: -2%; color: #34c1df; ">
+                            <b style="font-size: 27px;">L</b>owest
+                            <span style="font-size: 27px; color: #34c1df; ">10</span>
+                            <b style="font-size: 27px;">P</b>erformances
+                        </h3>
+                        @* ---------------------------------------------------------------------------------------------- *@
+                        <br />
+
+                        <!-- RESPONSIVE TABLE-->
+                        <div class="table-responsive">
+                            <!-- Table with hoverable rows -->
+                            <table class="table table-borderless table-responsive table-hover table-fixed">
+                                @if (Model.pim_User_Outputs.Count() > 0)
+                                {
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">MC</th>
+                                            <th scope="col" style="text-align: center;">Performance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @* Mengurutkan data berdasarkan performa dan mengambil 10 data terendah *@
+
+                                        @* Mengurutkan data berdasarkan performa dan mengambil 10 data terendah *@
+                                        @*@foreach (var item in Model.pim_User_Outputs_Top.Where(x => x.pn_standardoutput != 0 && x.actual_output_pcs != 0)
+                                                     .OrderBy(x => x.actual_output_pcs / x.pn_standardoutput)
+                                                     .ThenBy(x => x.actual_output_pcs == 0 ? 0 : x.actual_output_pcs / x.pn_standardoutput)
+                                                     .Take(10))
+                                            {*@
+                                        @foreach (var item in Model.pim_User_Outputs_Top)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <p style="margin-bottom: 0;">@item.no_machine</p>
+                                                </td>
+                                                <td>
+                                                    @if (item.pn_standardoutput.HasValue && item.pn_standardoutput != 0 && item.actual_output_pcs.HasValue && item.actual_output_pcs != 0)
+                                                    {
+                                                        decimal performance = Math.Round(((decimal)item.actual_output_pcs / (decimal)item.pn_standardoutput) * 100, 2);
+
+                                                        // Jika performance lebih dari 1, maka setting == MAX 1 -kt pak wahyu-
+                                                        if (performance >= 100)
+                                                        {
+                                                            performance = 100;
+                                                        }
+
+                                                        <p style="margin-bottom: 0; text-align:center;">
+                                                            @performance.ToString("0.00") %
+                                                        </p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p style="margin-bottom: 0; text-align: center;">0%</p>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                }
+                                else
+                                {
+                                    <p class="mt-0 text-center d-md-block=" style="color: #34c1df;"><i>"... PERFORMANCE NOT FOUND..."</i></p>
+                                }
+                            </table>
+                            <!-- End Table with hoverable rows -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESPONSIVE - REJECTS TABLE-->
+            <div class="col-lg-5 col-md-12 pt-md-0 mt-md-0 ms-0 me-0" style="font-size:small;">
+                <div class="card col-md-12">
+                    <div class="card-body">
+                        <h3 class="card-title mt-2 text-center d-md-block" style="font-size: 25px; padding-left: -2%; color: #4bc65d; ">
+                            <b style="font-size: 27px;">T</b>op
+                            <span style="font-size: 27px; color: #4bc65d;">10</span>
+                            <b style="font-size: 27px;">R</b>ejects
+                        </h3>
+                        @* ---------------------------------------------------------------------------------------------- *@
+                        <br />
+
+                        <!-- RESPONSIVE TABLE-->
+                        <div class="table-responsive">
+                            <!-- Table with hoverable rows -->
+                            <table class="table table-borderless table-responsive table-hover table-fixed">
+                                @if (Model.view_Pim_Output_Reject.Count() > 0)
+                                {
+                                    <thead>
+                                        <tr style="text-align: center;">
+                                            <th scope="col">MC</th>
+                                            <th scope="col">Part Number</th>
+                                            <th scope="col">Reject Rate (ppm)</th>
+                                            <th scope="col">Remarks</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                        @* GroupBy untuk mengelompokkan data berdasarkan kriteria *@
+                                        <!-- Melakukan operasi agregat seperti Count dan Sum pada setiap kelompok data untuk menampilkan informasi yang diinginkan.-->
+                                        @foreach (var item in Model.view_Pim_Output_Reject.GroupBy(x => new { x.no_machine, x.partnumber, x.rj_remarks, x.date, x.shift }))
+                                        {
+                                            <tr style="text-align: center;">
+                                                <th scope="row">
+                                                    <p style="margin-bottom: 0;">@item.First().no_machine</p>
+                                                </th>
+                                                <td>
+                                                    <p style="margin-bottom: 0;">@item.First().partnumber</p>
+                                                </td>
+                                                <td>
+                                                    @if (item.First().rj_rate2 > 100)
+                                                    {
+                                                        <!-- #,##0 digunakan untuk memisahkan ribuan dengan koma.-->
+                                                        <p class="text-center" style="margin-bottom: 0; color: purple;">@string.Format("{0:#,##0}", item.First().rj_rate2 * 10000)</p>
+                                                    }
+                                                    else if (item.First().rj_rate2 >= 90)
+                                                    {
+                                                        <!-- #,##0 digunakan untuk memisahkan ribuan dengan koma.-->
+                                                        <p class="text-center text-danger" style="margin-bottom: 0;">@string.Format("{0:#,##0}", item.First().rj_rate2 * 10000)</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <!-- #,##0 digunakan untuk memisahkan ribuan dengan koma.-->
+                                                        <p class="text-center" style="margin-bottom: 0;">@string.Format("{0:#,##0}", item.First().rj_rate2 * 10000)</p>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <p style="margin-bottom: 0;">@item.First().rj_remarks</p>
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    </tbody>
+                                }
+                                else
+                                {
+                                    <p class="mt-0 text-center d-md-block text-success"><i>"... REJECT DATA NOT FOUND..."</i></p>
+                                }
+                            </table>
+                        </div>
+                        <!-- End Table with hoverable rows -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+        <div class="card col-lg-12 mt-4 pt-4 d-none d-md-block">
+            <div class="card-body">
+                <h3 class="card-title mt-2 text-center d-md-block text-success" style="font-size: 29px;">
+                    <b style="font-size: 31px;">S</b>SC
+                    <b style="font-size: 31px;">D</b>ATA
+                    <b style="font-size: 31px;">O</b>UTPUT
+                </h3>
+                <div class="table-responsive">
+                    <table class="table table-borderless table-hover datatable text-sm-center" style="overflow-x: auto; font-size:13px;">
+                        @if (Model.pim_User_Outputs.Count() > 0)
+                        {
+                            <thead>
+                                <tr>
+                                    @*<th>Date</th>*@
+                                    <th>MC</th>
+                                    @*<th>Shift</th>*@
+                                    <th>Total Time</th>
+                                    <th>No Run</th>
+                                    <th>Downtime</th>
+                                    <th>Op Time</th>
+                                    <th>Std Output</th>
+                                    <th>Output Pcs</th>
+                                    <th>Output</th>
+                                    <th>Reject</th>
+                                    <th>Good Output</th>
+
+                                    <th>Availability</th>
+                                    <th>Performance</th>
+                                    <th>Quality</th>
+
+                                    <th>OEE</th>
+                                </tr>
+                            </thead>
+
+
+                            <tbody>
+                                @foreach (var item in Model.pim_User_Outputs)
+                                {
+                                    <tr>
+                                        @*<td>@ViewBag.FilterDate.ToShortDateString()</td>*@
+                                        <td>@item.no_machine</td>
+                                        @*<td>@item.shift</td>*@
+                                        <td>
+                                            @if (item.total_time == null)
+                                            {
+                                                <p style="margin-bottom: 0;">0</p>
+                                            }
+                                            else
+                                            {
+                                                <p style="margin-bottom: 0;">@item.total_time</p>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.totalNotRunning == null)
+                                            {
+                                                <p style="margin-bottom: 0;">0</p>
+                                            }
+                                            else
+                                            {
+                                                <p style="margin-bottom: 0;">@item.totalNotRunning</p>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.totalDt_in_minutes == null)
+                                            {
+                                                <p style="margin-bottom: 0;">0</p>
+                                            }
+                                            else
+                                            {
+                                                <p style="margin-bottom: 0;">@item.totalDt_in_minutes</p>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.pn_operatingtime == null)
+                                            {
+                                                <p style="margin-bottom: 0;">0</p>
+                                            }
+                                            else
+                                            {
+                                                <p style="margin-bottom: 0;">@item.pn_operatingtime</p>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.pn_standardoutput == null)
+                                            {
+                                                <p style="margin-bottom: 0;">0</p>
+                                            }
+                                            else
+                                            {
+                                                <p style="margin-bottom: 0;">@item.pn_standardoutput</p>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.actual_output_pcs == null)
+                                            {
+                                                <p style="margin-bottom: 0;">0</p>
+                                            }
+                                            else
+                                            {
+                                                <p style="margin-bottom: 0;">@item.actual_output_pcs</p>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.actual_output == null)
+                                            {
+                                                <p style="margin-bottom: 0;">0</p>
+                                            }
+                                            else
+                                            {
+                                                <p style="margin-bottom: 0;">@item.actual_output</p>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.totalRj == null)
+                                            {
+                                                <p style="margin-bottom: 0;">0</p>
+                                            }
+                                            else
+                                            {
+                                                <p style="margin-bottom: 0;">@item.totalRj</p>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.actual_good_output == null)
+                                            {
+                                                <p style="margin-bottom: 0;">0</p>
+                                            }
+                                            else
+                                            {
+                                                <p style="margin-bottom: 0;">@item.actual_good_output</p>
+                                            }
+                                        </td>
+
+                                        @* ---------------------AVAILABILITY------------------- *@
+                                        <td>
+                                            @if (item.total_time.HasValue && item.total_time != 0 && item.pn_operatingtime.HasValue && item.pn_operatingtime != 0 && item.totalNotRunning.HasValue && item.totalNotRunning != 0)
+                                            {
+                                                decimal availability = Math.Round((((decimal)item.pn_operatingtime) / ((decimal)item.total_time - (decimal)item.totalNotRunning)) * 100, 2);
+                                                // jika nilai availability diatas 100 maka setting 100
+                                                if (availability >= 100)
+                                                {
+                                                    <p style="margin-bottom: 0;">
+                                                        100 %
+                                                    </p>
+                                                }
+                                                else
+                                                {
+                                                    <p style="margin-bottom: 0;">
+                                                        @availability.ToString("0.00") %
+                                                    </p>
+                                                }
+                                            }
+                                            else if (item.total_time.HasValue && item.total_time != 0 && item.pn_operatingtime.HasValue && item.pn_operatingtime != 0)
+                                            {
+                                                decimal availability = Math.Round((((decimal)item.pn_operatingtime) / ((decimal)item.total_time - 0)) * 100, 2);
+                                                // jika nilai availability diatas 100 maka setting 100
+                                                if (availability >= 100)
+                                                {
+                                                    <p style="margin-bottom: 0;">
+                                                        100 %
+                                                    </p>
+                                                }
+                                                else
+                                                {
+                                                    <p style="margin-bottom: 0;">
+                                                        @availability.ToString("0.00") %
+                                                    </p>
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                <p style="margin-bottom: 0;">0%</p>
+                                            }
+                                        </td>
+
+
+                                        <!--//performance = Math.Round(((decimal)g.Sum(x => x.actual_output) / (decimal)g.Sum(x => x.pn_standardoutput)) * 100, 2),-->
+                                        @* ---------------------PERFORMANCE------------------- *@
+                                        <td>
+                                            @if (item.pn_standardoutput.HasValue && item.pn_standardoutput != 0 && item.actual_output_pcs.HasValue && item.actual_output_pcs != 0)
+                                            {
+                                                decimal performance = Math.Round(((decimal)item.actual_output_pcs / (decimal)item.pn_standardoutput) * 100, 2);
+                                                // jika nilai performance diatas 100 maka setting 100
+                                                if (performance >= 100)
+                                                {
+                                                    <p style="margin-bottom: 0;">
+                                                        100 %
+                                                    </p>
+                                                }
+                                                else
+                                                {
+                                                    // format string "0", maka bilangan desimal akan dibulatkan ke bilangan bulat terdekat
+                                                    <p style="margin-bottom: 0;">
+                                                        @performance.ToString("0.00") %
+                                                    </p>
+                                                }
+                                            }
+                                            else
+                                            {
+
+                                                <p style="margin-bottom: 0;">0%</p>
+                                            }
+                                        </td>
+                                        @* ---------------------QUALITY------------------- *@
+                                        <td>
+                                            @if (item.actual_good_output.HasValue && item.actual_good_output != 0 && item.actual_output_pcs.HasValue && item.actual_output_pcs != 0)
+                                            {
+                                                decimal quality = Math.Round(((decimal)item.actual_good_output / (decimal)item.actual_output_pcs) * 100, 2);
+
+                                                // jika nilai quality diatas 100 maka setting 100
+                                                if (quality >= 100)
+                                                {
+                                                    <p style="margin-bottom: 0;">
+                                                        100 %
+                                                    </p>
+                                                }
+                                                else
+                                                {
+                                                    // format string "0", maka bilangan desimal akan dibulatkan ke bilangan bulat terdekat
+                                                    <p style="margin-bottom: 0;">
+                                                        @quality.ToString("0.00") %
+                                                    </p>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <p style="margin-bottom: 0;">0%</p>
+                                            }
+                                        </td>
+
+                                        @* ---------------------OEE------------------- *@
+                                        <td>
+                                            @if (item.totalNotRunning.HasValue && item.total_time.HasValue && item.pn_operatingtime.HasValue && item.pn_standardoutput.HasValue && item.actual_output_pcs.HasValue && item.actual_good_output.HasValue && item.totalNotRunning != 0 && item.total_time != 0 && item.pn_operatingtime != 0 && item.pn_standardoutput != 0 && item.actual_output_pcs != 0 && item.actual_good_output != 0)
+                                            {
+                                                decimal availability = Math.Round((((decimal)item.pn_operatingtime) / ((decimal)item.total_time - (decimal)item.totalNotRunning)), 2);
+                                                decimal performance = Math.Round(((decimal)item.actual_output_pcs / (decimal)item.pn_standardoutput), 2);
+                                                decimal quality = Math.Round(((decimal)item.actual_good_output / (decimal)item.actual_output_pcs), 2);
+
+                                                // Jika lebih dari 1 maka set max 1
+                                                if (availability >= 1)
+                                                {
+                                                    availability = 1;
+                                                }
+
+                                                if (performance >= 1)
+                                                {
+                                                    performance = 1;
+                                                }
+
+                                                if (quality >= 1)
+                                                {
+                                                    quality = 1;
+                                                }
+
+
+                                                decimal OEE_SCORE = Math.Round((availability * performance * quality) * 100, 2);
+
+                                                // format string "0", maka bilangan desimal akan dibulatkan ke bilangan bulat terdekat
+                                                <p style="margin-bottom: 0;">
+                                                    @OEE_SCORE.ToString("0.00") %
+
+                                                </p>
+
+                                            }
+                                            // tidak ada not running
+                                            else if (item.total_time.HasValue && item.pn_operatingtime.HasValue && item.pn_standardoutput.HasValue && item.actual_output_pcs.HasValue && item.actual_good_output.HasValue && item.total_time != 0 && item.pn_operatingtime != 0 && item.pn_standardoutput != 0 && item.actual_output_pcs != 0 && item.actual_good_output != 0)
+                                            {
+                                                decimal availability = Math.Round((((decimal)item.pn_operatingtime) / ((decimal)item.total_time - 0)), 2);
+                                                decimal performance = Math.Round(((decimal)item.actual_output_pcs / (decimal)item.pn_standardoutput), 2);
+                                                decimal quality = Math.Round(((decimal)item.actual_good_output / (decimal)item.actual_output_pcs), 2);
+
+                                                // Jika lebih dari 1 maka set max 1
+                                                if (availability >= 1)
+                                                {
+                                                    availability = 1;
+                                                }
+
+                                                if (performance >= 1)
+                                                {
+                                                    performance = 1;
+                                                }
+
+                                                if (quality >= 1)
+                                                {
+                                                    quality = 1;
+                                                }
+
+
+                                                decimal OEE_SCORE = Math.Round((availability * performance * quality) * 100, 2);
+
+                                                <p style="margin-bottom: 0;">
+                                                    @OEE_SCORE.ToString("0.00") %
+
+                                                </p>
+                                            }
+                                            else
+                                            {
+                                                <p style="margin-bottom: 0;">0%</p>
+                                            }
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+                        else
+                        {
+                            <p class="mt-0 text-center d-md-block text-secondary"><i>"...DATA OUTPUT EMPTY..."</i></p>
+                        }
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+    </section>
+</main>
+
+<!-- OEE GRAPH PLOTLY-->
+<script>
+    //call function oeeQuality
+    oeeQuality();
+    function oeeQuality() {
+        var score = "@ViewBag.AvgQUALITY_SCORE";
+        var color;
+
+        if (score < 70) {
+            color = 'red';
+        } else if (score >= 70 && score < 95) {
+            color = 'orange';
+        } else {
+            color = 'green';
+        }
+
+        // jika score lebih dari 100 maka set MAX 100
+        if (score > 100) {
+            score = 100;
+        }
+
+        var data = [
+            {
+                domain: { x: [0, 1], y: [0, 1] },
+                value: score,
+                title: {
+                    text: "<b> QUALITY </b>",
+                    font: {
+                        color: '#4bc65d', bold: true
+                    }
+                },
+                type: "indicator",
+                mode: "gauge+number+delta",
+                delta: { reference: 95 },
+                gauge: {
+                    axis: { range: [0, 110], tickvals: [0, 55, 95, 110] },
+                    steps: [
+                        /*{ range: [0, 49], color: "grey" },*/
+                        { range: [0, 95], color: "lightgrey" }
+                    ],
+                    threshold: {
+                        line: { color: "blue", width: 3 },
+                        thickness: 0.85,
+                        value: 95
+                    },
+                    bar: { color: color }
+                }
+            }
+        ];
+
+        var layout = { width: 360, height: 220, margin: { t: 0, b: 0 } };
+        var config = { displaylogo: false };
+        Plotly.newPlot('oeeQuality', data, layout, config);
+    }
+
+    //call function oeePerformance
+    oeePerformance();
+    function oeePerformance() {
+        var score = @ViewBag.AvgPERFORMAMCE_SCORE;
+        var color;
+
+        if (score < 70) {
+            color = 'red';
+        } else if (score >= 70 && score < 95) {
+            color = 'orange';
+        } else {
+            color = 'green';
+        }
+
+        // jika score lebih dari 100 maka set MAX 100
+        if (score > 100) {
+            score = 100;
+        }
+
+        var data = [
+            {
+                domain: { x: [0, 1], y: [0, 1] },
+                value: score,
+                title: {
+                    text: " <b> PERFORMANCE </b> ",
+                    font: {
+                        color: '#34c1df'
+                    }
+                },
+                type: "indicator",
+                mode: "gauge+number+delta",
+                delta: { reference: 95 },
+                gauge: {
+                    axis: { range: [0, 110], tickvals: [0, 55, 95, 110] },
+                    steps: [
+                        /*{ range: [0, 49], color: "grey" },*/
+                        { range: [0, 95], color: "lightgrey" }
+                    ],
+                    threshold: {
+                        line: { color: "blue", width: 3 },
+                        thickness: 0.85,
+                        value: 95
+                    },
+                    bar: { color: color }
+                }
+            }
+        ];
+
+        var layout = { width: 360, height:220, margin: { t: 0, b: 0 } };
+        var config = { displaylogo: false };
+        Plotly.newPlot('oeePerformance', data, layout, config);
+    }
+
+    //call function oeeAvailability
+    oeeAvailability();
+    function oeeAvailability() {
+        var score = @ViewBag.AvgAVAILABILITY_SCORE;
+        var color;
+
+        if (score < 70) {
+            color = 'red';
+        } else if (score >= 70 && score < 95) {
+            color = 'orange';
+        } else {
+            color = 'green';
+        }
+
+        if (score > 100) {
+            score = 100;
+        }
+
+        var data = [
+            {
+                domain: { x: [0, 1], y: [0, 1] },
+                value: score,
+                title: {
+                    text: "<b> AVAILABILITY </b> ",
+                    font: {
+                        color: '#f26825',
+                    }
+                },
+                type: "indicator",
+                mode: "gauge+number+delta",
+                delta: { reference: 95 },
+                gauge: {
+                    axis: { range: [0, 110], tickvals: [0, 55, 95, 110] },
+                    steps: [
+                        /*{ range: [0, 49], color: "grey" },*/
+                        { range: [0, 95], color: "lightgrey" }
+                    ],
+                    threshold: {
+                        line: { color: "blue", width: 3 },
+                        thickness: 0.85,
+                        value: 95
+                    },
+                    bar: { color: color }
+                }
+            }
+        ];
+
+        var layout = { width: 360, height: 220, margin: { t: 0, b: 0 } };
+        var config = { displaylogo: false };
+        Plotly.newPlot('oeeAvailability', data, layout, config);
+    }
+
+    //call function oeeScore
+    oeeScore();
+    function oeeScore() {
+        var score = @ViewBag.AvgOEE_SCORE;
+        var color;
+
+        if (score < 70) {
+            color = 'red';
+        } else if (score > 70 && score < 85) {
+            color = 'orange';
+        } else {
+            color = 'green';
+        }
+
+        // jika score lebih dari 100 maka set MAX 100
+        if (score > 100) {
+            score = 100;
+        }
+
+        var data = [
+            {
+                domain: { x: [0, 1], y: [0, 1] },
+                value: score,
+                title: { text: "<b>OEE</b>"},
+                type: "indicator",
+                mode: "gauge+number+delta",
+                delta: { reference: 85 },
+                gauge: {
+                    axis: { range: [0, 110], tickvals: [0, 55, 85, 110] },
+                    steps: [
+                        /*{ range: [0, 49], color: "grey" },*/
+                        { range: [0, 85], color: "lightgrey" }
+                    ],
+                    threshold: {
+                        line: { color: "blue", width: 3 },
+                        thickness: 0.85,
+                        value: 85
+                    },
+                    bar: { color: color }
+                }
+            }
+        ];
+
+        var layout = { width: 360, height: 220, margin: { t: 0, b: 0 } };
+        var config = { displaylogo: false };
+        Plotly.newPlot('oeeScore', data, layout, config);
+    }
+
+
+    // >>>>>>>>> IF OEE NULL
+
+    //call function oeeQuality
+    oeeQualityNull();
+    function oeeQualityNull() {
+        var score = 0;
+        var color;
+
+        if (score < 70) {
+            color = 'red';
+        } else if (score >= 70 && score < 95) {
+            color = 'orange';
+        } else {
+            color = 'green';
+        }
+
+
+        var data = [
+            {
+                domain: { x: [0, 1], y: [0, 1] },
+                value: score,
+                title: {
+                    text: "<b> QUALITY </b>",
+                    font: {
+                        color: '#4bc65d',
+                    }
+                },
+                type: "indicator",
+                mode: "gauge+number+delta",
+                delta: { reference: 95 },
+                gauge: {
+                    axis: { range: [null, 100] },
+                    steps: [
+                        /*{ range: [0, 49], color: "grey" },*/
+                        { range: [0, 95], color: "#e6ffe6" }
+                    ],
+                    threshold: {
+                        line: { color: "blue", width: 3 },
+                        thickness: 0.85,
+                        value: 95
+                    },
+                    bar: { color: color }
+                }
+            }
+        ];
+
+        var layout = { width: 360, height:220, margin: { t: 0, b: 0 } };
+        var config = { displaylogo: false };
+        Plotly.newPlot('oeeQualityNull', data, layout, config);
+    }
+
+    //call function oeePerformance
+    oeePerformanceNull();
+    function oeePerformanceNull() {
+        var score = 0;
+        var color;
+
+        if (score < 70) {
+            color = 'red';
+        } else if (score >= 70 && score < 95) {
+            color = 'orange';
+        } else {
+            color = 'green';
+        }
+
+
+        var data = [
+            {
+                domain: { x: [0, 1], y: [0, 1] },
+                value: score,
+                title: {
+                    text: " <b> PERFORMANCE </b> ",
+                    font: {
+                        color: '#34c1df'
+                    }
+                },
+                type: "indicator",
+                mode: "gauge+number+delta",
+                delta: { reference: 95 },
+                gauge: {
+                    axis: { range: [null, 100] },
+                    steps: [
+                        /*{ range: [0, 49], color: "grey" },*/
+                        { range: [0, 95], color: "#e6ffff" }
+                    ],
+                    threshold: {
+                        line: { color: "blue", width: 3 },
+                        thickness: 0.85,
+                        value: 95
+                    },
+                    bar: { color: color }
+                }
+            }
+        ];
+
+        var layout = { width: 360, height:220, margin: { t: 0, b: 0 } };
+        var config = { displaylogo: false };
+        Plotly.newPlot('oeePerformanceNull', data, layout, config);
+    }
+
+    //call function oeeAvailability
+    oeeAvailabilityNull();
+    function oeeAvailabilityNull() {
+        var score = 0;
+        var color;
+
+        if (score < 70) {
+            color = 'red';
+        } else if (score >= 70 && score < 95) {
+            color = 'orange';
+        } else {
+            color = 'green';
+        }
+
+
+        var data = [
+            {
+                domain: { x: [0, 1], y: [0, 1] },
+                value: score,
+                title: {
+                    text: "<b> AVAILABILITY </b> ",
+                    font: {
+                        color: '#f26825',
+                    }
+                },
+                type: "indicator",
+                mode: "gauge+number+delta",
+                delta: { reference: 95 },
+                gauge: {
+                    axis: { range: [null, 100] },
+                    steps: [
+                        /*{ range: [0, 49], color: "grey" },*/
+                        { range: [0, 95], color: "#ffe6cc" }
+                    ],
+                    threshold: {
+                        line: { color: "blue", width: 3 },
+                        thickness: 0.85,
+                        value: 95
+                    },
+                    bar: { color: color }
+                }
+            }
+        ];
+
+        var layout = { width: 360, height: 220, margin: { t: 0, b: 0 } };
+        var config = { displaylogo: false };
+        Plotly.newPlot('oeeAvailabilityNull', data, layout, config);
+    }
+
+    //call function oeeScore
+    oeeScoreNull();
+    function oeeScoreNull() {
+        var score = 0;
+        var color;
+
+        if (score < 70) {
+            color = 'red';
+        } else if (score > 70 && score < 85) {
+            color = 'orange';
+        } else {
+            color = 'green';
+        }
+
+
+        var data = [
+            {
+                domain: { x: [0, 1], y: [0, 1] },
+                value: score,
+                title: { text: "<b>OEE</b>"},
+                type: "indicator",
+                mode: "gauge+number+delta",
+                delta: { reference: 85 },
+                gauge: {
+                    axis: { range: [null, 100] },
+                    steps: [
+                        /*{ range: [0, 49], color: "grey" },*/
+                        { range: [0, 85], color: "lightgrey" }
+                    ],
+                    threshold: {
+                        line: { color: "blue", width: 3 },
+                        thickness: 0.85,
+                        value: 85
+                    },
+                    bar: { color: color }
+                }
+            }
+        ];
+
+        var layout = { width: 360, height: 220, margin: { t: 0, b: 0 } };
+        var config = { displaylogo: false };
+        Plotly.newPlot('oeeScoreNull', data, layout, config);
+    }
+</script>
+<script>
+    var timeLeft = 300; // Waktu dalam detik (300 detik = 5 menit, start from 299)
+    var countdown = setInterval(function () {
+        // Menghitung menit
+        var minutes = Math.floor(timeLeft / 60);
+        // Menghitung detik
+        var seconds = timeLeft % 60;
+        // Menggabungkan menit dan detik
+        var countdownStr = minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
+        // Menampilkan countdown
+        document.getElementById("countdown").innerHTML = countdownStr;
+        if (timeLeft == 0) {
+            location.reload();
+        }
+        timeLeft--;
+    }, 1000);
+
+    setTimeout(function () {
+        var filterDate = new Date("@filterDate"); // konversi filterDate ke objek Date
+        var dateNow = new Date(); // tanggal sekarang
+        var inputShift = "@ViewBag.inputShift"; // shift saat ini
+        var inputShiftNow = "@ViewBag.inputShiftNow"; // shift saat ini
+
+        if (filterDate >= dateNow && inputShift >= inputShiftNow) {
+            location.reload();
+        } else {
+            setTimeout(arguments.callee, 300000); // coba lagi setelah 5 menit
+        }
+    }, 300000);
+
+
+    //setTimeout(function () {
+    //    location.reload();
+    //}, 60000); //900000ms = 15 menit, 1 menit
+
+
+
+    // select all checkboxes when "select all" checkbox is clicked
+    $('#selectAll').click(function () {
+        $('input[name="areaLine"]').prop('checked', this.checked);
+    });
+</script>
+
+
+
