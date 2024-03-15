@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewBag.Title = "Menu";
+}
+<style>
+    /* Efek hover untuk card */
+
+    .card:hover {
+        box-shadow: 0 40px 60px rgba(0, 145, 255, 0.2); /* Warna biru lembut (RGBA) */
+        transition: box-shadow 0.4s ease-in-out;
+    }
+</style>
+
+
+<h2>Menu</h2>
+
+
+<main id="" class="main" style="min-height: 800px; padding: 85px 35px 40px 35px;">
+    <section class="section">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 mt-5">
+
+
+                <!-- CARD 1-->
+                <div class="card pt-lg-3 p-lg-5">
+                    <div class="row g-0">
+                        <div class="col-md-3">
+                            <a href="@Url.Action("Index", "autoloading")">
+                                <img src="~/Content/assets/img/skill_animation.gif" class="img-fluid rounded-start" alt="Database Skill Operator" style="max-height:170px;">
+                            </a>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="card-body">
+                                <a href="@Url.Action("Index", "autoloading")">
+                                    <h5 class="card-title">OPERATOR SKILL MATRIX</h5>
+                                </a>
+                                <p class="card-text" style="font-size: 13px;">Edit data skill operator, termasuk menambah, mengurangi, dan mengganti leader operator</p>
+                                <p class="card-text text-secondary" style="font-size: 10px;"><i>Designed for editing operator skill data, which includes adding operators, delete operators, and changing the leader</i></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- CARD 2-->
+                <div class="card pt-lg-3 p-lg-5">
+                    <div class="row g-0">
+                        <div class="col-md-3 mt-1 mb-1">
+                            <a href="https://forms.office.com/r/6DZPM8JA1S">
+                                <img src="~/Content/assets/img/feedback.gif" class="img-fluid rounded-start" alt="Database Skill Operator" style="max-height:160px;">
+                            </a>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="card-body">
+                                <a href="https://forms.office.com/r/6DZPM8JA1S">
+                                    <h5 class="card-title">FEEDBACK SKILL REQUIREMENT</h5>
+                                </a>
+                                <p class="card-text" style="font-size: 13px;">Feedback untuk team planner terkait abnormalitas  "Skill Requirement" atau "Head Count"</p>
+                                <p class="card-text text-secondary" style="font-size: 10px;"><i>Providing feedback to the planner team regarding <b>skill requirement </b>or <b>head count requirement</b> in the schedule database</i></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

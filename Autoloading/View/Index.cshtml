@@ -1,0 +1,252 @@
+﻿@*@model OEE_SSC.Models.pim_scrap*@
+@model OEE_SSC.Models.pimListData
+
+@{
+    ViewBag.Title = "database operator update";
+}
+
+<h2>inputScrap</h2>
+
+<main id="" class="main" style="min-height: 800px; padding: 85px 35px 40px 35px;">
+    <section class="section">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+
+                <div class="card col-lg-12 pt-lg-3 p-lg-5">
+                    <div class="card-body pt-lg-2">
+
+                        <h2 class="card-title text-center" style="font-size:x-large">
+                            OPERATOR SKILL MATRIX LIST
+                        </h2>
+
+
+                        @if (TempData["Message"] != null)
+                        {
+                            <div id="alert_submit2" class="alert alert-success alert-dismissible fade show" role="alert">
+                                @TempData["Message"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                        <div id="alert_submit2" class="alert alert-info alert-dismissible fade show" role="alert" style="font-size:11px;">
+                            Maksimal update data pada pukul 16:30 (Hari senin-jumat), data yang diupdate setelah pukul 16:30 diperbaharui di hari berikutnya
+                        </div>
+
+
+                        <!--ADD NEW DATA NEW PAGE-->
+                        <a type="button" class="btn btn-info me-1" href="@Url.Action("addSKILL", "autoloading", new { EMEMP_ = ViewBag.EMEMP_ })"><i class="bi bi-person-plus-fill me-1"></i> Add Operator</a>
+
+                        <!-- Start Add Part Number Modal Form centered Modal-->
+                        <div class="modal fade" id="add_operator" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Add New Operator</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <!-- Add New Operator - MODAL START -->
+
+                                    @using (Html.BeginForm("Create", "autoloading"))
+                                    {
+                                        @*@Html.AntiForgeryToken()*@
+                                        <div class="modal-body">
+                                            <!-- Add Part Number FORM -->
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <!-- General Form Elements -->
+                                                    <form class="needs-validation" novalidate>
+
+                                                        <!-- KPK OPERATOR -->
+                                                        <div class="row mb-3">
+                                                            <label for="EMEMP_" class="col-sm-4 col-form-label">KPK:</label>
+                                                            <div class="col-sm-8">
+                                                                <input name="EMEMP_" type="number" class="form-control" value="" min="4" placeholder="Enter KPK..." required>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- NAMA OPERATOR -->
+                                                        <div class="row mb-3">
+                                                            <label for="EMNAME" class="col-sm-4 col-form-label">NAME:</label>
+                                                            <div class="col-sm-8">
+                                                                <input name="EMNAME" type="text" class="form-control" value="" min="1" placeholder="Enter Name..." required>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- LEADER OPERATOR -->
+                                                        <div class="row mb-3">
+                                                            <label class="col-sm-4 col-form-label">LEADER</label>
+                                                            <div class="col-sm-8">
+                                                                <select class="form-select" name="model.LEADERNAME" id="LEADERNAME" aria-label="Default select example" required>
+                                                                    <option selected disabled value="">-- Select Leader --</option>
+                                                                    @foreach (var item in Model.pim_Autoloadings_leader)
+                                                                    {
+                                                                        <option value="@item"> @item</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="row mb-3 pt-5">
+                                                            <div class="col-sm-12">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <input type="submit" value="Submit" class="btn btn-success" />
+                                                            </div>
+                                                        </div>
+
+                                                    </form><!-- End General Form Elements -->
+
+                                                </div>
+                                            </div>
+                                            <!-- END Add Part Number FORM -->
+                                        </div>
+                                        <!-- Add Part Number MODAL END -->
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Add Part Number Modal Form centered Modal-->
+                        @* SHOW ALL MACHINE *@
+                        <a class="btn btn-outline-primary" href="@Url.Action("Index", "autoloading")">All Leader</a>
+
+
+                        <!--FILTER DATA -->
+                        <a type="button" class="btn btn-warning me-1" data-bs-toggle="modal" data-bs-target="#filter_leader" href="@Url.Action("filterOPT", "autoloading")">Filter Leader</a>
+
+                        <!-- Start Filter by Machine Modal Form centered Modal-->
+                        <div class="modal fade" id="filter_leader" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Filter Leader</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+
+                                    <!-- FILTER BY MACHINE - MODAL START -->
+                                    @using (Html.BeginForm("Index", "autoloading", FormMethod.Get))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <div class="modal-body">
+                                            <!-- Filter by Machine FORM -->
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <!-- General Form Elements -->
+                                                    <form class="needs-validation" novalidate>
+
+                                                        <!-- DROP DOWN LEADER OPERATOR -->
+                                                        <div class="row mb-3">
+                                                            <label class="col-sm-5 col-form-label">FILTER BY LEADER</label>
+                                                            <div class="col-sm-7">
+                                                                <select class="form-select" name="LEADERNAME" aria-label="Select Leader" required>
+                                                                    <option selected disabled value="">-- Select Leader --</option>
+                                                                    @foreach (var item in Model.pim_Autoloadings_leader)
+                                                                    {
+                                                                        <option value="@item"> @item</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mb-3 pt-5">
+                                                            <div class="col-sm-12">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                <button type="submit" class="btn btn-info">Filter</button>
+                                                            </div>
+                                                        </div>
+
+                                                    </form><!-- End General Form Elements -->
+
+                                                </div>
+                                            </div>
+                                            <!-- END Filter by Machine FORM -->
+                                        </div>
+                                        <!-- Filter by Machine MODAL END -->
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Filter by Machine Modal Form centered Modal-->
+                        
+                        
+                        <!--EXPORT SCRAP-->
+                        <a class="btn btn-outline-success me-1" style="float: right" title="Download Database Skill" href="@Url.Action("exportDatabaseSkill", "autoloading")">
+                            <i class="bi bi-cloud-download"></i>
+                        </a>
+
+                        @if (ViewBag.Message != null)
+                        {
+                            <p class="text-success">@ViewBag.Message</p>
+                        }
+
+                        @if (ViewBag.Error != null)
+                        {
+                            <p class="text-danger">@ViewBag.Error</p>
+                        }
+
+                        <br />  @* ---------------------------------------------------------------------------------------------- *@ <br />
+
+                        <!--FETCH DATABASE SCRAP-->
+                        <!-- Menampilkan SCRAP Output -->
+                        <table class="table datatable table-striped" style="font-size:small;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">NO</th>
+                                    <th scope="col">KPK</th>
+                                    <th scope="col">NAME</th>
+                                    <th scope="col">LEADER</th>
+                                    <th scope="col" class="col-3">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int count_b = 0;
+                                }
+                                @if (Model != null)
+                                {
+                                    foreach (var item in Model.pim_Autoloadings)
+                                    {
+                                        <tr id="@item.ID" style="max-width:100%;">
+                                            <td>@(count_b+1)</td>
+                                            <td>@item.EMEMP_</td>
+                                            <td>@item.EMNAME</td>
+                                            <td>@item.LEADERNAME</td>
+                                            <td>
+                                                <!-- Add Edit button -->
+                                                <a type="button" class="btn btn-outline-success me-1" href="@Url.Action("addSKILL", "autoloading", new { EMEMP_=item.EMEMP_ })"><i class="bi bi-person-check-fill me-1"></i> Skill</a>
+
+                                                @* Delete Data *@<!-- Delete Data -->
+                                                <button type="button" class="btn btn-outline-danger ms-1" onclick="confirmDelete('@item.EMEMP_')">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+
+                                                <script>
+                                                    function confirmDelete(EMEMP_) {
+                                                        if (confirm('Apakah yakin ingin menghapus data operator dengan KPK "' + EMEMP_ + '" ?')) {
+                                                            window.location.href = '@Url.Action("deleteData", "autoloading")?EMEMP_=' + EMEMP_;
+                                                        }
+                                                    }
+                                                </script>
+
+                                            </td>
+                                        </tr>
+                                        count_b++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="10">No data available</td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                        <!-- End Table with stripped rows -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+</main>

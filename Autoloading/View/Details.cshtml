@@ -1,0 +1,169 @@
+﻿@*@model OEE_SSC.Models.pim_scrap*@
+@model OEE_SSC.Models.pimListData
+
+@{
+    ViewBag.Title = "database operator update";
+}
+
+<h2>inputScrap</h2>
+
+<main id="" class="main" style="min-height: 800px; padding: 85px 35px 40px 35px;">
+    <section class="section">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+
+                <div class="card col-lg-12 pt-lg-3 p-lg-5">
+                    <div class="card-body pt-lg-2">
+
+                        <h2 class="card-title text-center mb-3" style="font-size:x-large">
+                            DATA of "<b>@ViewBag.optname</b>" - @ViewBag.EMEMP_
+                        </h2>
+
+                        <!--ADD NEW DATA NEW PAGE-->
+                        <a type="button" class="btn btn-info me-1" href="@Url.Action("addSKILL", "autoloading", new { EMEMP_ = ViewBag.EMEMP_ })"><i class="bi bi-person-plus-fill me-1"></i> Edit Skill Operator</a>
+
+                        <!--BACK TO HOME-->
+                        <a class="btn btn-secondary me-1" style="float: right" title="Download Current Data" href="@Url.Action("Index", "autoloading")">
+                            CANCEL
+                        </a>
+
+                        @if (ViewBag.Message != null)
+                        {
+                            <p class="text-success">@ViewBag.Message</p>
+                        }
+
+                        @if (ViewBag.Error != null)
+                        {
+                            <p class="text-danger">@ViewBag.Error</p>
+                        }
+
+                        <br />  @* ---------------------------------------------------------------------------------------------- *@ <br />
+
+                        <!-- FETCH DATABASE OPERATOR SKILL -->
+                        <table class="table table-bordered " style="font-size:small;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">NO</th>
+                                    <th scope="col">KPK</th>
+                                    <th scope="col">NAME</th>
+                                    <th scope="col">SKILL</th>
+                                    <th scope="col" class="col-3">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int count_a = 0;
+                                }
+                                @if (Model != null)
+                                {
+                                    foreach (var item in Model.pim_Autoloadings)
+                                    {
+                                        <tr id="@item.ID" style="max-width:100%;">
+                                            <td>@(count_a + 1)</td>
+                                            <td>@item.EMEMP_</td>
+                                            <td>@item.EMNAME</td>
+                                            <td class="text-success">@item.SKILL</td>
+                                            <td>
+                                                @* Delete Data *@
+                                                <button type="button" class="btn btn-outline-danger ms-1" onclick="confirmDelete(@item.ID)"><i class="bi bi-trash"></i> Delete Skill </button>
+
+                                                <script>
+                                                function confirmDelete(id) {
+                                                    if (confirm('Apakah yakin ingin menghapus data operator dengan KPK \"@item.EMEMP_\" ?')) {
+                                                        window.location.href = '@Url.Action("deleteData", "autoloading", new { ID = "__id__" })'.replace('__id__', ID);
+                                                    }
+                                                }
+                                                </script>
+                                            </td>
+                                        </tr>
+                                        count_a++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="10">No data available</td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+
+                        <br />
+
+
+                        @* SKILL CATHEGORY INFORMATION *@
+                        <div class="tab-pane fade show active profile-overview mt-3" id="profile-overview">
+                            <!-- Default Accordion -->
+                            <div class="accordion pt-2" id="accordionExample">
+                                <div class="accordion-item">
+
+                                    <h2 class="accordion-header" id="headingTwo">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+
+                                            LIST OF PIM SKILL CATEGORY
+                                        </button>
+                                    </h2>
+
+                                    <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            @* ------------------------------------- *@
+                                            <div class="tab-pane fade show profile-overview" id="profile-overview">
+
+
+                                                <!-- FETCH DATABASE CATEGORY SKILL -->
+                                                <table class="table table-bordered" style="font-size:small;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">NO</th>
+                                                            <th scope="col">CODE</th>
+                                                            <th scope="col">TYPE</th>
+                                                            <th scope="col">DETAILS</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            int count_b = 0;
+                                                        }
+                                                        @if (Model != null)
+                                                        {
+                                                            foreach (var item in Model.pim_Autoloading_Skills)
+                                                            {
+                                                                <tr id="@item.ID" style="max-width:100%;">
+                                                                    <td>@(count_b+1)</td>
+                                                                    <td class="text-success">@item.SKILLCODE</td>
+                                                                    <td>@item.SKILLTYPE</td>
+                                                                    <td>@item.SKILLNAME</td>
+                                                                </tr>
+                                                                count_b++;
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr>
+                                                                <td colspan="10">No data available</td>
+                                                            </tr>
+                                                        }
+
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                            @* ------------------------------------- *@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Default Accordion Example -->
+                            @* ------------------------------------------------ *@
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+</main>
+

@@ -1,0 +1,220 @@
+﻿@model OEE_SSC.Models.pimListData
+
+@{
+    ViewBag.Title = "add new skill";
+}
+
+<h2>Edit Data newMachinePartnumber </h2>
+
+<section class="section" style="padding: 85px 55px 40px 55px;">
+    <div class="row justify-content-center">
+
+
+        <div class="col-lg-9 col-md-11 pt-lg-5">
+
+            @* VALIDATION (PART NUMBER AND NO MACHINE) *@
+            @if (TempData["Error_add_new"] != null)
+            {
+                <div id="alert_submit2" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-octagon me-1"></i>
+                    @TempData["Error_add_new"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+
+
+            <div class="card col-lg-12">
+                <div class="card-body">
+
+                    <form method="post" action="@Url.Action("addSKILL", "autoloading", FormMethod.Post)">
+
+                        @Html.AntiForgeryToken()
+                        <div class="form-horizontal">
+
+                            <h5 class="card-title"> Database Skill Operator </h5>
+                            <hr />
+
+                            <!---->
+
+                            <div class="row mb-3 pt-3">
+                                <label for="EMEMP_" class="col-sm-3 col-form-label">KPK</label>
+                                <div class="col-sm-8">
+                                    <input name="EMEMP_" type="number" class="form-control" value="@ViewBag.EMEMP_" placeholder="Enter operator kpk" minlength="5" pattern="[A-Za-z0-9]{5,}" required>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="partnumber" class="col-sm-3 col-form-label">Name</label>
+                                <div class="col-sm-8">
+                                    <input name="EMNAME" type="text" class="form-control" value="@ViewBag.EMNAME" placeholder="Enter operator name" minlength="9" onkeyup="this.value = this.value.toUpperCase()" required>
+                                </div>
+                            </div>
+
+                            <!-- DROP DOWN LEADER OPERATOR -->
+                            <div class="row mb-3">
+                                <label class="col-sm-3 col-form-label">Leader</label>
+                                <div class="col-sm-8">
+                                    <select class="form-select" name="LEADERNAME" aria-label="Default select example" required>
+                                        <option selected disabled value="">-- Select Leader --</option>
+                                        @*@(item == @item ? "selected" : "")*@
+                                        @foreach (var item in Model.pim_Autoloadings_leader)
+                                        {
+                                            <option value="@item"> @item</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- NOTES OPERATOR -->
+                            <fieldset class="row mb-3">
+                                <legend class="col-form-label col-sm-3 pt-0">Status Operator</legend>
+                                <div class="col-sm-8">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" id="opt_notes" name="statusOption" value="fullShift"  @(ViewBag.opt_notes == null || ViewBag.opt_notes == "" ? "checked" : "") required>
+                                        <label class="form-check-label" for="opt_notes">
+                                            Full Shift
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" id="opt_notes2" name="statusOption" value="notFullShift"  @(ViewBag.opt_notes != null && ViewBag.opt_notes != "" ? "checked" : "")>
+                                        <label class="form-check-label" for="opt_notes2">
+                                            Operator tidak bisa loading full shift
+                                        </label>
+                                    </div>
+
+                                    <div class="col-sm-11 mt-2" id="notesInputContainer" @(ViewBag.opt_notes == null ? "style='display:none;'" : "")>
+                                        <input id="notesInput" name="opt_notes" type="text" class="form-control" value="@ViewBag.opt_notes" placeholder="Alasan tidak bisa full shift...">
+                                    </div>
+                                </div>
+                            </fieldset>
+
+
+
+                            <div class="row">
+                                @{
+                                    // Ubah "ValueToCheck" dengan nilai yang ingin kamu periksa keberadaannya
+                                    HashSet<string> skillsSet = new HashSet<string>(ViewBag.findSkillsValues);
+
+                                    // FIRST COLUMN (Kategori Skill)
+                                    <div class="col-sm-4">
+                                        <label class="col-form-label">SKILLS CATEGORY:</label>
+                                        @foreach (var item in Model.pim_Autoloading_Skillcodes)
+                                        {
+                                            <div class="form-check">
+                                                <input name="SKILL_@item" value="@item" class="form-check-input" type="checkbox" @(skillsSet.Contains(item) ? "checked" : "")>
+                                                <label class="form-check-label" for="gridCheck1">
+                                                    @item
+                                                </label>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+
+
+                                <!-- SECOND COLUMN (Daftar Skill) -->
+                                <div class="col-sm-8">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">LIST OF PIM SKILLS</h5>
+
+                                            <!-- Accordion without outline borders -->
+                                            <div class="accordion accordion-flush" id="accordionFlushExample">
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="flush-headingOne">
+                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                                            Click Here to Open
+                                                        </button>
+                                                    </h2>
+                                                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                                        <div class="accordion-body">
+                                                            <!-- FETCH DATABASE CATEGORY SKILL -->
+                                                            <table class="table table-bordered" style="font-size:small;">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col">NO</th>
+                                                                        <th scope="col">CODE</th>
+                                                                        <th scope="col">TYPE</th>
+                                                                        <th scope="col">DETAILS</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @{
+                                                                        int count_b = 0;
+                                                                    }
+                                                                    @if (Model != null)
+                                                                    {
+                                                                        foreach (var item in Model.pim_Autoloading_Skills)
+                                                                        {
+                                                                            <tr id="@item.ID" style="max-width:100%;">
+                                                                                <td>@(count_b+1)</td>
+                                                                                <td class="text-success">@item.SKILLCODE</td>
+                                                                                <td>@item.SKILLTYPE</td>
+                                                                                <td>@item.SKILLNAME</td>
+                                                                            </tr>
+                                                                            count_b++;
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <tr>
+                                                                            <td colspan="10">No data available</td>
+                                                                        </tr>
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><!-- End Accordion without outline borders -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <hr />
+
+                            <div class="row mb-3 pt-3">
+                                <div class="col-sm-12">
+                                    @if (ViewBag.EMEMP_ != 0)
+                                    {
+                                        <a type="button" class="btn btn-secondary me-1" href="@Url.Action("Index", "autoloading", new { LEADERNAME = ViewBag.LEADERNAME })">Cancel</a>
+
+                                    }
+                                    else
+                                    {
+                                        <a type="button" class="btn btn-secondary me-1" href="@Url.Action("Index", "autoloading")">Cancel</a>
+                                    }
+
+                                    <button type="submit" class="btn btn-success">Save</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    // Get the radio buttons and the notes input container
+    var radioFullShift = document.getElementById("opt_notes");
+    var radioCannotKeyIn = document.getElementById("opt_notes2");
+    var notesInputContainer = document.getElementById("notesInputContainer");
+    var notesInput = document.getElementById("notesInput");
+
+    // Add event listener to radio buttons to show/hide the notes input and set the required attribute
+    radioFullShift.addEventListener("change", function () {
+        notesInputContainer.style.display = "none";
+        notesInput.removeAttribute("required");
+    });
+
+    radioCannotKeyIn.addEventListener("change", function () {
+        notesInputContainer.style.display = "block";
+        notesInput.setAttribute("required", "required");
+    });
+</script>
