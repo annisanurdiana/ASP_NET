@@ -1,0 +1,1855 @@
+﻿@model OEE_SSC.Models.pimListData
+@{
+
+    ViewBag.Title = "displayData";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    DateTime startDate = ViewBag.startDate;
+    DateTime finishDate = ViewBag.finishDate;
+    DateTime dateNow = ViewBag.DateNow.Date;
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Plotly CHART -->
+<script src="https://cdn.plot.ly/plotly-2.20.0.min.js" charset="utf-8"></script>
+
+@*<h3>Download Data</h3>*@
+
+<main id="" class="main" style="padding: 85px 35px 40px 35px;">
+    <section class="section">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+
+                <div class="text-center pb-1 mt-0">
+                    @* FILTER DATA *@
+                    <!-- Start Filter by AREA Modal Form centered Modal-->
+                    <div class="modal fade" id="filter_by_group" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Filter Data SSC </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <!-- FILTER DATA - MODAL START -->
+                                @using (Html.BeginForm("filterDownloadData", "downloadData", FormMethod.Get, new { id = "importForm" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <div class="modal-body">
+                                        <!-- Filter by Machine FORM -->
+                                        <div class="card-body">
+                                            <!-- Tampilkan loading ketika proses impor sedang berlangsung -->
+                                            <div id="loading" class="justify-content-center  mb-3" style="display: none;">
+                                                <h5>Please wait... data is being processed...</h5>
+                                                <div class="Loading">
+                                                    <div class="Loading-progress"></div>
+                                                </div>
+                                            </div>
+
+                                            <!-- General Form Elements -->
+                                            <form class="needs-validation" novalidate>
+
+                                                @* ----- Input Readonly ---- *@
+
+                                                <div class="row mb-1 mt-2 justify-content-center text-start">
+                                                    <div class="col-sm-10 mb-1">
+                                                        <div class="row mb-3">
+
+                                                            <!-- DATE -->
+                                                            <label for="date" class="col-sm-4 col-form-label">Date Start:</label>
+                                                            <div class="col-sm-8 mb-2">
+                                                                <input class="form-control" name="dateStart" type="date" value="">
+                                                            </div>
+
+                                                            <label for="date" class="col-sm-4 col-form-label">Date End:</label>
+                                                            <div class="col-sm-8 mt-2">
+                                                                <input class="form-control" name="dateFinish" type="date" value="">
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row mb-1 pt-4">
+                                                    <div class="col-sm-12">
+                                                        <button type="button" class="btn btn-secondary">Cancel</button>
+                                                        <button id="filterData" type="submit" class="btn btn-primary">Filter</button>
+                                                    </div>
+                                                </div>
+
+                                            </form><!-- End General Form Elements -->
+
+                                        </div>
+                                    </div>
+                                    <!-- END Filter by Machine FORM -->
+                                    <!-- Filter by Machine MODAL END -->
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Filter by AREA Modal Form centered Modal-->
+                    
+                    @* ABNORMALITY DATA *@
+                    <!-- Start Filter by AREA Modal Form centered Modal-->
+                    <div class="modal fade" id="filter_abnormal" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Abnormality Data SSC </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <!-- FILTER DATA - MODAL START -->
+                                @using (Html.BeginForm("filterAbnormalityData", "downloadData", FormMethod.Get))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <div class="modal-body">
+                                        <!-- Filter by Machine FORM -->
+                                        <div class="card-body">
+                                            <!-- General Form Elements -->
+                                            <form class="needs-validation" novalidate>
+
+                                                @* ----- Input Readonly ---- *@
+
+                                                <div class="row mb-1 mt-2 justify-content-center text-start">
+                                                    <div class="col-sm-10 mb-1">
+                                                        <div class="row mb-3">
+
+                                                            <!-- DATE -->
+                                                            <label for="date" class="col-sm-4 col-form-label">Date Start:</label>
+                                                            <div class="col-sm-8 mb-2">
+                                                                <input class="form-control" name="dateStart" type="date" value="">
+                                                            </div>
+
+                                                            <label for="date" class="col-sm-4 col-form-label">Date End:</label>
+                                                            <div class="col-sm-8 mt-2">
+                                                                <input class="form-control" name="dateFinish" type="date" value="">
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row mb-1 pt-4">
+                                                    <div class="col-sm-12">
+                                                        <button type="button" class="btn btn-secondary">Cancel</button>
+                                                        <button type="submit" class="btn btn-primary">Filter</button>
+                                                    </div>
+                                                </div>
+
+                                            </form><!-- End General Form Elements -->
+
+                                        </div>
+                                    </div>
+                                    <!-- END Filter by Machine FORM -->
+                                    <!-- Filter by Machine MODAL END -->
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Filter by AREA Modal Form centered Modal-->
+                </div>
+
+
+                <!--FETCH DATABASE-->
+                <!-- Menampilkan Data SSC Output -->
+
+                <div class="row">
+
+                    <!-- REPORT -->
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body pt-3">
+                                <h2 class="card-title text-center" style="font-size:x-large">
+                                    DATA OUTPUT "PIM" FROM e-SSC <br />
+                                    <span style="font-size: small; color: #012970; "> &nbsp; Date: &nbsp;@ViewBag.startDate.ToShortDateString() to @ViewBag.finishDate.ToShortDateString()</span>
+                                </h2>
+
+
+                                @* TEST COMPLETENESS *@
+                                @*<div class="row justify-content-center mt-0 text-center">
+                                        @foreach (var item in Model.VO_MAIN_CALC_AREAs)
+                                        {
+                                            decimal completeness = 0; // Default value
+                                            decimal downtime = item.totalDT.GetValueOrDefault();
+                                            if (item.sch != null && item.totalRJ != null && item.totalDT != null && item.pn_stdoutput != null && item.sch != 0)
+                                            {
+                                                completeness = Math.Round((((decimal)item.total_output_pcs.GetValueOrDefault() + (decimal)item.totalRJ.GetValueOrDefault()) + ((decimal)item.totalDT.GetValueOrDefault() * (decimal)item.pn_stdoutput.GetValueOrDefault())) / (decimal)item.sch.GetValueOrDefault(), 2);
+                                            }
+                                            else
+                                            {
+                                                completeness = Math.Round((((decimal)item.total_output_pcs.GetValueOrDefault() + (decimal)item.totalRJ.GetValueOrDefault()) + ((decimal)item.pn_stdoutput.GetValueOrDefault())) / (decimal)item.sch.GetValueOrDefault(), 2);
+                                            }
+
+                                            <p>AREA: @item.mc_area - SHIFT: @item.shift_ - MC: @item.no_machine - COMPLETENESS: @completeness</p>
+                                        }
+
+                                        <h1>@ViewBag.mc</h1>
+                                    </div>*@
+
+
+
+                                <!-- Website Traffic -->
+                                <div class="row justify-content-center mt-0 text-center">
+
+                                    @if (ViewBag.AvgAVAILABILITY_SCORE == null && ViewBag.AvgPERFORMAMCE_SCORE == null && ViewBag.AvgQUALITY_SCORE == null && ViewBag.AvgOEE_SCORE == null)
+                                    {
+
+                                        <div class="row justify-content-center mt-0 text-center">
+                                            <!-- RESPONSIVE - OEE TABLE-->
+                                            <div class="col-lg-3 col-md-6 pt-md-1 mt-md-1 ms-0 me-0">
+                                                <div class="col-lg-3 col-md-6 pt-md-1 mt-md-1 ms-0 me-0">
+                                                    <div id="oeeScoreNull"> @*Plotly chart will be drawn inside this DIV*@ </div>
+                                                </div>
+                                            </div>
+
+
+                                            <!-- RESPONSIVE - A TABLE-->
+                                            <div class="col-lg-3 col-md-6 pt-md-1 mt-md-1 ms-0 me-0">
+                                                <div id="oeeAvailabilityNull"> @*Plotly chart will be drawn inside this DIV*@ </div>
+                                            </div>
+
+                                            <!-- RESPONSIVE - P TABLE-->
+                                            <div class="col-lg-3 col-md-6 pt-md-1 mt-md-1 ms-0 me-0">
+                                                <div id="oeePerformanceNull"> @*Plotly chart will be drawn inside this DIV*@ </div>
+                                            </div>
+
+                                            <!-- RESPONSIVE - Q TABLE-->
+                                            <div class="col-lg-3 col-md-6 pt-md-1 mt-md-1 ms-0 me-0">
+                                                <div id="oeeQualityNull"> @*Plotly chart will be drawn inside this DIV*@ </div>
+                                            </div>
+                                        </div>
+
+                                    }
+
+                                    else
+                                    {
+
+                                        <div class="row justify-content-center mt-0 text-center">
+
+
+                                            <!-- RESPONSIVE - A TABLE-->
+                                            <div class="col-lg-2 col-md-6 p-3 pt-md-1 mt-md-1 ms-0 me-4 btn btn-outline-danger">
+                                                <h6 class="mt-3">
+                                                    AVAILABILITY<br /><span style="font-size: small;">(Average)</span>:
+                                                    <br>
+                                                    <span style="font-size:50px;"><b>@ViewBag.AvgAVAILABILITY_SCORE</b></span>
+                                                </h6>
+                                            </div>
+
+                                            <!-- RESPONSIVE - P TABLE-->
+                                            <div class="col-lg-3 col-md-6 p-3 pt-md-1 mt-md-1 ms-0 me-4 btn btn-outline-primary">
+                                                <h6 class="mt-3">
+                                                    PERFORMANCE<br /><span style="font-size: small;">(Average)</span>:
+                                                    <br>
+                                                    <span style="font-size:50px;"><b>@ViewBag.AvgPERFORMAMCE_SCORE</b></span>
+                                                </h6>
+                                            </div>
+
+
+                                            <!-- RESPONSIVE - Q TABLE-->
+                                            <div class="col-lg-2 col-md-6 p-3 pt-md-1 mt-md-1 ms-0 me-4 btn btn-outline-success">
+                                                <h6 class="mt-3">
+                                                    QUALITY<br /> <span style="font-size: small;">(Average)</span>:
+                                                    <br>
+                                                    <span style="font-size:50px;"><b>@ViewBag.AvgQUALITY_SCORE</b></span>
+                                                </h6>
+                                            </div>
+
+                                            <!-- RESPONSIVE - AVG TABLE-->
+                                            @if (ViewBag.AvgOEE_SCORE < 70)
+                                            {
+                                                <div class="col-lg-3 col-md-6 p-3 pt-md-1 mt-md-1 ms-0 me-4 btn btn-outline-secondary">
+                                                    <h6 class="mt-3">
+                                                        OEE<br /> <span style="font-size: small;">(Average)</span>:
+                                                        <br>
+                                                        <span style="font-size:50px;"><b>@ViewBag.AvgOEE_SCORE</b></span>
+                                                    </h6>
+                                                </div>
+
+                                            }
+                                            else if (ViewBag.AvgOEE_SCORE >= 70 && ViewBag.AvgOEE_SCORE <= 85)
+                                            {
+                                                <div class="col-lg-3 col-md-6 p-3 pt-md-1 mt-md-1 ms-0 me-4 btn btn-outline-secondary">
+                                                    <h6 class="mt-3">
+                                                        OEE<br /> <span style="font-size: small;">(Average)</span>:
+                                                        <br>
+                                                        <span style="font-size:50px;"><b>@ViewBag.AvgOEE_SCORE</b></span>
+                                                    </h6>
+                                                </div>
+
+                                            }
+                                            else
+                                            {
+                                                <div class="col-lg-3 col-md-6 p-3 pt-md-1 mt-md-1 ms-0 me-4 btn btn-outline-secondary">
+                                                    <h6 class="mt-3">
+                                                        OEE<br /> <span style="font-size: small;">(Average)</span>:
+                                                        <br>
+                                                        <span style="font-size:50px;"><b>@ViewBag.AvgOEE_SCORE</b></span>
+                                                    </h6>
+                                                </div>
+
+                                            }
+
+                                        </div>
+
+                                    }
+
+
+                                </div>
+
+                                <div class="row justify-content-center">
+                                    @if (ViewBag.abnormality != null)
+                                    {
+                                        <div class="row justify-content-start text-left mt-0 p-3 text small">
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                <h4 class="alert-heading">Data Regarding Abnormalities</h4>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <ul>
+                                                            <li>Nilai Availability, Performance, atau Quality &le; 0%</li>
+                                                            <li>Nilai OEE, Availability, atau Quality di atas 100%</li>
+                                                            <li>Nilai Performance kurang dari 70% atau lebih dari 120%</li>
+                                                            <li>Nilai Variance lebih besar 20% dari standard output pcs</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <ul style="opacity:80%">
+                                                            <li>Availability, Performance, or Quality values &le; 0%</li>
+                                                            <li>OEE, Availability, or Quality values above 100%</li>
+                                                            <li>Performance values below 70% or above 120%</li>
+                                                            <li>Variance values greater than 20% of the standard output in pcs</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <p class="mb-0">Mohon check nilai abnormality yang ditandai highlight berwarna merah.</p>
+                                                    </div>
+                                                    <div class="col-md-6" style="opacity:80%">
+                                                        <p class="mb-0">&emsp;Please check the abnormality values marked with a red highlight</p>
+                                                    </div>
+                                                </div>
+
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
+                                        </div>
+
+
+                                    }
+
+                                </div>
+                                <!-- End Website Traffic -->
+                                @*<h2> OEE AVG: <b>@ViewBag.AvgOEE_SCORE</b></h2>
+                                    <h2> OEE APQ: <b>@ViewBag.apqOEE_SCORE</b></h2>
+                                    <h2>A <b>@ViewBag.AvgAVAILABILITY_SCORE</b></h2>
+                                    <h2>P <b>@ViewBag.AvgPERFORMAMCE_SCORE</b></h2>
+                                    <h2>Q <b>@ViewBag.AvgQUALITY_SCORE</b></h2>
+                                    <br />*@
+                                <!-- Bordered Tabs -->
+                                <ul class="nav nav-tabs nav-tabs-bordered mt-4">
+
+                                    <li class="nav-item">
+                                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#oee-report">Output OEE</button>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#ssc-report">Output Part</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#reject-report">Reject</button>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#downtime-report">Downtime</button>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#not-running-report">Not Running</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#rejectPP-report">PP</button>
+                                    </li>
+
+                                </ul>
+                                <div class="tab-content pt-2">
+
+
+                                    @* DETALS OEE OUTPUT *@
+                                    <div class="tab-pane fade show active oee-report" id="oee-report">
+                                        <!-- REPORT - OEE OUTPUT -->
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <div class="card-body">
+
+                                                    <!-- Auto Refresh pada id="countdown" akan dimatikan jika data sudah selesai diperoleh, sdh ganti hari -->
+                                                    @if (finishDate >= dateNow)
+                                                    {
+                                                        <h5 class="card-title text-info">
+                                                            @* FILTER DATA *@
+                                                            <button type="button" class="btn btn-info text-light" title="Filter Data" data-bs-toggle="modal" data-bs-target="#filter_by_group">
+                                                                Filter Date <i class="bi bi-filter"></i>
+                                                            </button>
+
+                                                            @*<button class="btn btn-outline-danger" id="filterAbnormality">Abnormality Time</button>*@
+
+                                                            <a class="btn btn-danger text-light" href="@Url.Action("filterAbnormalityData", "downloadData",  new { dateStart = @ViewBag.startDate, dateFinish = @ViewBag.finishDate })">
+                                                                <span class="d-none d-md-block ps-2 text-light">Abnormality Check</span>
+                                                            </a>
+                                                            <a class="btn btn-secondary text-light" href="@Url.Action("filterDownloadData", "downloadData",  new { dateStart = @ViewBag.startDate, dateFinish = @ViewBag.finishDate })">
+                                                                <span class="d-none d-md-block text-light"><i class="bi bi-arrow-clockwise"></i></span>
+                                                            </a>
+
+                                                            <span class="text-info" id="countdown2" style="font-weight:700; float: right"></span>
+                                                        </h5>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <h5 class="card-title text-info">
+                                                            @* FILTER DATA *@
+                                                            <button type="button" class="btn btn-info text-light" title="Filter Data" data-bs-toggle="modal" data-bs-target="#filter_by_group">
+                                                                Filter Date <i class="bi bi-filter"></i>
+                                                            </button>
+                                                            <a class="btn btn-danger text-light" href="@Url.Action("filterAbnormalityData", "downloadData",  new { dateStart = @ViewBag.startDate, dateFinish = @ViewBag.finishDate })">
+                                                                <span class="d-none d-md-block ps-2 text-light">Abnormality Check</span>
+                                                            </a>
+                                                            <a class="btn btn-secondary text-light" href="@Url.Action("filterDownloadData", "downloadData",  new { dateStart = @ViewBag.startDate, dateFinish = @ViewBag.finishDate })">
+                                                                <span class="d-none d-md-block text-light"><i class="bi bi-arrow-clockwise"></i></span>
+                                                            </a>
+                                                        </h5>
+                                                    }
+
+                                                    <div class="table-responsive">
+                                                        <table class="table datatable table-hover" style="font-size:11px;">
+                                                            @if (Model.VO_MAIN_CALC_TOPs.Count() > 0)
+                                                            {
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Date</th>
+                                                                        <th>WE</th>
+                                                                        <th>MC</th>
+                                                                        <th>Shift</th>
+
+                                                                        <th>OEE</th>
+                                                                        <th>Availability</th>
+                                                                        <th>Performance</th>
+                                                                        <th>Quality</th>
+
+                                                                        <th>Total Time</th>
+                                                                        <th>Not Runinng</th>
+                                                                        <th>Available Time</th>
+                                                                        <th>Total Downtime</th>
+                                                                        <th>Operating Time</th>
+                                                                        <th>Good Output</th>
+                                                                        <th>Std Output</th>
+                                                                        <th>Output Pcs</th>
+                                                                        <th>Var</th>
+                                                                    </tr>
+                                                                </thead>
+
+                                                                <tbody>
+                                                                    @foreach (var item in Model.VO_MAIN_CALC_TOPs)
+                                                                    {
+                                                                        <tr class="data-row">
+                                                                            <td>@item.date_.GetValueOrDefault().ToShortDateString()</td>
+                                                                            <td>@item.we_</td>
+                                                                            <td>@item.no_machine</td>
+                                                                            <td>@item.shift_</td>
+
+
+                                                                            @* ---------------------OEE------------------- *@
+                                                                            <td class="oee">
+                                                                                @if (item.totalNotRun.HasValue && item.total_time.HasValue && item.pn_operatingtime.HasValue && item.pn_stdoutput.HasValue && item.total_output_pcs.HasValue && item.total_good_output.HasValue && item.totalNotRun != 0 && item.total_time != 0 && item.pn_operatingtime != 0 && item.pn_stdoutput != 0 && item.total_output_pcs != 0 && item.total_good_output != 0)
+                                                                                {
+                                                                                    decimal availability = Math.Round((((decimal)item.pn_operatingtime) / ((decimal)item.total_time - (decimal)item.totalNotRun)), 2);
+                                                                                    decimal performance = Math.Round(((decimal)item.total_output_pcs / (decimal)item.pn_stdoutput), 2);
+                                                                                    decimal quality = Math.Round(((decimal)item.total_good_output / (decimal)item.total_output_pcs), 2);
+                                                                                    decimal OEE_SCORE = Math.Round((availability * performance * quality) * 100, 2);
+
+                                                                                    // format string "0", maka bilangan desimal akan dibulatkan ke bilangan bulat terdekat
+                                                                                    <p style="margin-bottom: 0;">
+                                                                                        @OEE_SCORE.ToString("0.00") %
+
+                                                                                    </p>
+
+                                                                                }
+                                                                                // tidak ada not running
+                                                                                else if (item.total_time.HasValue && item.pn_operatingtime.HasValue && item.pn_stdoutput.HasValue && item.total_output_pcs.HasValue && item.total_good_output.HasValue && item.total_time != 0 && item.pn_operatingtime != 0 && item.pn_stdoutput != 0 && item.total_output_pcs != 0 && item.total_good_output != 0)
+                                                                                {
+                                                                                    decimal availability = Math.Round((((decimal)item.pn_operatingtime) / ((decimal)item.total_time - 0)), 2);
+                                                                                    decimal performance = Math.Round(((decimal)item.total_output_pcs / (decimal)item.pn_stdoutput), 2);
+                                                                                    decimal quality = Math.Round(((decimal)item.total_good_output / (decimal)item.total_output_pcs), 2);
+                                                                                    decimal OEE_SCORE = Math.Round((availability * performance * quality) * 100, 2);
+
+                                                                                    if (OEE_SCORE < 0)
+                                                                                    {
+                                                                                        <p style="color: red; font-weight: 700; justify-content: center;">
+                                                                                            @OEE_SCORE.ToString("0.00") %
+                                                                                        </p>
+                                                                                    }
+                                                                                    else if (OEE_SCORE >= 101)
+                                                                                    {
+                                                                                        <p style="color: red; font-weight: 700; justify-content: center;">
+                                                                                            @OEE_SCORE.ToString("0.00") %
+                                                                                        </p>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <p style="margin-bottom: 0;">
+                                                                                            @OEE_SCORE.ToString("0.00") %
+                                                                                        </p>
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0%</p>
+                                                                                }
+                                                                            </td>
+
+                                                                            @* ---------------------AVAILABILITY------------------- *@
+                                                                            <td class="availability">
+                                                                                @if (item.total_time.HasValue && item.total_time != 0 && item.pn_operatingtime.HasValue && item.pn_operatingtime != 0 && item.totalNotRun.HasValue && item.totalNotRun != 0)
+                                                                                {
+                                                                                    decimal availability = Math.Round((((decimal)item.pn_operatingtime) / ((decimal)item.total_time - (decimal)item.totalNotRun)) * 100, 2);
+                                                                                    // jika nilai availability diatas 100 maka setting 100
+                                                                                    if (availability > 100)
+                                                                                    {
+                                                                                        <p style="background-color: red; color: white; font-weight: 700; justify-content: center;">
+                                                                                            &nbsp;@availability.ToString("0.00") %
+                                                                                        </p>
+                                                                                    }
+                                                                                    else if (availability < 0)
+                                                                                    {
+                                                                                        <p style="background-color: red; color: white; font-weight: 700; justify-content: center; ">
+                                                                                            &nbsp;@availability.ToString("0.00") %
+                                                                                        </p>
+
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <p style="margin-bottom: 0;">
+                                                                                            @availability.ToString("0.00") %
+                                                                                        </p>
+                                                                                    }
+                                                                                }
+                                                                                else if (item.total_time.HasValue && item.total_time != 0 && item.pn_operatingtime.HasValue && item.pn_operatingtime != 0)
+                                                                                {
+                                                                                    decimal availability = Math.Round((((decimal)item.pn_operatingtime) / ((decimal)item.total_time - 0)) * 100, 2);
+                                                                                    // jika nilai availability diatas 100 maka setting 100
+                                                                                    if (availability > 100)
+                                                                                    {
+                                                                                        <p style="background-color: red; color: white; font-weight: 700; justify-content: center;">
+                                                                                            &nbsp;@availability.ToString("0.00") %
+                                                                                        </p>
+                                                                                    }
+                                                                                    else if (availability < 0)
+                                                                                    {
+                                                                                        <p style="background-color: red; color: white; font-weight: 700; justify-content: center; ">
+                                                                                            &nbsp;@availability.ToString("0.00") %
+                                                                                        </p>
+
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <p style="margin-bottom: 0;">
+                                                                                            @availability.ToString("0.00") %
+                                                                                        </p>
+                                                                                    }
+
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0%</p>
+                                                                                }
+                                                                            </td>
+
+                                                                            <!--//performance = Math.Round(((decimal)g.Sum(x => x.actual_output) / (decimal)g.Sum(x => x.pn_stdoutput)) * 100, 2),-->
+                                                                            @* ---------------------PERFORMANCE------------------- *@
+                                                                            <td class="performance">
+                                                                                @if (item.pn_stdoutput.HasValue && item.pn_stdoutput != 0 && item.total_output_pcs.HasValue && item.total_output_pcs != 0)
+                                                                                {
+                                                                                    decimal performance = Math.Round(((decimal)item.total_output_pcs / (decimal)item.pn_stdoutput) * 100, 2);
+                                                                                    // jika nilai performance diatas 100 maka setting 100
+                                                                                    if (performance >= 120 || performance < 70 || performance < 0)
+                                                                                    {
+                                                                                        <p style="background-color: red; color: white; font-weight: 700; justify-content: center;">
+                                                                                            &nbsp;@performance.ToString("0.00") %
+                                                                                        </p>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        // format string "0", maka bilangan desimal akan dibulatkan ke bilangan bulat terdekat
+                                                                                        <p style="margin-bottom: 0;">
+                                                                                            @performance.ToString("0.00") %
+                                                                                        </p>
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+
+                                                                                    <p style="margin-bottom: 0;">0%</p>
+                                                                                }
+                                                                            </td>
+                                                                            @* ---------------------QUALITY------------------- *@
+                                                                            <td class="quality">
+                                                                                @if (item.total_good_output.HasValue && item.total_good_output != 0 && item.total_output_pcs.HasValue && item.total_output_pcs != 0)
+                                                                                {
+                                                                                    decimal quality = Math.Round(((decimal)item.total_good_output / (decimal)item.total_output_pcs) * 100, 2);
+
+                                                                                    // jika nilai quality diatas 100 maka setting 100
+                                                                                    if (quality > 100)
+                                                                                    {
+                                                                                        <p style="background-color: red; color: white; font-weight: 700; justify-content: center;">
+                                                                                            &nbsp;@quality.ToString("0.00") %
+                                                                                        </p>
+                                                                                    }
+                                                                                    else if (quality < 0)
+                                                                                    {
+                                                                                        <p style="background-color: red; color: white; font-weight: 700; justify-content:center;">
+                                                                                            &nbsp;@quality.ToString("0.00") %
+                                                                                        </p>
+
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        // format string "0", maka bilangan desimal akan dibulatkan ke bilangan bulat terdekat
+                                                                                        <p style="margin-bottom: 0;">
+                                                                                            @quality.ToString("0.00") %
+                                                                                        </p>
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0%</p>
+                                                                                }
+                                                                            </td>
+
+
+                                                                            <td class="total-time">
+                                                                                @if (item.total_time > 510)
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">
+                                                                                        510
+                                                                                    </p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">
+                                                                                        @item.total_time
+                                                                                    </p>
+                                                                                }
+                                                                            </td>
+                                                                            <td class="total-time">
+                                                                                @if (item.totalNotRun == null)
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">@item.totalNotRun</p>
+                                                                                }
+                                                                            </td>
+                                                                            @* AVAILABLE TIME = TOTAL TIME - NOT RUNNING  *@
+                                                                            <td>
+                                                                                @if (item.total_time != null && item.total_time != 0)
+                                                                                {
+                                                                                    int available_time = (int)item.total_time - (item.totalNotRun != null ? (int)item.totalNotRun : 0);
+                                                                                    if (available_time < 1)
+                                                                                    {
+                                                                                        <p style="margin-bottom: 0;"> 0 </p>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <p style="margin-bottom: 0;">@available_time</p>
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                            </td>
+                                                                            <td>
+                                                                                @if (item.totalDT == null)
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">@item.totalDT</p>
+                                                                                }
+                                                                            </td>
+                                                                            <td>
+                                                                                @if (item.pn_operatingtime == null)
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">@item.pn_operatingtime</p>
+                                                                                }
+                                                                            </td>
+                                                                            <td>
+                                                                                @if (item.total_good_output == null)
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">@item.total_good_output</p>
+                                                                                }
+                                                                            </td>
+                                                                            <td>
+                                                                                @if (item.pn_stdoutput == null)
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">@item.pn_stdoutput</p>
+                                                                                }
+                                                                            </td>
+                                                                            <td>
+                                                                                @if (item.total_output_pcs == null)
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">@item.total_output_pcs</p>
+                                                                                }
+                                                                            </td>
+                                                                            @* Variance *@
+                                                                            <td>
+                                                                                @if (item.total_output_pcs != null && item.total_output_pcs != 0 && item.pn_stdoutput != null && item.pn_stdoutput != 0)
+                                                                                {
+                                                                                    decimal variance_ = Math.Round((((decimal)item.total_output_pcs) - ((decimal)item.pn_stdoutput)), 0);
+                                                                                    if (variance_ < 0)
+                                                                                    {
+                                                                                        // Jika variance diatas 20% set menjadi ABNORMALITY
+                                                                                        if ((item.pn_stdoutput.Value - item.total_output_pcs.Value) > (item.pn_stdoutput.Value * 1 / 5))
+                                                                                        {
+
+                                                                                            <p style="margin-bottom: 0; background-color: red; color: white; font-weight: 700; justify-content: center;">@variance_</p>
+
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <p style="margin-bottom: 0; color: red; ">@variance_</p>
+                                                                                        }
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <p style="margin-bottom: 0;">@variance_</p>
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                </tbody>
+                                                            }
+                                                            else
+                                                            {
+                                                                <i class="mt-0 text-center d-md-block text-secondary">"...DATA NOT FOUND..."</i>
+                                                            }
+                                                        </table>
+                                                        <!-- End Table with stripped rows -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @* --------------------------------- *@
+                                    </div>
+
+                                    @* DETALS SSC OUTPUT *@
+                                    <div class="tab-pane fade ssc-report" id="ssc-report">
+                                        <!-- REPORT - SSC OUTPUT -->
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <div class="card-body">
+
+                                                    @if (finishDate >= dateNow)
+                                                    {
+                                                        <h6 class="card-title text-primary">
+                                                            @* FILTER DATA *@
+                                                            <button type="button" class="btn btn-primary text-light" title="Filter Data" data-bs-toggle="modal" data-bs-target="#filter_by_group">
+                                                                Filter Date <i class="bi bi-filter"></i>
+                                                            </button>
+
+                                                            <a class="btn btn-danger text-light" href="@Url.Action("filterAbnormalityData", "downloadData",  new { dateStart = @ViewBag.startDate, dateFinish = @ViewBag.finishDate })">
+                                                                <span class="d-none d-md-block ps-2 text-light">Abnormality Check</span>
+                                                            </a>
+                                                            <a class="btn btn-secondary text-light" href="@Url.Action("filterDownloadData", "downloadData",  new { dateStart = @ViewBag.startDate, dateFinish = @ViewBag.finishDate })">
+                                                                <span class="d-none d-md-block text-light"><i class="bi bi-arrow-clockwise"></i></span>
+                                                            </a>
+                                                            <span class="text-primary" id="countdown" style="font-weight:700; float: right"></span>
+                                                        </h6>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <h6 class="card-title text-primary">
+                                                            @* FILTER DATA *@
+                                                            <button type="button" class="btn btn-primary text-light" title="Filter Data" data-bs-toggle="modal" data-bs-target="#filter_by_group">
+                                                                Filter Date <i class="bi bi-filter"></i>
+                                                            </button>
+                                                            <a class="btn btn-danger text-light" href="@Url.Action("filterAbnormalityData", "downloadData",  new { dateStart = @ViewBag.startDate, dateFinish = @ViewBag.finishDate })">
+                                                                <span class="d-none d-md-block ps-2 text-light">Abnormality Check</span>
+                                                            </a>
+                                                            <a class="btn btn-secondary text-light" href="@Url.Action("filterDownloadData", "downloadData",  new { dateStart = @ViewBag.startDate, dateFinish = @ViewBag.finishDate })">
+                                                                <span class="d-none d-md-block text-light"><i class="bi bi-arrow-clockwise"></i></span>
+                                                            </a>
+                                                        </h6>
+                                                    }
+
+                                                    <div class="table-responsive">
+                                                        <!-- Menampilkan SSC Output -->
+                                                        <table class="table datatable table-hover" style="font-size: 11px;">
+                                                            @if (Model.VO_MAIN_CALCs.Count() > 0)
+                                                            {
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Date</th>
+                                                                        <th>MC</th>
+                                                                        <th>Shift</th>
+                                                                        <th>PN</th>
+                                                                        <th>KPK</th>
+                                                                        <th>Total Time</th>
+                                                                        <th>No Run</th>
+                                                                        <th>Downtime</th>
+                                                                        <th>CAV</th>
+                                                                        <th>SET</th>
+                                                                        <th>Pengali</th>
+                                                                        <th>Actual Output</th>
+                                                                        <th>Output (pcs)</th>
+                                                                        <th>Reject</th>
+                                                                        <th>Good Output</th>
+                                                                        <th>Available Time</th>
+                                                                        <th>Op Time</th>
+                                                                        <th>Std Output</th>
+                                                                        <th>Var</th>
+                                                                        <th>Note</th>
+
+                                                                    </tr>
+                                                                </thead>
+
+                                                                <tbody>
+                                                                    @foreach (var item in Model.VO_MAIN_CALCs)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>@item.date_.GetValueOrDefault().ToShortDateString()</td>
+                                                                            <td>@item.no_machine</td>
+                                                                            <td>@item.shift_</td>
+                                                                            <td>@item.partnumber</td>
+                                                                            <td>@item.op_kpk</td>
+                                                                            <td>
+                                                                                @if (item.total_time == null)
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">@item.total_time</p>
+                                                                                }
+                                                                            </td>
+                                                                            <td>
+                                                                                @if (item.totalNotRun == null)
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">@item.totalNotRun</p>
+                                                                                }
+                                                                            </td>
+                                                                            <td>
+                                                                                @if (item.totalDT == null)
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">@item.totalDT</p>
+                                                                                }
+                                                                            </td>
+                                                                            <td>
+                                                                                @if (item.pn_cav == null)
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">@item.pn_cav</p>
+                                                                                }
+                                                                            </td>
+                                                                            <td>
+                                                                                @if (item.pn_set == null)
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">@item.pn_set</p>
+                                                                                }
+                                                                            </td>
+                                                                            @* PENGALI OUTPUT PER PCS*@
+                                                                            <td>
+                                                                                @if (item.pn_cav != null && item.pn_cav != 0 && item.pn_set != null && item.pn_set != 0)
+                                                                                {
+                                                                                    decimal pengali_output = Math.Round((((decimal)item.pn_cav) / ((decimal)item.pn_set)), 0);
+
+                                                                                    <p style="margin-bottom: 0;">@pengali_output</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                            </td>
+                                                                            @* ACTUAL OUTPUT *@
+                                                                            <td>
+                                                                                @if (item.total_actoutput == null)
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">@item.total_actoutput</p>
+                                                                                }
+                                                                            </td>
+                                                                            @* OUTPUT PER PCS *@
+                                                                            <td>
+                                                                                @if (item.total_output_pcs == null)
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">@item.total_output_pcs</p>
+                                                                                }
+                                                                            </td>
+                                                                            @* REJECT TOTAL *@
+                                                                            <td>
+                                                                                @if (item.totalRJ == null)
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">@item.totalRJ</p>
+                                                                                }
+                                                                            </td>
+                                                                            @* GOOD OUTPUT *@
+                                                                            <td>
+                                                                                @if (item.total_good_output == null)
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">@item.total_good_output</p>
+                                                                                }
+                                                                            </td>
+                                                                            @* AVAILABLE TIME = TOTAL TIME - NOT RUNNING  *@
+                                                                            <td>
+                                                                                @if (item.total_time != null && item.total_time != 0)
+                                                                                {
+                                                                                    int available_time = (int)item.total_time - (item.totalNotRun != null ? (int)item.totalNotRun : 0);
+                                                                                    if (available_time < 1)
+                                                                                    {
+                                                                                        <p style="margin-bottom: 0;"> 0 </p>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <p style="margin-bottom: 0;">@available_time</p>
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                            </td>
+                                                                            @* OPERATING TIME = (TOTAL TIME - NOT RUNNING) - DOWNTIME *@
+                                                                            <td>
+                                                                                @if (item.total_time != null && item.total_time != 0 && item.totalNotRun != null && item.totalNotRun != 0 && item.totalDT != null && item.totalDT != 0)
+                                                                                {
+                                                                                    int operating_time = ((int)item.total_time - (int)item.totalNotRun) - (int)item.totalDT;
+                                                                                    if (operating_time < 1)
+                                                                                    {
+                                                                                        <p style="margin-bottom: 0;"> 0 </p>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <p style="margin-bottom: 0;">@operating_time</p>
+                                                                                    }
+                                                                                }
+                                                                                else if (item.total_time != null && item.total_time != 0)
+                                                                                {
+                                                                                    int operating_time = (int)item.total_time - (item.totalNotRun != null ? (int)item.totalNotRun : 0);
+                                                                                    if (operating_time < 1)
+                                                                                    {
+                                                                                        <p style="margin-bottom: 0;"> 0 </p>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <p style="margin-bottom: 0;">@operating_time</p>
+                                                                                    }
+
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                            </td>
+                                                                            <td>
+                                                                                @if (item.pn_stdoutput == null)
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">@item.pn_stdoutput</p>
+                                                                                }
+                                                                            </td>
+                                                                            <td>
+                                                                                @if (item.total_output_pcs != null && item.total_output_pcs != 0 && item.pn_stdoutput != null && item.pn_stdoutput != 0)
+                                                                                {
+                                                                                    decimal variance_ = Math.Round((((decimal)item.total_output_pcs) - ((decimal)item.pn_stdoutput)), 0);
+                                                                                    if (variance_ < 0)
+                                                                                    {
+                                                                                        if ((item.pn_stdoutput.Value - item.total_output_pcs.Value) > (item.pn_stdoutput.Value * 1 / 5))
+                                                                                        {
+
+                                                                                            <p style="margin-bottom: 0; background-color: red; color: white; font-weight: 700; justify-content: center;">@variance_</p>
+
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <p style="margin-bottom: 0; color: red; ">@variance_</p>
+                                                                                        }
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <p style="margin-bottom: 0;">@variance_</p>
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">0</p>
+                                                                                }
+                                                                            </td>
+
+                                                                            <td>
+                                                                                @if (item.pn_notes == null)
+                                                                                {
+                                                                                    <p style="margin-bottom: 0;">-</p>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p style="margin-bottom: 0; max-width:80px;">@item.pn_notes</p>
+                                                                                }
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                </tbody>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p class="mt-0 text-center d-md-block text-secondary"><i>"...DATA NOT FOUND..."</i></p>
+                                                            }
+                                                        </table>
+                                                        <!-- End Table with stripped rows -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @* --------------------------------- *@
+                                    </div>
+
+
+
+                                    @* DETALS REJECT OUTPUT *@
+                                    <div class="tab-pane fade reject-report" id="reject-report">
+                                        <!-- REPORT - REJECT OUTPUT -->
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <div class="card-body">
+
+                                                    <!-- Auto Refresh pada id="countdown" akan dimatikan jika data sudah selesai diperoleh, sdh ganti hari -->
+                                                    @if (finishDate >= dateNow)
+                                                    {
+                                                        <h5 class="card-title text-success">
+                                                            @* FILTER DATA *@
+                                                            <button type="button" class="btn btn-success text-light" title="Filter Data" data-bs-toggle="modal" data-bs-target="#filter_by_group">
+                                                                Filter Date <i class="bi bi-filter"></i>
+                                                            </button>
+                                                            <button class="btn btn-secondary" onclick="location.reload();"><i class="bi bi-arrow-clockwise"></i></button>
+
+                                                            <span class="text-success" id="countdown5" style="font-weight:700; float: right"></span>
+                                                        </h5>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <h5 class="card-title text-success">
+                                                            @* FILTER DATA *@
+                                                            <button type="button" class="btn btn-success text-light" title="Filter Data" data-bs-toggle="modal" data-bs-target="#filter_by_group">
+                                                                Filter Date <i class="bi bi-filter"></i>
+                                                            </button>
+                                                            <button class="btn btn-secondary" onclick="location.reload();"><i class="bi bi-arrow-clockwise"></i></button>
+                                                        </h5>
+                                                    }
+
+
+                                                    <div class="table-responsive">
+                                                        <!-- Menampilkan Reject Output -->
+                                                        <table class="table datatable table-hover" style="font-size:small;">
+                                                            @if (Model.VO_REJECTs.Count() > 0)
+                                                            {
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col">No</th>
+                                                                        <th scope="col">WE</th>
+                                                                        <th scope="col">Date</th>
+                                                                        <th scope="col">Machine</th>
+                                                                        <th scope="col">Shift</th>
+                                                                        <th scope="col">Part Number</th>
+                                                                        <th scope="col">Quantity</th>
+                                                                        <th scope="col">Code</th>
+                                                                        <th scope="col">Details</th>
+                                                                        <th scope="col">Other Remarks</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @{
+                                                                        int count_b = 0;
+                                                                    }
+                                                                    @foreach (var item in Model.VO_REJECTs)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>@(count_b+1)</td>
+                                                                            <td>@item.we_</td>
+                                                                            <td>@item.date_.GetValueOrDefault().ToShortDateString()</td>
+                                                                            <td>@item.no_machine</td>
+                                                                            <td>@item.shift_</td>
+                                                                            <td>@item.partnumber</td>
+                                                                            <td>@item.reject_qty</td>
+                                                                            <td>@item.reject_code</td>
+                                                                            <td>@item.rj_remarks</td>
+                                                                            <td>@item.reject_notes</td>
+                                                                        </tr>
+                                                                        count_b++;
+                                                                    }
+                                                                </tbody>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p class="mt-0 text-center d-md-block text-success"><i>"... REJECT DATA NOT FOUND..."</i></p>
+                                                            }
+                                                        </table>
+                                                        <!-- End Table with stripped rows -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @* --------------------------------- *@
+                                    </div>
+
+
+                                    @* DETALS DOWNTIME OUTPUT *@
+                                    <div class="tab-pane fade downtime-report" id="downtime-report">
+                                        <!-- REPORT - DOWNTIME OUTPUT -->
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <div class="card-body">
+
+                                                    <!-- Auto Refresh pada id="countdown" akan dimatikan jika data sudah selesai diperoleh, sdh ganti hari -->
+                                                    @if (finishDate >= dateNow)
+                                                    {
+                                                        <h5 class="card-title text-danger">
+                                                            @* FILTER DATA *@
+                                                            <button type="button" class="btn btn-danger text-light" title="Filter Data" data-bs-toggle="modal" data-bs-target="#filter_by_group">
+                                                                Filter Date <i class="bi bi-filter"></i>
+                                                            </button>
+                                                            <button class="btn btn-secondary" onclick="location.reload();"><i class="bi bi-arrow-clockwise"></i></button>
+
+                                                            <span class="text-danger" id="countdown3" style="font-weight:700; float: right"></span>
+                                                        </h5>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <h5 class="card-title text-danger">
+                                                            @* FILTER DATA *@
+                                                            <button type="button" class="btn btn-danger text-light" title="Filter Data" data-bs-toggle="modal" data-bs-target="#filter_by_group">
+                                                                Filter Date <i class="bi bi-filter"></i>
+                                                            </button>
+                                                            <button class="btn btn-secondary" onclick="location.reload();"><i class="bi bi-arrow-clockwise"></i></button>
+                                                        </h5>
+                                                    }
+
+                                                    <!-- Menampilkan Downtime Output -->
+                                                    <div class="table-responsive">
+                                                        <table class="table datatable table-hover" style="font-size:small;">
+                                                            @if (Model.VO_DOWNTIMEs.Count() > 0)
+                                                            {
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col">No</th>
+                                                                        <th scope="col">WE</th>
+                                                                        <th scope="col">Date</th>
+                                                                        <th scope="col">Machine</th>
+                                                                        <th scope="col">Shift</th>
+                                                                        <th scope="col">Part Number</th>
+                                                                        <th scope="col">Operator</th>
+                                                                        <th scope="col">Start</th>
+                                                                        <th scope="col">Finish</th>
+                                                                        <th scope="col">Durations</th>
+                                                                        <th scope="col">Code</th>
+                                                                        <th scope="col">Remarks</th>
+                                                                        <th scope="col">Type</th>
+                                                                        <th scope="col">Notes</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @{
+                                                                        int count_a = 0;
+                                                                    }
+                                                                    @foreach (var item in Model.VO_DOWNTIMEs.Where(x => x.downtime_code != "PD9" && x.downtime_code != "Z02"))
+                                                                    {
+                                                                        <tr>
+                                                                            <td>@(count_a+1)</td>
+                                                                            <td>@item.we_</td>
+                                                                            <td>@item.date_.GetValueOrDefault().ToShortDateString()</td>
+                                                                            <td>@item.no_machine</td>
+                                                                            <td>@item.shift_</td>
+                                                                            <td>@item.partnumber</td>
+                                                                            <td>@item.op_name</td>
+                                                                            <td>@item.dt_start</td>
+                                                                            <td>@item.dt_finish</td>
+                                                                            @if (@item.duration_minutes == null)
+                                                                            {
+                                                                                <td>@item.duration_minutes</td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <td>@item.duration_minutes minutes</td>
+                                                                            }
+                                                                            <td>@item.downtime_code</td>
+                                                                            <td>@item.dt_remarks</td>
+                                                                            <td>@item.dt_type</td>
+                                                                            <td>@item.downtime_notes</td>
+                                                                        </tr>
+                                                                        count_a++;
+                                                                    }
+
+                                                                </tbody>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p class="mt-0 text-center d-md-block text-danger"> <i>"..DOWNTIME DATA NOT FOUND..."</i></p>
+                                                            }
+                                                        </table>
+                                                        <!-- End Table with stripped rows -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @* --------------------------------- *@
+                                    </div>
+
+
+                                    @* DETALS NOT RUNNING OUTPUT *@
+                                    <div class="tab-pane fade not-running-report" id="not-running-report">
+                                        <!-- REPORT -  NOT RUNNING OUTPUT -->
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <div class="card-body">
+
+                                                    <!-- Auto Refresh pada id="countdown" akan dimatikan jika data sudah selesai diperoleh, sdh ganti hari -->
+                                                    @if (finishDate >= dateNow)
+                                                    {
+                                                        <h5 class="card-title text-warning">
+                                                            @* FILTER DATA *@
+                                                            <button type="button" class="btn btn-warning text-light" title="Filter Data" data-bs-toggle="modal" data-bs-target="#filter_by_group">
+                                                                Filter Date <i class="bi bi-filter"></i>
+                                                            </button>
+                                                            <button class="btn btn-secondary" onclick="location.reload();"><i class="bi bi-arrow-clockwise"></i></button>
+
+                                                            <span class="text-warning" id="countdown4" style="font-weight:700; float: right"></span>
+                                                        </h5>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <h5 class="card-title text-warning">
+                                                            @* FILTER DATA *@
+                                                            <button type="button" class="btn btn-warning text-light" title="Filter Data" data-bs-toggle="modal" data-bs-target="#filter_by_group">
+                                                                Filter Date <i class="bi bi-filter"></i>
+                                                            </button>
+                                                            <button class="btn btn-secondary" onclick="location.reload();"><i class="bi bi-arrow-clockwise"></i></button>
+                                                        </h5>
+                                                    }
+
+                                                    <!-- Menampilkan Downtime Output -->
+                                                    <div class="table-responsive">
+                                                        <table class="table datatable table-hover" style="font-size:small;">
+                                                            @if (Model.VO_DOWNTIMEs.Count() > 0)
+                                                            {
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col">No</th>
+                                                                        <th scope="col">WE</th>
+                                                                        <th scope="col">Date</th>
+                                                                        <th scope="col">Machine</th>
+                                                                        <th scope="col">Shift</th>
+                                                                        <th scope="col">Part Number</th>
+                                                                        <th scope="col">Operator</th>
+                                                                        <th scope="col">Start</th>
+                                                                        <th scope="col">Finish</th>
+                                                                        <th scope="col">Durations</th>
+                                                                        <th scope="col">Code</th>
+                                                                        <th scope="col">Remarks</th>
+                                                                        <th scope="col">Type</th>
+                                                                        <th scope="col">Notes</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @{
+                                                                        int count_a = 0;
+                                                                    }
+                                                                    @foreach (var item in Model.VO_DOWNTIMEs.Where(x => x.downtime_code == "PD9" || x.downtime_code == "Z02"))
+                                                                    {
+                                                                        <tr>
+                                                                            <td>@(count_a+1)</td>
+                                                                            <td>@item.we_</td>
+                                                                            <td>@item.date_.GetValueOrDefault().ToShortDateString()</td>
+                                                                            <td>@item.no_machine</td>
+                                                                            <td>@item.shift_</td>
+                                                                            <td>@item.partnumber</td>
+                                                                            <td>@item.op_name</td>
+                                                                            <td>@item.dt_start</td>
+                                                                            <td>@item.dt_finish</td>
+                                                                            <!--NOT RUNNING = tidak ada Schedule ATAU break, masukkan ke sini-->
+                                                                            @if (@item.duration_minutes == null)
+                                                                            {
+                                                                                <td>-</td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <td>@item.duration_minutes minutes</td>
+                                                                            }
+                                                                            <td>@item.downtime_code</td>
+                                                                            <td>@item.dt_remarks</td>
+                                                                            <td>@item.dt_type</td>
+                                                                            <td>@item.downtime_notes</td>
+                                                                        </tr>
+                                                                        count_a++;
+                                                                    }
+
+                                                                </tbody>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p class="mt-0 text-center d-md-block text-danger"> <i>"..DOWNTIME DATA NOT FOUND..."</i></p>
+                                                            }
+                                                        </table>
+                                                        <!-- End Table with stripped rows -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @* --------------------------------- *@
+                                    </div>
+
+
+                                    @* DETALS REJECT PP *@
+                                    <div class="tab-pane fade rejectPP-report" id="rejectPP-report">
+                                        <!-- REPORT - REJECT PP -->
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <div class="card-body">
+
+                                                    <!-- Auto Refresh pada id="countdown" akan dimatikan jika data sudah selesai diperoleh, sdh ganti hari -->
+                                                    @if (finishDate >= dateNow)
+                                                    {
+                                                        <h5 class="card-title text-success">
+                                                            @* FILTER DATA *@
+                                                            <button type="button" class="btn btn-success text-light" title="Filter Data" data-bs-toggle="modal" data-bs-target="#filter_by_group">
+                                                                Filter Date <i class="bi bi-filter"></i>
+                                                            </button>
+                                                            <button class="btn btn-secondary" onclick="location.reload();"><i class="bi bi-arrow-clockwise"></i></button>
+
+                                                            <span class="text-success" id="countdown6" style="font-weight:700; float: right"></span>
+                                                        </h5>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <h5 class="card-title text-success">
+                                                            @* FILTER DATA *@
+                                                            <button type="button" class="btn btn-success text-light" title="Filter Data" data-bs-toggle="modal" data-bs-target="#filter_by_group">
+                                                                Filter Date <i class="bi bi-filter"></i>
+                                                            </button>
+                                                            <button class="btn btn-secondary" onclick="location.reload();"><i class="bi bi-arrow-clockwise"></i></button>
+                                                        </h5>
+                                                    }
+
+
+                                                    <div class="table-responsive">
+                                                        <!-- Menampilkan Reject Output -->
+                                                        <table class="table datatable table-hover" style="font-size:small;">
+                                                            @if (Model.VO_REJECT_PPs.Count() > 0)
+                                                            {
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col">No</th>
+                                                                        <th scope="col">Date</th>
+                                                                        <th scope="col">Shift</th>
+                                                                        <th scope="col">Leader Area</th> @*if - else*@
+                                                                        <th scope="col">Machine</th>
+                                                                        <th scope="col">Mold</th>
+                                                                        <th scope="col">Part Number</th>
+                                                                        <th scope="col">Description</th>
+                                                                        <th scope="col">CT</th>
+                                                                        <th scope="col">Output / Hour</th> @*(3600 / main.pn_ct) * main.pn_cav*@
+                                                                        <th scope="col">Plan</th>
+                                                                        <th scope="col">Total Output</th>
+                                                                        <th scope="col">Total Output (Pcs)</th>
+                                                                        <th scope="col">Reject Qty</th>
+                                                                        <th scope="col">Reject Remark</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                @functions {
+                                                                    private string GetLeaderArea(int? areaCode)
+                                                                    {
+                                                                        if (areaCode.ToString().Contains("1"))
+                                                                        {
+                                                                            return "1F-A,B,C,D,M3";
+                                                                        }
+                                                                        else if (areaCode.ToString().Contains("2"))
+                                                                        {
+                                                                            return "1F-E,F,G,H";
+                                                                        }
+                                                                        else if (areaCode.ToString().Contains("3"))
+                                                                        {
+                                                                            return "1F-J,K,L";
+                                                                        }
+                                                                        else if (areaCode.ToString().Contains("4"))
+                                                                        {
+                                                                            return "1F-M,N,P";
+                                                                        }
+                                                                        else if (areaCode.ToString().Contains("5"))
+                                                                        {
+                                                                            return "GF-A,B,C,D,E,F";
+                                                                        }
+                                                                        else if (areaCode.ToString().Contains("6"))
+                                                                        {
+                                                                            return "GF-G,H,J,K,L,M";
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            // Lakukan sesuatu jika areaCode tidak cocok dengan kondisi di atas
+                                                                            return "not valid";
+                                                                        }
+                                                                    }
+                                                                }
+                                                                <tbody>
+                                                                    @{
+                                                                        int count_b = 0;
+                                                                    }
+                                                                    @foreach (var item in Model.VO_REJECT_PPs)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>@(count_b + 1)</td>
+                                                                            <td>@item.date_.GetValueOrDefault().ToShortDateString()</td>
+                                                                            <td>@item.shift_</td>
+                                                                            <td>@GetLeaderArea(item.mc_area)</td>
+                                                                            <td>@item.no_machine</td>
+                                                                            <td>@item.mold</td>
+                                                                            <td>@item.partnumber</td>
+                                                                            <td>@item.DESC</td>
+                                                                            <td>@item.pn_ct</td>
+                                                                            @{
+                                                                                float hourly_output = 0;
+
+                                                                                if (item.pn_ct != null && item.pn_cav != null && item.pn_ct != 0&& item.pn_cav != 0)
+                                                                                {
+                                                                                    hourly_output = (float)(3600 / item.pn_ct) * (int)item.pn_cav;
+                                                                                }
+                                                                            }
+                                                                            <td>@hourly_output</td>
+
+                                                                            <td>@item.sch</td>
+                                                                            <td>@item.total_actoutput</td>
+                                                                            <td>@item.total_output_pcs</td>
+                                                                            <td>@item.reject_qty</td>
+                                                                            <td>@item.rj_remarks</td>
+                                                                        </tr>
+                                                                        count_b++;
+                                                                    }
+                                                                </tbody>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p class="mt-0 text-center d-md-block text-success"><i>"... REJECT DATA NOT FOUND..."</i></p>
+                                                            }
+                                                        </table>
+                                                        <!-- End Table with stripped rows -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @* --------------------------------- *@
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                            <!-- End Bordered Tabs -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- OEE GRAPH PLOTLY-->
+<script>
+    //call function oeeQuality
+    oeeQuality();
+    function oeeQuality() {
+        var score = "@ViewBag.AvgQUALITY_SCORE";
+        var color;
+
+        if (score < 70) {
+            color = 'red';
+        } else if (score >= 70 && score < 95) {
+            color = 'orange';
+        } else {
+            color = 'green';
+        }
+
+        // jika score lebih dari 100 maka set MAX 100
+        if (score > 100) {
+            score = 100;
+        }
+
+        var data = [
+            {
+                domain: { x: [0, 1], y: [0, 1] },
+                value: score,
+                title: {
+                    text: "<b> QUALITY </b>",
+                    font: {
+                        color: '#4bc65d', bold: true
+                    }
+                },
+                type: "indicator",
+                mode: "gauge+number+delta",
+                delta: { reference: 95 },
+                gauge: {
+                    axis: { range: [0, 110], tickvals: [0, 55, 95, 110] },
+                    steps: [
+                        /*{ range: [0, 49], color: "grey" },*/
+                        { range: [0, 95], color: "lightgrey" }
+                    ],
+                    threshold: {
+                        line: { color: "blue", width: 3 },
+                        thickness: 0.85,
+                        value: 95
+                    },
+                    bar: { color: color }
+                }
+            }
+        ];
+
+        var layout = { width: 360, height: 220, startAngle: -135, endAngle: 225, margin: { t: 0, b: 0 } };
+        var config = { displaylogo: false };
+        Plotly.newPlot('oeeQuality', data, layout, config);
+    }
+
+    //call function oeePerformance
+    oeePerformance();
+    function oeePerformance() {
+        var score = @ViewBag.AvgPERFORMAMCE_SCORE;
+        var color;
+
+        if (score < 70) {
+            color = 'red';
+        } else if (score >= 70 && score < 95) {
+            color = 'orange';
+        } else {
+            color = 'green';
+        }
+
+        // jika score lebih dari 100 maka set MAX 100
+        if (score > 100) {
+            score = 100;
+        }
+
+        var data = [
+            {
+                domain: { x: [0, 1], y: [0, 1] },
+                value: score,
+                title: {
+                    text: " <b> PERFORMANCE </b> ",
+                    font: {
+                        color: '#34c1df'
+                    }
+                },
+                type: "indicator",
+                mode: "gauge+number+delta",
+                delta: { reference: 95 },
+                gauge: {
+                    axis: { range: [0, 110], tickvals: [0, 55, 95, 110] },
+                    steps: [
+                        /*{ range: [0, 49], color: "grey" },*/
+                        { range: [0, 95], color: "lightgrey" }
+                    ],
+                    threshold: {
+                        line: { color: "blue", width: 3 },
+                        thickness: 0.85,
+                        value: 95
+                    },
+                    bar: { color: color }
+                }
+            }
+        ];
+
+        var layout = { width: 360, height:220, margin: { t: 0, b: 0 } };
+        var config = { displaylogo: false };
+        Plotly.newPlot('oeePerformance', data, layout, config);
+    }
+
+    //call function oeeAvailability
+    oeeAvailability();
+    function oeeAvailability() {
+        var score = @ViewBag.AvgAVAILABILITY_SCORE;
+        var color;
+
+        if (score < 70) {
+            color = 'red';
+        } else if (score >= 70 && score < 95) {
+            color = 'orange';
+        } else {
+            color = 'green';
+        }
+
+        if (score > 100) {
+            score = 100;
+        }
+
+        var data = [
+            {
+                domain: { x: [0, 1], y: [0, 1] },
+                value: score,
+                title: {
+                    text: "<b> AVAILABILITY </b> ",
+                    font: {
+                        color: '#f26825',
+                    }
+                },
+                type: "indicator",
+                mode: "gauge+number+delta",
+                delta: { reference: 95 },
+                gauge: {
+                    axis: { range: [0, 110], tickvals: [0, 55, 95, 110] },
+                    steps: [
+                        /*{ range: [0, 49], color: "grey" },*/
+                        { range: [0, 95], color: "lightgrey" }
+                    ],
+                    threshold: {
+                        line: { color: "blue", width: 3 },
+                        thickness: 0.85,
+                        value: 95
+                    },
+                    bar: { color: color }
+                }
+            }
+        ];
+
+        var layout = { width: 360, height: 220, margin: { t: 0, b: 0 } };
+        var config = { displaylogo: false };
+        Plotly.newPlot('oeeAvailability', data, layout, config);
+    }
+
+    //call function oeeScore
+    oeeScore();
+    function oeeScore() {
+        var score = @ViewBag.AvgOEE_SCORE;
+        var color;
+
+        if (score < 70) {
+            color = 'red';
+        } else if (score > 70 && score < 85) {
+            color = 'orange';
+        } else {
+            color = 'green';
+        }
+
+        // jika score lebih dari 100 maka set MAX 100
+        if (score > 100) {
+            score = 100;
+        }
+
+        var data = [
+            {
+                domain: { x: [0, 1], y: [0, 1] },
+                value: score,
+                title: { text: "<b>OEE</b>"},
+                type: "indicator",
+                mode: "gauge+number+delta",
+                delta: { reference: 85 },
+                gauge: {
+                    axis: { range: [0, 110], tickvals: [0, 55, 85, 110] },
+                    steps: [
+                        /*{ range: [0, 49], color: "grey" },*/
+                        { range: [0, 85], color: "lightgrey" }
+                    ],
+                    threshold: {
+                        line: { color: "blue", width: 3 },
+                        thickness: 0.85,
+                        value: 85
+                    },
+                    bar: { color: color }
+                }
+            }
+        ];
+
+        var layout = { width: 360, height: 220, margin: { t: 0, b: 0 } };
+        var config = { displaylogo: false };
+        Plotly.newPlot('oeeScore', data, layout, config);
+    }
+</script>
+
+@* COUNT DOWN *@
+<script>
+    function startCountdown(id) {
+        var timeLeft = 1800; // Waktu dalam detik (300 detik = 5 menit, start from 299)
+
+        return setInterval(function () {
+            // Menghitung menit
+            var minutes = Math.floor(timeLeft / 60);
+            // Menghitung detik
+            var seconds = timeLeft % 60;
+            // Menggabungkan menit dan detik
+            var countdownStr = minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
+            // Menampilkan countdown
+            document.getElementById(id).innerHTML = countdownStr;
+            if (timeLeft == 0) {
+                clearInterval(countdown); // Clear the interval when timeLeft reaches 0
+                location.reload();
+            }
+            timeLeft--;
+        }, 1000);
+    }
+
+    var countdown1 = startCountdown("countdown");
+    var countdown2 = startCountdown("countdown2");
+    var countdown3 = startCountdown("countdown3");
+    var countdown4 = startCountdown("countdown4");
+    var countdown5 = startCountdown("countdown5");
+    var countdown6 = startCountdown("countdown6");
+
+    setTimeout(function () {
+        var filterDate = new Date("@finishDate"); // konversi filterDate ke objek Date
+        var dateNow = new Date(); // tanggal sekarang
+        var inputShift = "@ViewBag.inputShift"; // shift saat ini
+        var inputShiftNow = "@ViewBag.inputShiftNow"; // shift saat ini
+
+        if (filterDate >= dateNow && inputShift >= inputShiftNow) {
+            location.reload();
+        } else {
+            setTimeout(arguments.callee, 1800000); // coba lagi setelah 15 menit
+        }
+    }, 1800000);
+
+    // select all checkboxes when "select all" checkbox is clicked
+    $('#selectAll').click(function () {
+        $('input[name="areaLine"]').prop('checked', this.checked);
+    });
+</script>
+
+@* Abnormality Filter *@
+@*<script>
+        $(document).ready(function () {
+            $("#filterAbnormality").click(function () {
+                $(".data-row").each(function () {
+                    var total_time = parseFloat($(this).find(".total-time").text());
+                    var quality = parseFloat($(this).find(".quality").text());
+                    var performance = parseFloat($(this).find(".performance").text());
+
+                    if (total_time > 510 || quality > 100 || quality < 0 || performance > 120 || performance < 0) {
+                        $(this).addClass("abnormal");
+                    } else {
+                        $(this).removeClass("abnormal");
+                    }
+                });
+
+                $(".pagination").hide();
+                $(".data-row").hide();
+                $(".data-row.abnormal").show();
+            });
+        });
+    </script>*@
+
+@* LOADING DATA PROCESSING *@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Event listener ketika tombol "Update Query" di klik
+        $("#filterData").click(function () {
+            // Tampilkan loading saat proses impor berlangsung
+            showLoading();
+
+            // Kirim data form secara asynchronous menggunakan AJAX
+            $.ajax({
+                type: "POST",
+                url: $("#importForm").attr("action"),
+                data: new FormData($("#importForm")[0]),
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    // Sembunyikan loading setelah impor selesai
+                    hideLoading();
+                    // Refresh halaman untuk menampilkan pesan sukses atau error
+                    //location.reload();
+                },
+                error: function (error) {
+                    // Sembunyikan loading jika terjadi kesalahan
+                    hideLoading();
+                    // Tampilkan pesan error
+                    console.log(error);
+                    //alert("Error occurred while importing data. Please try again.");
+                }
+            });
+        });
+
+        // Function untuk menampilkan loading
+        function showLoading() {
+            $("#loading").show();
+        }
+
+        // Function untuk menyembunyikan loading
+        function hideLoading() {
+            $("#loading").hide();
+        }
+    });
+</script>

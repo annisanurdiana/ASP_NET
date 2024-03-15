@@ -1,0 +1,170 @@
+﻿@model OEE_SSC.Models.pimListData
+@{
+
+    ViewBag.Title = "downloadData";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    DateTime startDate = ViewBag.startDate;
+    DateTime finishDate = ViewBag.finishDate;
+    DateTime dateNow = ViewBag.DateNow.Date;
+}
+
+
+@*<h3>Download Data</h3>*@
+
+<main id="" class="main" style="padding: 85px 35px 40px 35px;">
+    <section class="section">
+        <div class="row justify-content-center mt-5 p-5">
+            <div class="col-lg-8 col-md-10">
+
+                <!-- Tampilkan loading ketika proses impor sedang berlangsung -->
+                <div id="loading" class="justify-content-center  mb-3" style="display: none;">
+                    <h5>Download data is being processed...</h5>
+                    <div class="Loading">
+                        <div class="Loading-progress"></div>
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+                    <div class="card-body m-3">
+                        <h3 class="card-title text-center m-3">EXPORT DATA OUTPUT SSC TO EXCEL (.xlsx)</h3>
+
+                        <!-- Form -->
+                        <form id="importForm" class="row g-3">
+                            <div class="col-md-12">
+                                <label for="inputState" class="form-label">Data Download</label>
+                                <select id="inputState" class="form-select">
+                                    <option selected disabled>-- Select Data --</option>
+                                    <option value="1" required>Output Part</option>
+                                    <option value="2">Downtime</option>
+                                    <option value="3">Not Running</option>
+                                    <option value="4">Reject</option>
+                                    <option value="5">OEE (All Data)</option>
+                                    <option value="6">Power BI OEE (All Data)</option>
+                                    <option value="7">Part PP</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="inputState" class="form-label">Date Start</label>
+                                <div class="form-floating mb-3">
+                                    <input id="dateStart" type="date" class="form-control" value="" required />
+                                    <label for="floatingName">Date Start</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="inputState" class="form-label">Date End</label>
+                                <div class="form-floating mb-3">
+                                    <input id="dateEnd" type="date" class="form-control" value="" required />
+                                    <label for="floatingName">Date End</label>
+                                </div>
+                            </div>
+
+                            <div class="text-center p-3">
+                                <button type="button" class="btn btn-success" id="downloadBtn" onclick="redirectToExport()">Download <i class="bi bi-download"></i></button>
+                                <button type="reset" class="btn btn-secondary">Reset <i class="bi bi-trash"></i></button>
+                                <a type="button" class="btn btn-primary me-1" href="@Url.Action("mainPage", "Home")">Back to Menu</a>
+                            </div>
+                        </form>
+                        <!-- Form -->
+
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    function checkDateSelection() {
+        var dateStart = document.getElementById("dateStart").value;
+        var dateEnd = document.getElementById("dateEnd").value;
+        var downloadBtn = document.getElementById("downloadBtn");
+
+        if (dateStart !== "" && dateEnd !== "") {
+            downloadBtn.disabled = false;
+        } else {
+            downloadBtn.disabled = true;
+        }
+    }
+
+
+    function redirectToExport() {
+        var selectElement = document.getElementById("inputState");
+        var selectedValue = selectElement.value;
+        var dateStart = document.getElementById("dateStart").value;
+        var dateEnd = document.getElementById("dateEnd").value;
+        var exportUrl = '';
+
+
+        if (selectedValue === '1') {
+            exportUrl = '@Url.Action("exportOutputPart", "downloadData")' + "?dateStart=" + dateStart + "&dateEnd=" + dateEnd;
+        } else if (selectedValue === '2') {
+            exportUrl = '@Url.Action("exportDowntime", "downloadData")' + "?dateStart=" + dateStart + "&dateEnd=" + dateEnd;
+        } else if (selectedValue === '3') {
+            exportUrl = '@Url.Action("exportNotRunning", "downloadData")' + "?dateStart=" + dateStart + "&dateEnd=" + dateEnd;
+        } else if (selectedValue === '4') {
+            exportUrl = '@Url.Action("exportReject", "downloadData")' + "?dateStart=" + dateStart + "&dateEnd=" + dateEnd;
+        } else if (selectedValue === '5') {
+            exportUrl = '@Url.Action("exportOutputOEE", "downloadData")' + "?dateStart=" + dateStart + "&dateEnd=" + dateEnd;
+        } else if (selectedValue === '6') {
+            exportUrl = '@Url.Action("exportOutputOEE_PBI", "downloadData")' + "?dateStart=" + dateStart + "&dateEnd=" + dateEnd;
+        } else if (selectedValue === '7') {
+            exportUrl = '@Url.Action("exportOutput_PP", "downloadData")' + "?dateStart=" + dateStart + "&dateEnd=" + dateEnd;
+        }
+
+        // Add more conditions for other options if needed
+        if (exportUrl !== '') {
+            window.location.href = exportUrl;
+        }
+    }
+</script>
+
+@* LOADING DATA PROCESSING *@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Event listener ketika tombol "Update Query" di klik
+        $("#downloadBtn").click(function () {
+            // Tampilkan loading saat proses impor berlangsung
+            showLoading();
+
+            // Kirim data form secara asynchronous menggunakan AJAX
+            $.ajax({
+                type: "POST",
+                url: $("#importForm").attr("action"),
+                data: new FormData($("#importForm")[0]),
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    // Sembunyikan loading setelah impor selesai
+                    hideLoading();
+                    // Refresh halaman untuk menampilkan pesan sukses atau error
+                    //location.reload();
+                },
+                error: function (error) {
+                    // Sembunyikan loading jika terjadi kesalahan
+                    hideLoading();
+                    // Tampilkan pesan error
+                    console.log(error);
+                    //alert("Error occurred while importing data. Please try again.");
+                }
+            });
+        });
+
+        // Function untuk menampilkan loading
+        function showLoading() {
+            $("#loading").show();
+        }
+
+        // Function untuk menyembunyikan loading
+        function hideLoading() {
+            $("#loading").hide();
+        }
+    });
+</script>
