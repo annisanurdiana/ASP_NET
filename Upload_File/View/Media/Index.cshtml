@@ -1,0 +1,206 @@
+﻿@model IEnumerable<ObjFile>
+@*@model OEE_SSC.Models.pimListData*@
+@*<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+    <style type="text/css">
+        .btn {
+            width: 100px;
+            height: 40px;
+            background: #00BCD4;
+            border-style: solid;
+            border-color: white;
+            color: white;
+        }
+
+        .gridborder {
+            border-top: 1px solid #DED8D8;
+        }
+    </style>*@
+
+
+<main id="" class="main" style="padding: 5px 35px 40px 35px;">
+    <section class="section">
+        <div class="row justify-content-center mt-5 p-5">
+            <div class="col-lg-10 col-md-12">
+
+                <!-- Tampilkan loading ketika proses impor sedang berlangsung -->
+                <div id="loading" class="justify-content-center mb-3" style="display: none;">
+                    <h5>Upload file is being processed...</h5>
+                    <div class="Loading">
+                        <div class="Loading-progress"></div>
+                    </div>
+
+                </div>
+
+                <div class="card">
+                    <div class="card-body mt-1 mb-3">
+                        <h2 class="card-title text-center m-3 mb-2">UPLOAD FILE</h2>
+                        @using (@Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data", id = "importForm" }))
+                        {
+                            if (TempData["Message"] != null)
+                            {
+
+                                <div id="alert_submit2" class="alert alert-success alert-dismissible fade show" role="alert">
+                                    @TempData["Message"]
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            }
+
+                            <div class="form-group mb-4">
+                                <label for="file">Upload Here:</label>
+                                <input type="file" name="files" id="files" multiple="multiple" class="form-control" required />
+                            </div>
+
+                            <button id="uploadBtn" type="submit" class="btn btn-success" disabled>Upload</button>
+                        }
+                    </div>
+                </div>
+
+
+                <div class="card">
+                    <div class="card-body mt-3 mb-3 pt-4">
+                        <div class="table-responsive">
+
+                            <h2 class="card-title text-center m-3 mb-2">LIST OF FILE</h2>
+                            <table class="table datatable table-hover">
+                                <tr>
+                                    <th> File</th>
+                                    <th> Size</th>
+                                    <th> Type</th>
+                                    <th style="width:22%;"> Action </th>
+                                    <th> Delete</th>
+                                </tr>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr class="data-row">
+                                        <td class="">
+                                            @item.File
+                                        </td>
+                                        <td class="">
+                                            @string.Format("{0:N2} MB", item.Size)
+                                        </td>
+                                        <td class="">
+                                            @item.Type
+                                        </td>
+                                        <td style="width:22%;">
+                                            <button type="button" title="Download File" class="btn btn-primary" onclick="window.open('@Url.Action("Download", new { fileName = item.File })', '_blank')">
+                                                <i class="bi bi-arrow-down" style="font-size: 19px;"></i>
+                                            </button>
+
+                                            <button type="button" title="Open File" class="btn btn-warning" onclick="window.open('@Url.Action("Open", new { fileName = item.File })', '_blank')">
+                                                <i class="bi bi-eye-fill" style="font-size: 19px;"></i>
+                                            </button>
+                                        </td>
+
+                                        <td>
+                                            @using (Html.BeginForm("DeleteFile", "Media", new { fileName = item.File }, FormMethod.Post, new { id = "deleteForm" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <button type="button" title="Delete File" class="btn btn-danger" onclick="showPasswordPrompt();">
+                                                    <i class="bi bi-trash" style="font-size: 20px;"></i>
+                                                </button>
+                                            }
+                                        </td>
+
+
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+@* Password Delete  *@
+<script>
+    function showPasswordPrompt() {
+        var enteredPassword = prompt("Please enter your password to confirm deletion:");
+
+        if (enteredPassword !== null) {
+            // Kirim kata sandi ke server untuk verifikasi
+            $.ajax({
+                url: '@Url.Action("VerifyPassword", "Media")',
+                type: 'POST',
+                data: { password: enteredPassword },
+                success: function(result) {
+                    if (result.success) {
+                        $('#deleteForm').submit();
+                    } else {
+                        alert("Invalid password. File deletion canceled.");
+                    }
+                },
+                error: function() {
+                    alert("An error occurred while verifying the password.");
+                }
+            });
+        } else {
+            alert("File deletion canceled.");
+        }
+    }
+</script>
+
+
+@* Disable Button  *@
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var uploadBtn = document.getElementById("uploadBtn");
+        var filesInput = document.getElementById("files");
+
+        filesInput.addEventListener("change", function () {
+            if (filesInput.files.length > 0) {
+                uploadBtn.disabled = false;
+            } else {
+                uploadBtn.disabled = true;
+            }
+        });
+    });
+</script>
+
+@* LOADING DATA PROCESSING *@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Event listener ketika tombol "Update Query" di klik
+        $("#uploadBtn").click(function () {
+            // Tampilkan loading saat proses impor berlangsung
+            showLoading();
+
+            // Kirim data form secara asynchronous menggunakan AJAX
+            $.ajax({
+                type: "POST",
+                url: $("#importForm").attr("action"),
+                data: new FormData($("#importForm")[0]),
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    // Sembunyikan loading setelah impor selesai
+                    hideLoading();
+                    // Refresh halaman untuk menampilkan pesan sukses atau error
+                    //location.reload();
+                },
+                error: function (error) {
+                    // Sembunyikan loading jika terjadi kesalahan
+                    hideLoading();
+                    // Tampilkan pesan error
+                    console.log(error);
+                    //alert("Error occurred while importing data. Please try again.");
+                }
+            });
+        });
+
+        // Function untuk menampilkan loading
+        function showLoading() {
+            $("#loading").show();
+        }
+
+        // Function untuk menyembunyikan loading
+        function hideLoading() {
+            $("#loading").hide();
+        }
+    });
+</script>
