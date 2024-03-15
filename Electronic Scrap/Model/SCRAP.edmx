@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MMSModel1.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="pim_scrap">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="shift_" Type="int" />
+          <Property Name="date_" Type="date" />
+          <Property Name="partnumber" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="quantity" Type="int" />
+          <Property Name="area_code" Type="int" />
+          <Property Name="area_name" Type="varchar" MaxLength="250" />
+          <Property Name="scrap_number" Type="int" />
+          <Property Name="scrap_code" Type="varchar" MaxLength="50" />
+          <Property Name="um" Type="varchar" MaxLength="50" />
+          <Property Name="check_" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="pim_scrap_code">
+          <Key>
+            <PropertyRef Name="SCRAP_CODE" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SCRAP_CODE" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="SCRAP_REMARKS" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="pim_scrap_num">
+          <Key>
+            <PropertyRef Name="S_NUMBER" />
+          </Key>
+          <Property Name="S_NUMBER" Type="int" Nullable="false" />
+          <Property Name="S_NAME" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="pim_scrap_query">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="FACLWP" Type="varchar" MaxLength="250" />
+          <Property Name="TOYNWP" Type="varchar" MaxLength="250" />
+          <Property Name="PARTWP" Type="varchar" MaxLength="250" />
+          <Property Name="DESXIT" Type="varchar" MaxLength="250" />
+          <Property Name="PLANIT" Type="varchar" MaxLength="250" />
+          <Property Name="BASPIT" Type="float" />
+          <Property Name="SCRMWP" Type="float" />
+          <Property Name="COMMIT_" Type="varchar" MaxLength="250" />
+          <Property Name="TOY_NUMBER" Type="varchar" MaxLength="250" />
+          <Property Name="DESCRIPTION_" Type="varchar" MaxLength="250" />
+          <Property Name="PRICE_" Type="float" />
+          <Property Name="DATE_INPUT" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'MMS.dbo.VO_SCRAP' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VO_SCRAP">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="partnumber" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="shift_" Type="int" />
+          <Property Name="date_" Type="date" />
+          <Property Name="partnumber" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="quantity" Type="int" />
+          <Property Name="area_code" Type="int" />
+          <Property Name="area_name" Type="varchar" MaxLength="250" />
+          <Property Name="scrap_number" Type="int" />
+          <Property Name="scrap_code" Type="varchar" MaxLength="50" />
+          <Property Name="check_" Type="nvarchar" MaxLength="255" />
+          <Property Name="S_NAME" Type="varchar" MaxLength="250" />
+          <Property Name="SCRAP_REMARKS" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <Association Name="FK_SCRAP_CODE">
+          <End Role="pim_scrap_code" Type="Self.pim_scrap_code" Multiplicity="0..1" />
+          <End Role="pim_scrap" Type="Self.pim_scrap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pim_scrap_code">
+              <PropertyRef Name="SCRAP_CODE" />
+            </Principal>
+            <Dependent Role="pim_scrap">
+              <PropertyRef Name="scrap_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SCRAP_NUM">
+          <End Role="pim_scrap_num" Type="Self.pim_scrap_num" Multiplicity="0..1" />
+          <End Role="pim_scrap" Type="Self.pim_scrap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pim_scrap_num">
+              <PropertyRef Name="S_NUMBER" />
+            </Principal>
+            <Dependent Role="pim_scrap">
+              <PropertyRef Name="scrap_number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MMSModel1StoreContainer">
+          <EntitySet Name="pim_scrap" EntityType="Self.pim_scrap" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pim_scrap_code" EntityType="Self.pim_scrap_code" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pim_scrap_num" EntityType="Self.pim_scrap_num" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pim_scrap_query" EntityType="Self.pim_scrap_query" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VO_SCRAP" EntityType="Self.VO_SCRAP" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VO_SCRAP].[id] AS [id], 
+    [VO_SCRAP].[shift_] AS [shift_], 
+    [VO_SCRAP].[date_] AS [date_], 
+    [VO_SCRAP].[partnumber] AS [partnumber], 
+    [VO_SCRAP].[quantity] AS [quantity], 
+    [VO_SCRAP].[area_code] AS [area_code], 
+    [VO_SCRAP].[area_name] AS [area_name], 
+    [VO_SCRAP].[scrap_number] AS [scrap_number], 
+    [VO_SCRAP].[scrap_code] AS [scrap_code], 
+    [VO_SCRAP].[check_] AS [check_], 
+    [VO_SCRAP].[S_NAME] AS [S_NAME], 
+    [VO_SCRAP].[SCRAP_REMARKS] AS [SCRAP_REMARKS]
+    FROM [dbo].[VO_SCRAP] AS [VO_SCRAP]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_SCRAP_CODE" Association="Self.FK_SCRAP_CODE">
+            <End Role="pim_scrap_code" EntitySet="pim_scrap_code" />
+            <End Role="pim_scrap" EntitySet="pim_scrap" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SCRAP_NUM" Association="Self.FK_SCRAP_NUM">
+            <End Role="pim_scrap_num" EntitySet="pim_scrap_num" />
+            <End Role="pim_scrap" EntitySet="pim_scrap" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MMSModel1" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="MMSEntitiesScrap2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="pim_scrap_query" EntityType="MMSModel1.pim_scrap_query" />
+          <EntitySet Name="pim_scrap_code" EntityType="MMSModel1.pim_scrap_code" />
+          <EntitySet Name="pim_scrap_num" EntityType="MMSModel1.pim_scrap_num" />
+          <EntitySet Name="VO_SCRAP" EntityType="MMSModel1.VO_SCRAP" />
+          <EntitySet Name="pim_scrap" EntityType="MMSModel1.pim_scrap" />
+          <AssociationSet Name="FK_SCRAP_CODE" Association="MMSModel1.FK_SCRAP_CODE">
+            <End Role="pim_scrap_code" EntitySet="pim_scrap_code" />
+            <End Role="pim_scrap" EntitySet="pim_scrap" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SCRAP_NUM" Association="MMSModel1.FK_SCRAP_NUM">
+            <End Role="pim_scrap_num" EntitySet="pim_scrap_num" />
+            <End Role="pim_scrap" EntitySet="pim_scrap" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="pim_scrap_query">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="FACLWP" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="TOYNWP" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="PARTWP" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="DESXIT" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="PLANIT" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="BASPIT" Type="Double" />
+          <Property Name="SCRMWP" Type="Double" />
+          <Property Name="COMMIT_" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="TOY_NUMBER" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="DESCRIPTION_" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="PRICE_" Type="Double" />
+          <Property Name="DATE_INPUT" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="pim_scrap_code">
+          <Key>
+            <PropertyRef Name="SCRAP_CODE" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SCRAP_CODE" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SCRAP_REMARKS" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="pim_scrap" Relationship="MMSModel1.FK_SCRAP_CODE" FromRole="pim_scrap_code" ToRole="pim_scrap" />
+        </EntityType>
+        <EntityType Name="pim_scrap_num">
+          <Key>
+            <PropertyRef Name="S_NUMBER" />
+          </Key>
+          <Property Name="S_NUMBER" Type="Int32" Nullable="false" />
+          <Property Name="S_NAME" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="pim_scrap" Relationship="MMSModel1.FK_SCRAP_NUM" FromRole="pim_scrap_num" ToRole="pim_scrap" />
+        </EntityType>
+        <EntityType Name="VO_SCRAP">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="partnumber" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" />
+          <Property Name="shift_" Type="Int32" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="partnumber" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="quantity" Type="Int32" />
+          <Property Name="area_code" Type="Int32" />
+          <Property Name="area_name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="scrap_number" Type="Int32" />
+          <Property Name="scrap_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="check_" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="S_NAME" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="SCRAP_REMARKS" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="pim_scrap">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="shift_" Type="Int32" />
+          <Property Name="date_" Type="DateTime" Precision="0" />
+          <Property Name="partnumber" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="quantity" Type="Int32" />
+          <Property Name="area_code" Type="Int32" />
+          <Property Name="area_name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="scrap_number" Type="Int32" />
+          <Property Name="scrap_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="um" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="check_" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="pim_scrap_code" Relationship="MMSModel1.FK_SCRAP_CODE" FromRole="pim_scrap" ToRole="pim_scrap_code" />
+          <NavigationProperty Name="pim_scrap_num" Relationship="MMSModel1.FK_SCRAP_NUM" FromRole="pim_scrap" ToRole="pim_scrap_num" />
+        </EntityType>
+        <Association Name="FK_SCRAP_CODE">
+          <End Type="MMSModel1.pim_scrap_code" Role="pim_scrap_code" Multiplicity="0..1" />
+          <End Type="MMSModel1.pim_scrap" Role="pim_scrap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pim_scrap_code">
+              <PropertyRef Name="SCRAP_CODE" />
+            </Principal>
+            <Dependent Role="pim_scrap">
+              <PropertyRef Name="scrap_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SCRAP_NUM">
+          <End Type="MMSModel1.pim_scrap_num" Role="pim_scrap_num" Multiplicity="0..1" />
+          <End Type="MMSModel1.pim_scrap" Role="pim_scrap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pim_scrap_num">
+              <PropertyRef Name="S_NUMBER" />
+            </Principal>
+            <Dependent Role="pim_scrap">
+              <PropertyRef Name="scrap_number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MMSModel1StoreContainer" CdmEntityContainer="MMSEntitiesScrap2">
+          <EntitySetMapping Name="pim_scrap_query">
+            <EntityTypeMapping TypeName="MMSModel1.pim_scrap_query">
+              <MappingFragment StoreEntitySet="pim_scrap_query">
+                <ScalarProperty Name="DATE_INPUT" ColumnName="DATE_INPUT" />
+                <ScalarProperty Name="PRICE_" ColumnName="PRICE_" />
+                <ScalarProperty Name="DESCRIPTION_" ColumnName="DESCRIPTION_" />
+                <ScalarProperty Name="TOY_NUMBER" ColumnName="TOY_NUMBER" />
+                <ScalarProperty Name="COMMIT_" ColumnName="COMMIT_" />
+                <ScalarProperty Name="SCRMWP" ColumnName="SCRMWP" />
+                <ScalarProperty Name="BASPIT" ColumnName="BASPIT" />
+                <ScalarProperty Name="PLANIT" ColumnName="PLANIT" />
+                <ScalarProperty Name="DESXIT" ColumnName="DESXIT" />
+                <ScalarProperty Name="PARTWP" ColumnName="PARTWP" />
+                <ScalarProperty Name="TOYNWP" ColumnName="TOYNWP" />
+                <ScalarProperty Name="FACLWP" ColumnName="FACLWP" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pim_scrap_code">
+            <EntityTypeMapping TypeName="MMSModel1.pim_scrap_code">
+              <MappingFragment StoreEntitySet="pim_scrap_code">
+                <ScalarProperty Name="SCRAP_REMARKS" ColumnName="SCRAP_REMARKS" />
+                <ScalarProperty Name="SCRAP_CODE" ColumnName="SCRAP_CODE" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pim_scrap_num">
+            <EntityTypeMapping TypeName="MMSModel1.pim_scrap_num">
+              <MappingFragment StoreEntitySet="pim_scrap_num">
+                <ScalarProperty Name="S_NAME" ColumnName="S_NAME" />
+                <ScalarProperty Name="S_NUMBER" ColumnName="S_NUMBER" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VO_SCRAP">
+            <EntityTypeMapping TypeName="MMSModel1.VO_SCRAP">
+              <MappingFragment StoreEntitySet="VO_SCRAP">
+                <ScalarProperty Name="SCRAP_REMARKS" ColumnName="SCRAP_REMARKS" />
+                <ScalarProperty Name="S_NAME" ColumnName="S_NAME" />
+                <ScalarProperty Name="check_" ColumnName="check_" />
+                <ScalarProperty Name="scrap_code" ColumnName="scrap_code" />
+                <ScalarProperty Name="scrap_number" ColumnName="scrap_number" />
+                <ScalarProperty Name="area_name" ColumnName="area_name" />
+                <ScalarProperty Name="area_code" ColumnName="area_code" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="partnumber" ColumnName="partnumber" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="shift_" ColumnName="shift_" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pim_scrap">
+            <EntityTypeMapping TypeName="MMSModel1.pim_scrap">
+              <MappingFragment StoreEntitySet="pim_scrap">
+                <ScalarProperty Name="check_" ColumnName="check_" />
+                <ScalarProperty Name="um" ColumnName="um" />
+                <ScalarProperty Name="scrap_code" ColumnName="scrap_code" />
+                <ScalarProperty Name="scrap_number" ColumnName="scrap_number" />
+                <ScalarProperty Name="area_name" ColumnName="area_name" />
+                <ScalarProperty Name="area_code" ColumnName="area_code" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="partnumber" ColumnName="partnumber" />
+                <ScalarProperty Name="date_" ColumnName="date_" />
+                <ScalarProperty Name="shift_" ColumnName="shift_" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
